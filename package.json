@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:inspect": "NODE_OPTIONS='--inspect' next dev",
+    "dev:db": "docker-compose up",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
