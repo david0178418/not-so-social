@@ -5,7 +5,7 @@ export default NextAuth({
 	// https://next-auth.js.org/configuration/providers
 	providers: [
 		CredentialsProvider({
-			name: 'Credentials',
+			name: 'Username',
 			// The credentials is used to generate a suitable form on the sign in page.
 			// You can specify whatever fields you are expecting to be submitted.
 			// e.g. domain, username, password, 2FA token, etc.
@@ -31,7 +31,6 @@ export default NextAuth({
 					return {
 						id: 1,
 						username,
-						password,
 					};
 				} else {
 					return null;
@@ -139,9 +138,7 @@ export default NextAuth({
 				token,
 			} = args;
 
-			if(token) {
-				session.foo = { ...token };
-			}
+			session.user = token.user;
 
 			return session;
 		},
