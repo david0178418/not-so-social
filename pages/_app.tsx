@@ -1,3 +1,4 @@
+import { SessionProvider } from 'next-auth/react';
 import Head from 'next/head';
 
 import type { AppProps } from 'next/app';
@@ -15,7 +16,10 @@ interface Props {
 function MyApp(props: AppProps<Props>) {
 	const {
 		Component,
-		pageProps,
+		pageProps: {
+			session,
+			...pageProps
+		},
 	} = props;
 
 	return (
@@ -26,7 +30,9 @@ function MyApp(props: AppProps<Props>) {
 					content="initial-scale=1, width=device-width"
 				/>
 			</Head>
-			<Component {...pageProps} />
+			<SessionProvider session={session}>
+				<Component {...pageProps} />
+			</SessionProvider>
 		</>);
 }
 

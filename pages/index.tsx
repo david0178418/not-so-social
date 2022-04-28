@@ -2,10 +2,17 @@ import { Layout } from '@components/layout';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '@/styles/Home.module.css';
+import {
+	useSession,
+	signIn,
+	signOut,
+} from 'next-auth/react';
 
 import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
+	const session = useSession();
+
 	return (
 		<Layout>
 			<div className={styles.container}>
@@ -19,6 +26,16 @@ const Home: NextPage = () => {
 					<h1 className={styles.title}>
 						Welcome to <a href="https://nextjs.org">Next.js!</a>
 					</h1>
+
+					<pre>
+						{JSON.stringify(session, null, 4)}
+					</pre>
+
+					{session?.status === 'authenticated' ? (
+						<button onClick={() => signOut()}>sign out</button>
+					) : (
+						<button onClick={() => signIn()}>sign in</button>
+					)}
 
 					<p className={styles.description}>
 						Get started by editing{' '}
