@@ -34,7 +34,10 @@ const Home: NextPage = () => {
 					{session?.status === 'authenticated' ? (
 						<button onClick={() => signOut()}>sign out</button>
 					) : (
-						<button onClick={() => signIn()}>sign in</button>
+						<button onClick={() => signIn('credentials', {
+							username: 'foo',
+							password: 'bar',
+						})}>sign in</button>
 					)}
 
 					<p className={styles.description}>

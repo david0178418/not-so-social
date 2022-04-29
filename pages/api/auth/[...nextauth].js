@@ -12,7 +12,7 @@ export default NextAuth({
 			// You can pass any HTML attribute to the <input> tag through the object.
 			credentials: {
 				username: {
-					label: 'Username',
+					label: 'Username or Email',
 					type: 'text',
 					placeholder: 'pinner',
 				},
