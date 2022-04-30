@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { BackIcon, MenuIcon } from '@components/icons';
-import { LoginModal } from '@components/modals/login';
+import { LoginModal } from '@components/modals/login.modal';
 import {
 	AppBar,
 	Box,

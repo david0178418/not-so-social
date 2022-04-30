@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Key } from 'ts-key-enum';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { ModalActions } from '@common/constants';
 import {
 	Box,
@@ -15,6 +15,7 @@ import {
 	useMediaQuery,
 	useTheme,
 } from '@mui/material';
+import { login } from '@common/actions';
 
 export
 function LoginModal() {
@@ -57,12 +58,16 @@ function LoginModal() {
 			return;
 		}
 
-		await signIn('credentials', {
-			username,
-			password,
-		});
+		try {
 
-		setUsername('');
+			if(await login(username, password)) {
+				setUsername('');
+			}
+
+		} catch(e) {
+			console.log(e);
+		}
+
 		setPassword('');
 	}
 
