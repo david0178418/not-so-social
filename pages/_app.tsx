@@ -1,10 +1,6 @@
 import { SessionProvider } from 'next-auth/react';
 import Head from 'next/head';
 import { Toast } from '@components/toast';
-import {
-	Provider,
-	useCreateStore,
-} from '@common/store';
 
 import type { AppProps } from 'next/app';
 
@@ -27,9 +23,6 @@ function MyApp(props: AppProps<Props>) {
 		},
 	} = props;
 
-
-	const createStore = useCreateStore(pageProps.initialState);
-
 	return (
 		<>
 			<Head>
@@ -39,11 +32,8 @@ function MyApp(props: AppProps<Props>) {
 				/>
 			</Head>
 			<SessionProvider session={session}>
-
-				<Provider createStore={createStore}>
-					<Component {...pageProps} />
-					<Toast/>
-				</Provider>
+				<Component {...pageProps} />
+				<Toast/>
 			</SessionProvider>
 		</>);
 }

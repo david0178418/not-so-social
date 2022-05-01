@@ -16,9 +16,12 @@ import {
 	useTheme,
 } from '@mui/material';
 import { login } from '@common/actions';
+import { useAtom } from 'jotai';
+import { pushToastMsgAtom } from '@common/atoms';
 
 export
 function LoginModal() {
+	const [, pustToastMsg] = useAtom(pushToastMsgAtom);
 	const session = useSession();
 	const router = useRouter();
 	const theme = useTheme();
@@ -62,9 +65,12 @@ function LoginModal() {
 
 			if(await login(username, password)) {
 				setUsername('');
+			} else {
+				pustToastMsg('Incorrect Login');
 			}
 
 		} catch(e) {
+			pustToastMsg('Something went wrong. Try again.');
 			console.log(e);
 		}
 

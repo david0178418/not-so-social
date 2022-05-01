@@ -1,4 +1,4 @@
 export
-interface State {
-	toastQueuedMessages: string[];
+interface Foo {
+	bar: string;
 }

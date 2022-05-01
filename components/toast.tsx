@@ -1,17 +1,18 @@
-import { useStore } from '@common/store';
 import { useEffect, useState } from 'react';
-import { setToastMsg } from '@common/store-actions';
 import { Snackbar, IconButton } from '@mui/material';
 import { CloseIcon } from '@components/icons';
+import { clearCurrentToastMsgAtom, toastMsgAtom } from '@common/atoms';
+import { useAtom } from 'jotai';
 
 export
 function Toast() {
-	const toastMsg = useStore(s => s.toastQueuedMessages);
+	const [toastMsg] = useAtom(toastMsgAtom);
+	const [, clearMsg] = useAtom(clearCurrentToastMsgAtom);
 	const [isOpen, setOpen] = useState(false);
 
 	useEffect(() => {
-		setOpen(!!toastMsg.length);
-	}, [toastMsg.length]);
+		setOpen(!!toastMsg);
+	}, [toastMsg]);
 
 	function handleClose() {
 		setOpen(false);
@@ -23,8 +24,8 @@ function Toast() {
 				open={isOpen}
 				autoHideDuration={4000}
 				onClose={handleClose}
-				TransitionProps={{ onExited: () => setToastMsg([]) }}
-				message={toastMsg[0]}
+				TransitionProps={{ onExited: () => clearMsg() }}
+				message={toastMsg}
 				action={
 					<IconButton
 						size="small"

@@ -1,5 +1,3 @@
-import { State } from './types';
-
 export
 const MONGODB_DB = 'pinboard';
 
@@ -88,6 +86,3 @@ export
 enum ModalActions {
 	Login = 'login',
 }
-
-export
-const DefaultState: State = { toastQueuedMessages: [] };

@@ -5,25 +5,14 @@ import { Key } from 'ts-key-enum';
 export
 async function get<T = any>(path: string, params?: any): Promise<T | null> {
 	const paramString = params ? `?${objectToArgs(params)}` : '';
-	try {
-		const response = await fetch(`${path}${paramString}`, { ...BASE_REQ });
 
-		if(!response.ok) {
-			throw await response.json();
-		}
+	const response = await fetch(`${path}${paramString}`, { ...BASE_REQ });
 
-		return await response.json() as T;
-	} catch (err: any) {
-		if(err.code === 'auth/id-token-expired') {
-			console.log(err.code);
-			// await refreshToken();
-
-			return get<T>(path, params);
-		}
-
-		console.error(`GET request error on ${path}:`, err);
-		return null;
+	if(!response.ok) {
+		throw await response.json();
 	}
+
+	return await response.json() as T;
 }
 
 export
