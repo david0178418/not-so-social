@@ -8,6 +8,7 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
+import { LogoutModal } from '@components/modals/logout.modal';
 
 interface Props {
 	showBack?: boolean;
@@ -54,6 +55,7 @@ function TitleBar(props: Props) {
 				</AppBar>
 			</Box>
 			<LoginModal/>
+			<LogoutModal/>
 		</>
 	);
 }

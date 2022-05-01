@@ -2,8 +2,11 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Key } from 'ts-key-enum';
-import { useSession } from 'next-auth/react';
 import { ModalActions } from '@common/constants';
+import { login } from '@common/actions';
+import { useAtom } from 'jotai';
+import { pushToastMsgAtom } from '@common/atoms';
+import { useIsLoggedIn } from '@common/hooks';
 import {
 	Box,
 	Button,
@@ -15,14 +18,11 @@ import {
 	useMediaQuery,
 	useTheme,
 } from '@mui/material';
-import { login } from '@common/actions';
-import { useAtom } from 'jotai';
-import { pushToastMsgAtom } from '@common/atoms';
 
 export
 function LoginModal() {
 	const [, pustToastMsg] = useAtom(pushToastMsgAtom);
-	const session = useSession();
+	const isLoggedIn = useIsLoggedIn();
 	const router = useRouter();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -34,21 +34,21 @@ function LoginModal() {
 		...newQuery
 	} = router.query;
 	const actionIsLogin = action === ModalActions.Login;
-	const isOpen = actionIsLogin && session.status !== 'authenticated';
+	const isOpen = actionIsLogin && !isLoggedIn;
 
 	useEffect(() => {
 		if(!actionIsLogin) {
 			return;
 		}
 
-		if(session.status === 'authenticated') {
+		if(isLoggedIn) {
 			router.replace({
 				pathname: router.pathname,
 				query: newQuery,
 			}, undefined, { shallow: true });
 		}
 
-	}, [actionIsLogin, session.status]);
+	}, [actionIsLogin, isLoggedIn]);
 
 	function handleKeyUp(key: string) {
 		if(key === Key.Enter) {

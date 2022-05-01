@@ -1,4 +1,4 @@
-import { signIn } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 
 export
 async function login(username: string, password: string) {
@@ -13,4 +13,9 @@ async function login(username: string, password: string) {
 	success = !!result?.ok;
 
 	return success;
+}
+
+export
+async function logout() {
+	await signOut();
 }

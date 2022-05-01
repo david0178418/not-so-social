@@ -85,4 +85,5 @@ enum DbCollections {
 export
 enum ModalActions {
 	Login = 'login',
+	Logout = 'logout',
 }
