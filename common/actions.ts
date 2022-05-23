@@ -16,6 +16,12 @@ async function login(username: string, password: string) {
 }
 
 export
+async function register(username: string, password: string) {
+	console.log(username, password);
+	return false;
+}
+
+export
 async function logout() {
 	await signOut();
 }

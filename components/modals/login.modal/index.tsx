@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalActions } from '@common/constants';
 import { useIsLoggedIn } from '@common/hooks';
 import { LoginForm } from './login-form';
@@ -7,10 +7,10 @@ import {
 	Button,
 	Dialog,
 	DialogActions,
-	DialogTitle,
 	useMediaQuery,
 	useTheme,
 } from '@mui/material';
+import { RegistrationForm } from './register-form';
 
 export
 function LoginModal() {
@@ -18,6 +18,7 @@ function LoginModal() {
 	const router = useRouter();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+	const [isRegister, setIsRegister] = useState(false);
 	const {
 		a: action,
 		...newQuery
@@ -40,7 +41,6 @@ function LoginModal() {
 				query: newQuery,
 			}, undefined, { shallow: true });
 		}
-
 	}, [actionIsLoginRegister, isLoggedIn]);
 
 	return (
@@ -49,21 +49,25 @@ function LoginModal() {
 				fullScreen={fullScreen}
 				open={isOpen}
 			>
-				<DialogTitle>
-					Login
-				</DialogTitle>
-				<LoginForm urlObj={urlObj} />
-				<DialogActions className="login-register-toggle">
-					<Button size="small">
-						Create an Account
-					</Button>
+				{isRegister && (
+					<RegistrationForm urlObj={urlObj} />
+				)}
+				{!isRegister && (
+					<LoginForm urlObj={urlObj} />
+				)}
+				<DialogActions style={{ justifyContent: 'center' }}>
+					{isRegister && (
+						<Button size="small" onClick={() => setIsRegister(false)}>
+							Login with Existing Account
+						</Button>
+					)}
+					{!isRegister && (
+						<Button size="small" onClick={() => setIsRegister(true)}>
+							Create an Account
+						</Button>
+					)}
 				</DialogActions>
 			</Dialog>
-			<style jsx>{`
-				.login-register-toggle {
-					justify-content: center;
-				}
-			`}</style>
 		</>
 	);
 }

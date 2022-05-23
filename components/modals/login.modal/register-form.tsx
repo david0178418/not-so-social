@@ -1,6 +1,8 @@
+import type { UrlObject } from 'url';
+
 import { useState } from 'react';
 import { Key } from 'ts-key-enum';
-import { login } from '@common/actions';
+import { register } from '@common/actions';
 import { useAtom } from 'jotai';
 import { pushToastMsgAtom } from '@common/atoms';
 import Link from 'next/link';
@@ -12,19 +14,24 @@ import {
 	DialogTitle,
 	TextField,
 } from '@mui/material';
-import { UrlObject } from 'url';
 
 interface Props {
 	urlObj: UrlObject;
 }
 
 export
-function LoginForm(props: Props) {
+function RegistrationForm(props: Props) {
 	const { urlObj } = props;
 	const [, pustToastMsg] = useAtom(pushToastMsgAtom);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const valid = !!(password && username);
+	const [repassword, setRepassword] = useState('');
+	const valid = !!(
+		username &&
+		password && (
+			password === repassword
+		)
+	);
 
 	function handleKeyUp(key: string) {
 		if(key === Key.Enter) {
@@ -39,7 +46,7 @@ function LoginForm(props: Props) {
 
 		try {
 
-			if(await login(username, password)) {
+			if(await register(username, password)) {
 				setUsername('');
 			} else {
 				pustToastMsg('Incorrect Login');
@@ -56,7 +63,7 @@ function LoginForm(props: Props) {
 	return (
 		<>
 			<DialogTitle>
-				Login
+				Create Account
 			</DialogTitle>
 			<DialogContent>
 				<Box
@@ -84,6 +91,15 @@ function LoginForm(props: Props) {
 						onKeyUp={e => handleKeyUp(e.key)}
 						onChange={e => setPassword(e.target.value)}
 					/>
+					<TextField
+						fullWidth
+						label="Re-enter Password"
+						variant="standard"
+						type="password"
+						value={repassword}
+						onKeyUp={e => handleKeyUp(e.key)}
+						onChange={e => setRepassword(e.target.value)}
+					/>
 				</Box>
 			</DialogContent>
 			<DialogActions>
@@ -102,7 +118,7 @@ function LoginForm(props: Props) {
 					disabled={!valid}
 					onClick={handleLogin}
 				>
-					Login
+					Register
 				</Button>
 			</DialogActions>
 		</>
