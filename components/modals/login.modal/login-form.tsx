@@ -1,54 +1,29 @@
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Key } from 'ts-key-enum';
-import { ModalActions } from '@common/constants';
 import { login } from '@common/actions';
 import { useAtom } from 'jotai';
 import { pushToastMsgAtom } from '@common/atoms';
-import { useIsLoggedIn } from '@common/hooks';
+import Link from 'next/link';
 import {
 	Box,
 	Button,
-	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogTitle,
 	TextField,
-	useMediaQuery,
-	useTheme,
 } from '@mui/material';
+import { UrlObject } from 'url';
+
+interface Props {
+	urlObj: UrlObject;
+}
 
 export
-function LoginModal() {
+function LoginForm(props: Props) {
+	const { urlObj } = props;
 	const [, pustToastMsg] = useAtom(pushToastMsgAtom);
-	const isLoggedIn = useIsLoggedIn();
-	const router = useRouter();
-	const theme = useTheme();
-	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const valid = !!(password && username);
-	const {
-		a: action,
-		...newQuery
-	} = router.query;
-	const actionIsLogin = action === ModalActions.Login;
-	const isOpen = actionIsLogin && !isLoggedIn;
-
-	useEffect(() => {
-		if(!actionIsLogin) {
-			return;
-		}
-
-		if(isLoggedIn) {
-			router.replace({
-				pathname: router.pathname,
-				query: newQuery,
-			}, undefined, { shallow: true });
-		}
-
-	}, [actionIsLogin, isLoggedIn]);
 
 	function handleKeyUp(key: string) {
 		if(key === Key.Enter) {
@@ -78,13 +53,7 @@ function LoginModal() {
 	}
 
 	return (
-		<Dialog
-			fullScreen={fullScreen}
-			open={isOpen}
-		>
-			<DialogTitle>
-				Login
-			</DialogTitle>
+		<>
 			<DialogContent>
 				<Box
 					noValidate
@@ -118,19 +87,20 @@ function LoginModal() {
 					replace
 					passHref
 					shallow
-					href={{
-						pathname: router.pathname,
-						query: newQuery,
-					}}
+					href={urlObj}
 				>
 					<Button color="error">
-						Close
+						Cancel
 					</Button>
 				</Link>
-				<Button disabled={!valid} onClick={handleLogin}>
+				<Button
+					variant="outlined"
+					disabled={!valid}
+					onClick={handleLogin}
+				>
 					Login
 				</Button>
 			</DialogActions>
-		</Dialog>
+		</>
 	);
 }

@@ -80,10 +80,13 @@ enum ActivityTypes {
 
 export
 enum DbCollections {
+	Users = 'users',
+	UsersMeta = 'users-meta',
+	Creds = 'credentials',
 }
 
 export
 enum ModalActions {
-	Login = 'login',
+	LoginRegister = 'login-register',
 	Logout = 'logout',
 }
