@@ -49,7 +49,6 @@ export default NextAuth({
 					username,
 				};
 			},
-
 		}),
 		// EmailProvider({
 		//   server: process.env.EMAIL_SERVER,
