@@ -30,7 +30,7 @@ function LeftRail() {
 						href={{
 							pathname,
 							query: {
-								a: ModalActions.Login,
+								a: ModalActions.LoginRegister,
 								...query,
 							},
 						}}

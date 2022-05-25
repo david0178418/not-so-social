@@ -38,16 +38,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 			error,
 		} = schema.validate(req.body);
 
-		// const db = await dbClientPromise;
-		// db.collection(DbCollections.Creds).findOne({user});
-
 		if(error) {
-			res.send({
-				ok: false,
-				errors: error
-					.details
-					.map(d => d.message),
-			});
+			res
+				.status(400)
+				.send({
+					ok: false,
+					errors: error
+						.details
+						.map(d => d.message),
+				});
 		} else {
 			const {
 				username,
@@ -77,6 +76,6 @@ async function createUser(username: string, password: string) {
 		.insertOne({
 			username,
 			userId: result.insertedId,
-			hash: hash(password, 10),
+			hash: (await hash(password, 10)),
 		});
 }

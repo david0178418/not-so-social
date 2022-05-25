@@ -1,5 +1,8 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { DbCollections } from '@common/constants';
+import { dbClientPromise } from '../../../common/server/mongodb';
+import { compare } from 'bcryptjs';
 
 const {
 	JWT_SECRET,
@@ -26,21 +29,27 @@ export default NextAuth({
 					type: 'password',
 				},
 			},
-			authorize(cred) {
+			async authorize(cred) {
 				const {
 					username,
 					password,
 				} = cred;
 
-				if(username === 'foo' && password === 'bar') {
-					return {
-						id: 1,
-						username,
-					};
-				} else {
+				const db = await dbClientPromise;
+
+				const u = await db.collection(DbCollections.Creds)
+					.findOne({ username });
+
+				if(!(u && await compare(password, u.hash))) {
 					return null;
 				}
+
+				return {
+					id: u._id,
+					username,
+				};
 			},
+
 		}),
 		// EmailProvider({
 		//   server: process.env.EMAIL_SERVER,

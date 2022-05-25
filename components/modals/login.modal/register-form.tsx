@@ -2,13 +2,15 @@ import type { UrlObject } from 'url';
 
 import { useState } from 'react';
 import { Key } from 'ts-key-enum';
-import { register } from '@common/actions';
+import { login, register } from '@common/actions';
 import { useAtom } from 'jotai';
 import { pushToastMsgAtom } from '@common/atoms';
 import Link from 'next/link';
 import {
+	Backdrop,
 	Box,
 	Button,
+	CircularProgress,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
@@ -26,6 +28,7 @@ function RegistrationForm(props: Props) {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [repassword, setRepassword] = useState('');
+	const [loading, setLoading] = useState(false);
 	const valid = !!(
 		username &&
 		password && (
@@ -35,29 +38,34 @@ function RegistrationForm(props: Props) {
 
 	function handleKeyUp(key: string) {
 		if(key === Key.Enter) {
-			handleLogin();
+			handleRegister();
 		}
 	}
 
-	async function handleLogin() {
+	async function handleRegister() {
 		if(!valid) {
 			return;
 		}
 
+		setLoading(true);
+
 		try {
-
-			if(await register(username, password)) {
+			if(
+				await register(username, password) &&
+				await login(username, password)
+			) {
 				setUsername('');
-			} else {
-				pustToastMsg('Incorrect Login');
 			}
+		} catch(e: any) {
+			const { errors = ['Something went wrong. Try again.'] } = e;
 
-		} catch(e) {
-			pustToastMsg('Something went wrong. Try again.');
+			errors.map(pustToastMsg);
 			console.log(e);
 		}
 
 		setPassword('');
+		setRepassword('');
+		setLoading(false);
 	}
 
 	return (
@@ -116,11 +124,20 @@ function RegistrationForm(props: Props) {
 				<Button
 					variant="outlined"
 					disabled={!valid}
-					onClick={handleLogin}
+					onClick={handleRegister}
 				>
 					Register
 				</Button>
 			</DialogActions>
+			<Backdrop
+				open={loading}
+				sx={{
+					color: '#fff',
+					zIndex: (theme) => theme.zIndex.drawer + 1,
+				}}
+			>
+				<CircularProgress color="inherit" />
+			</Backdrop>
 		</>
 	);
 }
