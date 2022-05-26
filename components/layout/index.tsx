@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import Head from 'next/head';
 import { TitleBar } from './title-bar';
 import { RightRail } from './right-rail';
@@ -6,8 +8,6 @@ import {
 	Container,
 	Grid,
 } from '@mui/material';
-
-import type { ReactNode } from 'react';
 
 interface Props {
 	title?: string;
@@ -25,7 +25,7 @@ function Layout(props: Props) {
 		<>
 			<Head>
 				<title>Pinboard {title ? `- ${title}` : ''}</title>
-				<meta name="description" content="Strctured Arguments - Where Ideas Reign King" />
+				<meta name="description" content="Pinboard" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 

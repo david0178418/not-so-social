@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ModalActions } from '@common/constants';
 import { useIsLoggedIn } from '@common/hooks';
 import { LoginForm } from './login-form';
+import { RegistrationForm } from './register-form';
 import {
 	Button,
 	Dialog,
@@ -10,7 +11,6 @@ import {
 	useMediaQuery,
 	useTheme,
 } from '@mui/material';
-import { RegistrationForm } from './register-form';
 
 export
 function LoginModal() {

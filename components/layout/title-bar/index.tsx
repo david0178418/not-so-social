@@ -20,10 +20,12 @@ function TitleBar(props: Props) {
 
 	return (
 		<>
-			<Box sx={{
-				marginBottom: 1,
-				flexGrow: 1,
-			}}>
+			<Box
+				sx={{
+					marginBottom: 1,
+					flexGrow: 1,
+				}}
+			>
 				<AppBar position="static">
 					<Toolbar>
 						{showBack && (
@@ -38,7 +40,11 @@ function TitleBar(props: Props) {
 								</IconButton>
 							</Link>
 						)}
-						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+						<Typography
+							variant="h6"
+							component="div"
+							sx={{ flexGrow: 1 }}
+						>
 							Pinboard
 						</Typography>
 					</Toolbar>
