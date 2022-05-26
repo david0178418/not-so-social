@@ -10,6 +10,38 @@ import {
 	ListItemIcon,
 	ListItemText,
 } from '@mui/material';
+import { ReactNode } from 'react';
+
+interface Props {
+	label: string;
+	secondary?: string;
+	children: ReactNode;
+}
+
+function RailButtonContent(props: Props) {
+	const {
+		label,
+		secondary = '',
+		children,
+	} = props;
+	return (
+		<>
+			<ListItemIcon>
+				{children}
+			</ListItemIcon>
+			<ListItemText
+				primary={label}
+				secondary={secondary}
+				sx={{
+					display: {
+						xs: 'none',
+						sm: 'inline',
+					},
+				}}
+			/>
+		</>
+	);
+}
 
 function LeftRail() {
 	const router = useRouter();
@@ -36,10 +68,12 @@ function LeftRail() {
 						}}
 					>
 						<ListItemButton>
-							<ListItemIcon>
+							<RailButtonContent
+								label="Login"
+								secondary="or register"
+							>
 								<LoginIcon/>
-							</ListItemIcon>
-							<ListItemText primary="Login" secondary="or register"/>
+							</RailButtonContent>
 						</ListItemButton>
 					</Link>
 				)}
@@ -56,10 +90,11 @@ function LeftRail() {
 						}}
 					>
 						<ListItemButton>
-							<ListItemIcon>
+							<RailButtonContent
+								label="Logout"
+							>
 								<LoginIcon/>
-							</ListItemIcon>
-							<ListItemText primary="Logout" />
+							</RailButtonContent>
 						</ListItemButton>
 					</Link>
 				)}
