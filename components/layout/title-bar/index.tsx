@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { BackIcon, MenuIcon } from '@components/icons';
+import { BackIcon } from '@components/icons';
 import { LoginModal } from '@components/modals/login.modal';
+import { LogoutModal } from '@components/modals/logout.modal';
 import {
 	AppBar,
 	Box,
@@ -8,7 +9,6 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
-import { LogoutModal } from '@components/modals/logout.modal';
 
 interface Props {
 	showBack?: boolean;
@@ -37,16 +37,6 @@ function TitleBar(props: Props) {
 									<BackIcon />
 								</IconButton>
 							</Link>
-						)}
-						{!showBack && (
-							<IconButton
-								size="large"
-								edge="start"
-								color="inherit"
-								sx={{ mr: 2 }}
-							>
-								<MenuIcon />
-							</IconButton>
 						)}
 						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 							Pinboard
