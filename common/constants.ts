@@ -87,6 +87,7 @@ enum DbCollections {
 
 export
 enum ModalActions {
+	CreatePost = 'create-post',
 	LoginRegister = 'login-register',
 	Logout = 'logout',
 }

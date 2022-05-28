@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import { ModalActions } from '@common/constants';
-import { LoginIcon } from '@components/icons';
+import { CreateIcon, LoginIcon } from '@components/icons';
 import { useRouter } from 'next/router';
 import { useIsLoggedIn, useIsLoggedOut } from '@common/hooks';
-import Link from 'next/link';
+import { ReactNode } from 'react';
 import {
 	List,
 	ListItem,
@@ -10,7 +11,6 @@ import {
 	ListItemIcon,
 	ListItemText,
 } from '@mui/material';
-import { ReactNode } from 'react';
 
 interface Props {
 	label: string;
@@ -54,8 +54,8 @@ function LeftRail() {
 
 	return (
 		<List>
-			<ListItem disablePadding>
-				{isLoggedOut && (
+			{isLoggedOut && (
+				<ListItem disablePadding>
 					<Link
 						shallow
 						passHref
@@ -76,29 +76,54 @@ function LeftRail() {
 							</RailButtonContent>
 						</ListItemButton>
 					</Link>
-				)}
-				{isLoggedIn && (
-					<Link
-						shallow
-						passHref
-						href={{
-							pathname,
-							query: {
-								a: ModalActions.Logout,
-								...query,
-							},
-						}}
-					>
-						<ListItemButton>
-							<RailButtonContent
-								label="Logout"
-							>
-								<LoginIcon/>
-							</RailButtonContent>
-						</ListItemButton>
-					</Link>
-				)}
-			</ListItem>
+				</ListItem>
+			)}
+			{isLoggedIn && (
+				<>
+					<ListItem disablePadding>
+						<Link
+							shallow
+							passHref
+							href={{
+								pathname,
+								query: {
+									a: ModalActions.CreatePost,
+									...query,
+								},
+							}}
+						>
+							<ListItemButton>
+								<RailButtonContent
+									label="Create Post"
+								>
+									<CreateIcon />
+								</RailButtonContent>
+							</ListItemButton>
+						</Link>
+					</ListItem>
+					<ListItem disablePadding>
+						<Link
+							shallow
+							passHref
+							href={{
+								pathname,
+								query: {
+									a: ModalActions.Logout,
+									...query,
+								},
+							}}
+						>
+							<ListItemButton>
+								<RailButtonContent
+									label="Logout"
+								>
+									<LoginIcon/>
+								</RailButtonContent>
+							</ListItemButton>
+						</Link>
+					</ListItem>
+				</>
+			)}
 		</List>
 	);
 }

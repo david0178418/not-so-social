@@ -9,6 +9,7 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
+import { CreatePostModal } from '@components/modals/create-post.modal';
 
 interface Props {
 	showBack?: boolean;
@@ -50,8 +51,10 @@ function TitleBar(props: Props) {
 					</Toolbar>
 				</AppBar>
 			</Box>
+			{/** TODO: Need to figure out where to put these */}
 			<LoginModal/>
 			<LogoutModal/>
+			<CreatePostModal/>
 		</>
 	);
 }
