@@ -128,6 +128,7 @@ function LeftRail() {
 							<Fab
 								variant="extended"
 								color="primary"
+								style={{ width: '100%' }}
 								sx={{
 									display: {
 										xs: 'none',
