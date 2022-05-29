@@ -22,6 +22,7 @@ function CreatePostModal() {
 	const isLoggedOut = useIsLoggedOut();
 	const router = useRouter();
 	const [postTitle, setPostTitle] = useState('');
+	const [postBody, setPostBody] = useState('');
 	const {
 		a: action,
 		...newQuery
@@ -62,9 +63,6 @@ function CreatePostModal() {
 				Create Post
 			</DialogTitle>
 			<DialogContent>
-				<DialogContentText>
-					Foo
-				</DialogContentText>
 				<Box
 					noValidate
 					autoComplete="off"
@@ -80,6 +78,18 @@ function CreatePostModal() {
 						value={postTitle}
 						onKeyUp={e => handleKeyUp(e.key)}
 						onChange={e => setPostTitle(e.target.value)}
+					/>
+					<TextField
+						fullWidth
+						multiline
+						label="Post"
+						variant="standard"
+						placeholder="Post title"
+						type="text"
+						minRows={3}
+						value={postBody}
+						onKeyUp={e => handleKeyUp(e.key)}
+						onChange={e => setPostBody(e.target.value)}
 					/>
 				</Box>
 			</DialogContent>
