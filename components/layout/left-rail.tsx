@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useIsLoggedIn, useIsLoggedOut } from '@common/hooks';
 import { ReactNode } from 'react';
 import {
+	Fab,
 	List,
 	ListItem,
 	ListItemButton,
@@ -87,27 +88,6 @@ function LeftRail() {
 							href={{
 								pathname,
 								query: {
-									a: ModalActions.CreatePost,
-									...query,
-								},
-							}}
-						>
-							<ListItemButton>
-								<RailButtonContent
-									label="Create Post"
-								>
-									<CreateIcon />
-								</RailButtonContent>
-							</ListItemButton>
-						</Link>
-					</ListItem>
-					<ListItem disablePadding>
-						<Link
-							shallow
-							passHref
-							href={{
-								pathname,
-								query: {
 									a: ModalActions.Logout,
 									...query,
 								},
@@ -122,6 +102,44 @@ function LeftRail() {
 							</ListItemButton>
 						</Link>
 					</ListItem>
+					<Link
+						shallow
+						passHref
+						href={{
+							pathname,
+							query: {
+								a: ModalActions.CreatePost,
+								...query,
+							},
+						}}
+					>
+						<a>
+							<Fab
+								color="primary"
+								sx={{
+									display: {
+										xs: 'inline-flex',
+										sm: 'none',
+									},
+								}}
+							>
+								<CreateIcon/>
+							</Fab>
+							<Fab
+								variant="extended"
+								color="primary"
+								sx={{
+									display: {
+										xs: 'none',
+										sm: 'inline-flex',
+									},
+								}}
+							>
+								<CreateIcon sx={{ mr: 1 }} />
+								Create Post
+							</Fab>
+						</a>
+					</Link>
 				</>
 			)}
 		</List>
