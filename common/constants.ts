@@ -80,9 +80,10 @@ enum ActivityTypes {
 
 export
 enum DbCollections {
+	Creds = 'credentials',
+	Posts = 'posts',
 	Users = 'users',
 	UsersMeta = 'users-meta',
-	Creds = 'credentials',
 }
 
 export

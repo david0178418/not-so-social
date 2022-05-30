@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { DbCollections } from '@common/constants';
-import { dbClientPromise } from '../../../common/server/mongodb';
+import { getCollection } from '../../../common/server/mongodb';
 import { compare } from 'bcryptjs';
 
 const {
@@ -35,10 +35,8 @@ export default NextAuth({
 					password,
 				} = cred;
 
-				const db = await dbClientPromise;
-
-				const u = await db.collection(DbCollections.Creds)
-					.findOne({ username });
+				const credsCol = await getCollection(DbCollections.Creds);
+				const u = credsCol.findOne({ username });
 
 				if(!(u && await compare(password, u.hash))) {
 					return null;
@@ -152,6 +150,8 @@ export default NextAuth({
 			} = args;
 
 			session.user = token.user;
+
+			session.foo = 'asdfas';
 
 			return session;
 		},

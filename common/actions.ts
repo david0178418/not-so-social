@@ -19,7 +19,7 @@ async function login(username: string, password: string) {
 }
 
 export
-async function register(username: string, password: string) {
+function register(username: string, password: string) {
 	return post<ApiResponse>('/api/register', {
 		username,
 		password,
@@ -29,4 +29,12 @@ async function register(username: string, password: string) {
 export
 async function logout() {
 	await signOut();
+}
+
+export
+function postSave(title: string, body: string) {
+	return post('/api/post/save', {
+		title,
+		body,
+	});
 }

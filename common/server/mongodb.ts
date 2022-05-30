@@ -1,4 +1,4 @@
-import { MONGODB_DB } from '@common/constants';
+import { DbCollections, MONGODB_DB } from '@common/constants';
 import {
 	Db,
 	MongoClient,
@@ -34,6 +34,15 @@ if (process.env.NODE_ENV === 'development') {
 		.then((client) => client.db(MONGODB_DB));
 }
 
+async function getCollection(collection: DbCollections) {
+	const db = await dbClientPromise;
+
+	return db.collection(collection);
+}
+
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
-export { dbClientPromise };
+export {
+	dbClientPromise,
+	getCollection,
+};

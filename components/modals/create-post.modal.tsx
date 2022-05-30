@@ -11,10 +11,10 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
 	TextField,
 } from '@mui/material';
+import { postSave } from '@common/actions';
 
 export
 function CreatePostModal() {
@@ -46,7 +46,7 @@ function CreatePostModal() {
 
 	async function handleSave() {
 		try {
-			//
+			console.log(await postSave(postTitle, postBody));
 		} catch(e) {
 			pustToastMsg('Something went wrong. Try again.');
 			console.log(e);
