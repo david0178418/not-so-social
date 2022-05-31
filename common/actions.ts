@@ -32,9 +32,11 @@ async function logout() {
 }
 
 export
-function postSave(title: string, body: string) {
-	return post('/api/post/save', {
+async function postSave(title: string, body: string) {
+	const { data } = await post<ApiResponse>('/api/post/save', {
 		title,
 		body,
 	});
+
+	return data;
 }

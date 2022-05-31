@@ -6,8 +6,9 @@ interface DbCreds {
 }
 
 export
-interface ApiResponse {
+interface ApiResponse<T = any> {
 	ok: boolean;
+	data?: T;
 	errors?: string[];
 }
 

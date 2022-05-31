@@ -57,9 +57,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 		body,
 	} = value;
 
-	createPost(title, body, session.user.id);
-
-	res.send({ ok: true });
+	res.send({
+		ok: true,
+		data: await createPost(title, body, session.user.id),
+	});
 }
 
 async function createPost(title: string, body: string, ownerId: string) {
