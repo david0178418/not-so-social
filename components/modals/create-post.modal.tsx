@@ -57,10 +57,6 @@ function CreatePostModal() {
 		setLoading(false);
 	}
 
-	function handleKeyUp(a: any) {
-		console.log(a);
-	}
-
 	return (
 		<Dialog open={isOpen}>
 			<DialogTitle>
@@ -80,7 +76,6 @@ function CreatePostModal() {
 						placeholder="Post title"
 						type="text"
 						value={postTitle}
-						onKeyUp={e => handleKeyUp(e.key)}
 						onChange={e => setPostTitle(e.target.value)}
 					/>
 					<TextField
@@ -92,7 +87,6 @@ function CreatePostModal() {
 						type="text"
 						minRows={3}
 						value={postBody}
-						onKeyUp={e => handleKeyUp(e.key)}
 						onChange={e => setPostBody(e.target.value)}
 					/>
 				</Box>
