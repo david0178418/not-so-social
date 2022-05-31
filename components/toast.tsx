@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import { Snackbar, IconButton } from '@mui/material';
 import { CloseIcon } from '@components/icons';
 import { clearCurrentToastMsgAtom, toastMsgAtom } from '@common/atoms';
-import { useAtom } from 'jotai';
+import {
+	useAtomValue,
+	useSetAtom,
+} from 'jotai';
 
 export
 function Toast() {
-	const [toastMsg] = useAtom(toastMsgAtom);
-	const [, clearMsg] = useAtom(clearCurrentToastMsgAtom);
+	const toastMsg = useAtomValue(toastMsgAtom);
+	const clearMsg = useSetAtom(clearCurrentToastMsgAtom);
 	const [isOpen, setOpen] = useState(false);
 
 	useEffect(() => {

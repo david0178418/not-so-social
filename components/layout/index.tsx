@@ -8,6 +8,7 @@ import {
 	Container,
 	Grid,
 } from '@mui/material';
+import { Loader } from '@components/loader';
 
 interface Props {
 	title?: string;
@@ -62,6 +63,7 @@ function Layout(props: Props) {
 					</Grid>
 				</Grid>
 			</Container>
+			<Loader />
 		</>
 	);
 }

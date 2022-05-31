@@ -3,14 +3,12 @@ import type { UrlObject } from 'url';
 import { useState } from 'react';
 import { Key } from 'ts-key-enum';
 import { login, register } from '@common/actions';
-import { useAtom } from 'jotai';
-import { pushToastMsgAtom } from '@common/atoms';
+import { useSetAtom } from 'jotai';
+import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import Link from 'next/link';
 import {
-	Backdrop,
 	Box,
 	Button,
-	CircularProgress,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
@@ -24,11 +22,11 @@ interface Props {
 export
 function RegistrationForm(props: Props) {
 	const { urlObj } = props;
-	const [, pustToastMsg] = useAtom(pushToastMsgAtom);
+	const pustToastMsg = useSetAtom(pushToastMsgAtom);
+	const setLoading = useSetAtom(loadingAtom);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [repassword, setRepassword] = useState('');
-	const [loading, setLoading] = useState(false);
 	const valid = !!(
 		username &&
 		password && (
@@ -129,15 +127,6 @@ function RegistrationForm(props: Props) {
 					Register
 				</Button>
 			</DialogActions>
-			<Backdrop
-				open={loading}
-				sx={{
-					color: '#fff',
-					zIndex: (theme) => theme.zIndex.drawer + 1,
-				}}
-			>
-				<CircularProgress color="inherit" />
-			</Backdrop>
 		</>
 	);
 }
