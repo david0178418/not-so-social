@@ -2,9 +2,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ModalActions } from '@common/constants';
-import { useAtom } from 'jotai';
-import { pushToastMsgAtom } from '@common/atoms';
+import { useSetAtom } from 'jotai';
+import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { useIsLoggedOut } from '@common/hooks';
+import { postSave } from '@common/actions';
 import {
 	Box,
 	Button,
@@ -14,11 +15,11 @@ import {
 	DialogTitle,
 	TextField,
 } from '@mui/material';
-import { postSave } from '@common/actions';
 
 export
 function CreatePostModal() {
-	const [, pustToastMsg] = useAtom(pushToastMsgAtom);
+	const pustToastMsg = useSetAtom(pushToastMsgAtom);
+	const setLoading = useSetAtom(loadingAtom);
 	const isLoggedOut = useIsLoggedOut();
 	const router = useRouter();
 	const [postTitle, setPostTitle] = useState('');
@@ -46,11 +47,14 @@ function CreatePostModal() {
 
 	async function handleSave() {
 		try {
+			setLoading(true);
 			console.log(await postSave(postTitle, postBody));
 		} catch(e) {
 			pustToastMsg('Something went wrong. Try again.');
 			console.log(e);
 		}
+
+		setLoading(false);
 	}
 
 	function handleKeyUp(a: any) {
