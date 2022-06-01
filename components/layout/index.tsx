@@ -44,22 +44,9 @@ function Layout(props: Props) {
 					<Grid
 						item
 						xs={14}
-						md={8}
+						md={12}
 					>
 						{children}
-					</Grid>
-					<Grid
-						item
-						// sm={4}
-						md={4}
-						sx={{
-							display: {
-								xs: 'none',
-								sm: 'block',
-							},
-						}}
-					>
-						<RightRail/>
 					</Grid>
 				</Grid>
 			</Container>
