@@ -1,7 +1,9 @@
 import { DbCollections } from '@common/constants';
 import { Post } from '@common/types';
+import { ObjectId } from 'mongodb';
 import { DbPost } from './db-schema';
 import { getCollection } from './mongodb';
+import { dbPostToPost } from './transforms';
 
 export
 async function getPosts(): Promise<Post[]> {
@@ -11,9 +13,14 @@ async function getPosts(): Promise<Post[]> {
 		.find()
 		.toArray();
 
-	return results.map(p => ({
-		...p,
-		_id: p._id?.toString(),
-		ownerId: p.ownerId.toString(),
-	}));
+	return results.map(dbPostToPost);
+}
+
+export
+async function getPost(id: string): Promise<Post | null> {
+	const col = await getCollection<DbPost>(DbCollections.Posts);
+
+	const result = await col.findOne({ _id: new ObjectId(id) });
+
+	return result && dbPostToPost(result);
 }

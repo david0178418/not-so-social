@@ -5,6 +5,7 @@ import {
 	ListItemText,
 	Typography,
 } from '@mui/material';
+import Link from 'next/link';
 
 interface Props {
 	post: Post;
@@ -14,6 +15,7 @@ export
 function FeedPost(props: Props) {
 	const {
 		post: {
+			_id,
 			body,
 			title,
 			created,
@@ -23,18 +25,27 @@ function FeedPost(props: Props) {
 	return (
 		<ListItem alignItems="flex-start">
 			<ListItemText
-				primary={title}
+				primary={(
+					<Link
+						passHref
+						href={`/p/${_id}`}
+					>
+						<a>
+							<strong>
+								{title}
+							</strong>
+						</a>
+					</Link>
+				)}
 				secondary={
 					<>
 						<Typography
-							sx={{ display: 'inline' }}
-							component="span"
-							variant="body2"
+							component="p"
 							color="text.primary"
 						>
 							{formatDate(created)}
 						</Typography>
-						{` - ${body}`}
+						{body}
 					</>
 				}
 			/>
