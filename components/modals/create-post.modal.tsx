@@ -49,12 +49,21 @@ function CreatePostModal() {
 		try {
 			setLoading(true);
 			console.log(await postSave(postTitle, postBody));
-		} catch(e) {
-			pustToastMsg('Something went wrong. Try again.');
+			close();
+		} catch(e: any) {
+			const { errors = ['Something went wrong. Try again.'] } = e;
+
+			errors.map(pustToastMsg);
 			console.log(e);
 		}
 
 		setLoading(false);
+	}
+
+	function close() {
+		setPostBody('');
+		setPostTitle('');
+		router.back();
 	}
 
 	return (
