@@ -5,6 +5,8 @@ import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
 import { Post } from '@common/types';
 import { getPosts } from '@common/server/db-calls';
+import { FeedPost } from '@components/feed-post';
+import { List } from '@mui/material';
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async () => {
@@ -30,11 +32,14 @@ const Home: NextPage<Props> = (props) => {
 				</Head>
 
 				<main className={styles.main}>
-					{posts.map(p => (
-						<pre key={p._id}>
-							{JSON.stringify(p, null, 4)}
-						</pre>
-					))}
+					<List>
+						{posts.map(p => (
+							<FeedPost
+								key={p._id}
+								post={p}
+							/>
+						))}
+					</List>
 				</main>
 			</div>
 		</Layout>
