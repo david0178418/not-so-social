@@ -151,8 +151,6 @@ export default NextAuth({
 
 			session.user = token.user;
 
-			session.foo = 'asdfas';
-
 			return session;
 		},
 	},

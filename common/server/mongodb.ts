@@ -34,10 +34,10 @@ if (process.env.NODE_ENV === 'development') {
 		.then((client) => client.db(MONGODB_DB));
 }
 
-async function getCollection(collection: DbCollections) {
+async function getCollection<T = any>(collection: DbCollections) {
 	const db = await dbClientPromise;
 
-	return db.collection(collection);
+	return db.collection<T>(collection);
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a

@@ -1,8 +1,11 @@
 export
-interface DbCreds {
-	username: string;
-	userId: string;
-	pwHash: string;
+interface Post {
+	_id?: string;
+	body: string;
+	title: string;
+	created: string;
+	lastUpdated: string;
+	ownerId: string;
 }
 
 export
