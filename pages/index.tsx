@@ -10,9 +10,7 @@ import { List } from '@mui/material';
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async () => {
-	const posts = await getPosts();
-	console.log(posts);
-	return { props: { posts } };
+	return { props: { posts: await getPosts() } };
 };
 
 interface Props {
