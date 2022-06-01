@@ -8,14 +8,14 @@ import { getPosts } from '@common/server/db-calls';
 import { FeedPost } from '@components/feed-post';
 import { List } from '@mui/material';
 
+interface Props {
+	posts: Post[];
+}
+
 export
 const getServerSideProps: GetServerSideProps<Props> = async () => {
 	return { props: { posts: await getPosts() } };
 };
-
-interface Props {
-	posts: Post[];
-}
 
 const Home: NextPage<Props> = (props) => {
 	const { posts } = props;
