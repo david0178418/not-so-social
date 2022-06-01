@@ -18,9 +18,14 @@ async function getPosts(): Promise<Post[]> {
 
 export
 async function getPost(id: string): Promise<Post | null> {
-	const col = await getCollection<DbPost>(DbCollections.Posts);
+	try {
+		const _id = new ObjectId(id);
+		const col = await getCollection<DbPost>(DbCollections.Posts);
 
-	const result = await col.findOne({ _id: new ObjectId(id) });
+		const result = await col.findOne({ _id });
 
-	return result && dbPostToPost(result);
+		return result && dbPostToPost(result);
+	} catch {
+		return null;
+	}
 }

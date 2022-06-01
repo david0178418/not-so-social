@@ -37,10 +37,10 @@ function FeedPost(props: Props) {
 						</a>
 					</Link>
 				)}
+				secondaryTypographyProps={{ component: 'div' }}
 				secondary={
 					<>
 						<Typography
-							component="p"
 							color="text.primary"
 						>
 							{formatDate(created)}
