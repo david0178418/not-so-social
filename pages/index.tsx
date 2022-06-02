@@ -1,12 +1,12 @@
 import type { GetServerSideProps, NextPage } from 'next';
 
-import { Layout } from '@components/layout';
-import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
+
+import Head from 'next/head';
+import { Layout } from '@components/layout';
 import { Post } from '@common/types';
 import { getPosts } from '@common/server/db-calls';
 import { FeedPost } from '@components/feed-post';
-import { List } from '@mui/material';
 
 interface Props {
 	posts: Post[];
@@ -30,14 +30,14 @@ const Home: NextPage<Props> = (props) => {
 				</Head>
 
 				<main className={styles.main}>
-					<List>
+					<div>
 						{posts.map(p => (
 							<FeedPost
 								key={p._id}
 								post={p}
 							/>
 						))}
-					</List>
+					</div>
 				</main>
 			</div>
 		</Layout>

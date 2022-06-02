@@ -2,10 +2,12 @@ export
 interface Post {
 	_id?: string;
 	body: string;
-	title: string;
+	bookmarked: boolean;
 	created: string;
+	isOwner: string;
 	lastUpdated: string;
-	ownerId: string;
+	points: number;
+	title: string;
 }
 
 export

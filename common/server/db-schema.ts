@@ -1,8 +1,15 @@
 import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 
+type SavedPostProps = Pick<Post,
+'body' |
+'title' |
+'created' |
+'lastUpdated'
+>;
+
 export
-interface DbPost extends Omit<Post, '_id' | 'ownerId'> {
+interface DbPost extends SavedPostProps {
 	_id?: ObjectId;
 	ownerId: ObjectId;
 }
