@@ -81,7 +81,11 @@ enum ActivityTypes {
 export
 enum DbCollections {
 	Creds = 'credentials',
+	PostBookmarks = 'post-bookmarks',
 	Posts = 'posts',
+	PostEditHistory = 'post-edit-history',
+	PostPoints = 'post-points',
+	UserActivity = 'user-activity',
 	Users = 'users',
 	UsersMeta = 'users-meta',
 }

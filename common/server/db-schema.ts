@@ -20,3 +20,9 @@ interface DbCreds {
 	userId: string;
 	pwHash: string;
 }
+
+export
+interface DbBookmark {
+	userId: string;
+	postId: ObjectId;
+}
