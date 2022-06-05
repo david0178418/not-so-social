@@ -2,17 +2,16 @@ import { Post } from '@common/types';
 import Link from 'next/link';
 import { BookmarkToggle } from './bookmark-toggle';
 import { formatCompactNumber } from '@common/utils';
+import { useIsLoggedIn } from '@common/hooks';
 import {
 	BoostIcon,
 	CommentIcon,
-	ConnectPostIcon,
 } from '@components/icons';
 import {
 	Button,
 	Grid,
 	Tooltip,
 } from '@mui/material';
-import { useIsLoggedIn } from '@common/hooks';
 
 interface Props {
 	post: Post;
@@ -41,26 +40,6 @@ function PostActions(props: Props) {
 						<Button
 							size={size}
 							startIcon={<CommentIcon/>}
-						>
-							{''}
-						</Button>
-					</Tooltip>
-				</Link>
-			</Grid>
-			<Grid
-				xs
-				item
-				style={{ textAlign: 'center' }}
-			>
-				<Link
-					passHref
-					shallow
-					href="/"
-				>
-					<Tooltip title="Connect to Post as Response">
-						<Button
-							size={size}
-							startIcon={<ConnectPostIcon/>}
 						>
 							{''}
 						</Button>
