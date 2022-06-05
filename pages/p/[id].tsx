@@ -9,6 +9,7 @@ import { IconButton, Typography } from '@mui/material';
 import { formatDate } from '@common/utils';
 import { BackIcon } from '@components/icons';
 import Link from 'next/link';
+import { getSession } from 'next-auth/react';
 
 interface Props {
 	post: Post | null;
@@ -19,10 +20,15 @@ interface Params extends ParsedUrlQuery {
 }
 
 export
-const getServerSideProps: GetServerSideProps<Props, Params> = async (props) => {
-	const { params: { id = '' } = {} } = props;
+const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
+	const {
+		req,
+		params: { id = '' } = {},
+	} = ctx;
+	const session = await getSession({ req });
+	const userId = session?.user.id || '';
 
-	return { props: { post: await getPost(id) } };
+	return { props: { post: await getPost(userId, id) } };
 };
 
 const Home: NextPage<Props> = (props) => {

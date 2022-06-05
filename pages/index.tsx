@@ -7,14 +7,18 @@ import { Layout } from '@components/layout';
 import { Post } from '@common/types';
 import { getPosts } from '@common/server/db-calls';
 import { FeedPost } from '@components/feed-post';
+import { getSession } from 'next-auth/react';
 
 interface Props {
 	posts: Post[];
 }
 
 export
-const getServerSideProps: GetServerSideProps<Props> = async () => {
-	return { props: { posts: await getPosts() } };
+const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
+	const session = await getSession({ req });
+	console.log(111, session);
+	const userId = session?.user.id || '';
+	return { props: { posts: await getPosts(userId || '') } };
 };
 
 const Home: NextPage<Props> = (props) => {
