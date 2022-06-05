@@ -24,7 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
 
-		col.deleteOne(
+		await col.deleteOne(
 			{
 				userId: user.id,
 				postId: new ObjectId(postId),

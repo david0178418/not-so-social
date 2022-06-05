@@ -26,7 +26,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const postObjId = new ObjectId(postId);
 
 		const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
-		col.updateOne(
+		await col.updateOne(
 			{
 				userId: user.id,
 				postId: postObjId,

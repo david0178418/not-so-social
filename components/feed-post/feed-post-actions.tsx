@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { BookmarkToggle } from './bookmark-toggle';
 import { formatCompactNumber, urlJoin } from '@common/utils';
 import { useIsLoggedIn } from '@common/hooks';
+import { writeToClipboard } from '@common/client/utils';
+import { Paths } from '@common/constants';
 import {
 	BoostIcon,
 	CommentIcon,
@@ -13,8 +15,6 @@ import {
 	Grid,
 	Tooltip,
 } from '@mui/material';
-import { writeToClipboard } from '@common/client/utils';
-import { Paths } from '@common/constants';
 
 interface Props {
 	post: Post;

@@ -16,7 +16,6 @@ interface Props {
 export
 const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
 	const session = await getSession({ req });
-	console.log(111, session);
 	const userId = session?.user.id || '';
 	return { props: { posts: await getPosts(userId || '') } };
 };
