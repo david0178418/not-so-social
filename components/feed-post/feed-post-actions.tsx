@@ -78,7 +78,7 @@ function PostActions(props: Props) {
 						color="success"
 						startIcon={<BoostIcon fontSize="inherit" />}
 					>
-						{formatCompactNumber(post.points)}
+						{formatCompactNumber(post.points || 0)}
 					</Button>
 				</Tooltip>
 			</Grid>
