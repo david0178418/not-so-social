@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { ModalActions } from '@common/constants';
 import { useRouter } from 'next/router';
 import { BookmarkIcon, BookmarkOutlinedIcon } from '@components/icons';
+import { pushToastMsgAtom } from '@common/atoms';
+import { useSetAtom } from 'jotai';
 
 interface Props {
 	post: Post;
@@ -21,6 +23,7 @@ function BookmarkToggle(props: Props) {
 		size = 'medium',
 	} = props;
 	const [isBookmarked, setIsBookmarked] = useState(!!post.bookmarked);
+	const pustToastMsg = useSetAtom(pushToastMsgAtom);
 	const {
 		pathname,
 		query,
@@ -31,11 +34,20 @@ function BookmarkToggle(props: Props) {
 			return;
 		}
 
-		post.bookmarked ?
+		setIsBookmarked(!isBookmarked);
+
+		await post.bookmarked ?
 			unbookmarkPost(post._id) :
 			bookmarkPost(post._id);
 
-		setIsBookmarked(!isBookmarked);
+		const msg = post.bookmarked ?
+			'Bookmark removed' :
+			'Bookmarked';
+
+		// TODO Nicer/cleaner way to update this without mutating
+		post.bookmarked = !post.bookmarked;
+
+		pustToastMsg(msg);
 	}
 
 	const body = (
