@@ -4,7 +4,6 @@ import { Paths } from '@common/constants';
 import { Post } from '@common/types';
 import { PostActions } from './feed-post-actions';
 import { DropdownMenu } from '@components/dropdown-menu';
-import { writeToClipboard } from '@common/client/utils';
 import {
 	getTimeSinceDate,
 	localizedDateFormat,
@@ -107,9 +106,6 @@ function FeedPost(props: Props) {
 										<MenuItem key="b">Abandon Ownership</MenuItem>,
 									]
 								)}
-								<MenuItem onClick={() => writeToClipboard(getItemUrl(post))}>
-									Copy Link
-								</MenuItem>
 								<MenuItem>View Point Activity</MenuItem>
 								{!post.isOwner && (
 									<MenuItem>Mark as Spam</MenuItem>
@@ -130,14 +126,6 @@ function FeedPost(props: Props) {
 			</div>
 		</Box>
 	);
-}
-
-function getItemUrl(item: Post) {
-	if(!item._id) {
-		return '';
-	}
-
-	return urlJoin(location.host, Paths.Post, item._id);
 }
 
 function parseContentString(str: string) {

@@ -7,6 +7,7 @@ export { default as CancelIcon } from '@mui/icons-material/Cancel';
 export { default as CloseIcon } from '@mui/icons-material/Close';
 export { default as CommentIcon } from '@mui/icons-material/ModeCommentOutlined';
 export { default as ConfirmIcon } from '@mui/icons-material/Check';
+export { default as CopyIcon } from '@mui/icons-material/ContentCopy';
 export { default as ConnectPostIcon } from '@mui/icons-material/Cable';
 export { default as CreateIcon } from '@mui/icons-material/Create';
 export { default as EditIcon } from '@mui/icons-material/Edit';
