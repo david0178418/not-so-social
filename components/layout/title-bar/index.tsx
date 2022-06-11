@@ -23,11 +23,11 @@ function TitleBar(props: Props) {
 		<>
 			<Box
 				sx={{
-					marginBottom: 1,
+					marginBottom: 9,
 					flexGrow: 1,
 				}}
 			>
-				<AppBar position="static">
+				<AppBar position="fixed">
 					<Toolbar>
 						{showBack && (
 							<Link href="/" passHref>
