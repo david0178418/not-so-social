@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 
 import Head from 'next/head';
 import { TitleBar } from './title-bar';
-import { RightRail } from './right-rail';
 import { LeftRail } from './left-rail';
 import {
 	Container,
@@ -36,14 +35,21 @@ function Layout(props: Props) {
 				<Grid container columns={16} spacing={2}>
 					<Grid
 						item
-						xs={2}
+						sm={2}
 						md={4}
+						sx={{
+							display: {
+								xs: 'none',
+								sm: 'block',
+							},
+						}}
 					>
 						<LeftRail/>
 					</Grid>
 					<Grid
 						item
-						xs={14}
+						xs={16}
+						sm={14}
 						md={12}
 					>
 						{children}
