@@ -36,7 +36,7 @@ function RailButtonContent(props: Props) {
 				sx={{
 					display: {
 						xs: 'none',
-						sm: 'inline',
+						md: 'inline',
 					},
 				}}
 			/>
@@ -119,7 +119,7 @@ function LeftRail() {
 								sx={{
 									display: {
 										xs: 'inline-flex',
-										sm: 'none',
+										md: 'none',
 									},
 								}}
 							>
@@ -132,7 +132,7 @@ function LeftRail() {
 								sx={{
 									display: {
 										xs: 'none',
-										sm: 'inline-flex',
+										md: 'inline-flex',
 									},
 								}}
 							>
