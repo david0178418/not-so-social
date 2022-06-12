@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
 
 import Head from 'next/head';
+import { Loader } from '@components/loader';
+import { BottomNav } from './bottom-nav';
 import { TitleBar } from './title-bar';
 import { LeftRail } from './left-rail';
 import {
 	Container,
 	Grid,
 } from '@mui/material';
-import { Loader } from '@components/loader';
 
 interface Props {
 	title?: string;
@@ -56,6 +57,7 @@ function Layout(props: Props) {
 					</Grid>
 				</Grid>
 			</Container>
+			<BottomNav/>
 			<Loader />
 		</>
 	);
