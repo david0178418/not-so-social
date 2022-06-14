@@ -54,9 +54,9 @@ function BookmarkToggle(props: Props) {
 		<Tooltip title="Bookmark">
 			<IconButton size={size} onClick={toggle}>
 				{isBookmarked ? (
-					<BookmarkIcon/>
+					<BookmarkIcon color="primary"/>
 				) : (
-					<BookmarkOutlinedIcon/>
+					<BookmarkOutlinedIcon color="primary"/>
 				)}
 			</IconButton>
 		</Tooltip>
