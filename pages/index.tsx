@@ -6,6 +6,8 @@ import { Post } from '@common/types';
 import { getPosts } from '@common/server/db-calls';
 import { FeedPost } from '@components/feed-post';
 import { getSession } from 'next-auth/react';
+import { InputAdornment, TextField } from '@mui/material';
+import { SearchIcon } from '@components/icons';
 
 interface Props {
 	posts: Post[];
@@ -31,7 +33,16 @@ const Home: NextPage<Props> = (props) => {
 			<Layout>
 				<div className="baz">
 					<div className="foo" >
-						asdfasdf
+						<TextField
+							fullWidth
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<SearchIcon />
+									</InputAdornment>
+								),
+							}}
+						/>
 					</div>
 					<div className="bar">
 						{posts.map(p => (
@@ -50,9 +61,10 @@ const Home: NextPage<Props> = (props) => {
 					}
 
 					.foo {
-						color: red;
-						height: 100px;
-						background-color: #FFFFFFCC;
+						padding-top: 10px;
+						padding-right: 100px;
+						padding-bottom: 20px;
+						padding-left: 100px;
 					}
 
 					.bar {
