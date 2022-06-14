@@ -61,10 +61,9 @@ function Layout(props: Props) {
 						xs={16}
 						sm={14}
 						md={12}
-						sx={{
+						style={{
 							maxHeight: '100%',
-							overflowX: 'hidden',
-							overflowY: 'auto',
+							overflow: 'hidden',
 							position: 'relative',
 						}}
 					>

@@ -29,12 +29,37 @@ const Home: NextPage<Props> = (props) => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Layout>
-				{posts.map(p => (
-					<FeedPost
-						key={p._id}
-						post={p}
-					/>
-				))}
+				<div className="baz">
+					<div className="foo" >
+						asdfasdf
+					</div>
+					<div className="bar">
+						{posts.map(p => (
+							<FeedPost
+								key={p._id}
+								post={p}
+							/>
+						))}
+					</div>
+				</div>
+				<style jsx>{`
+					.baz {
+						display: flex;
+						flex-direction: column;
+						max-height: 100%;
+					}
+
+					.foo {
+						color: red;
+						height: 100px;
+						background-color: #FFFFFFCC;
+					}
+
+					.bar {
+						overflow: hidden scroll;
+						flex: 1;
+					}
+				`}</style>
 			</Layout>
 		</>
 	);
