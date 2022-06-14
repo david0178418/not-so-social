@@ -3,12 +3,12 @@ import type { ReactNode } from 'react';
 import Head from 'next/head';
 import { Loader } from '@components/loader';
 import { BottomNav } from './bottom-nav';
-import { TitleBar } from './title-bar';
 import { LeftRail } from './left-rail';
 import {
 	Container,
 	Grid,
 } from '@mui/material';
+import { CommonModals } from './common-modals';
 
 interface Props {
 	title?: string;
@@ -30,10 +30,19 @@ function Layout(props: Props) {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<TitleBar/>
-
-			<Container>
-				<Grid container columns={16} spacing={2}>
+			<Container
+				sx={{
+					display: 'flex',
+					height: '100vh',
+					overflow: 'hidden',
+					paddingX: {
+						xs: 0,
+						sm: 1,
+						lg: 2,
+					},
+				}}
+			>
+				<Grid container columns={16} spacing={2} marginY={0}>
 					<Grid
 						item
 						sm={2}
@@ -52,12 +61,19 @@ function Layout(props: Props) {
 						xs={16}
 						sm={14}
 						md={12}
+						sx={{
+							maxHeight: '100%',
+							overflowX: 'hidden',
+							overflowY: 'auto',
+							position: 'relative',
+						}}
 					>
 						{children}
 					</Grid>
 				</Grid>
 			</Container>
 			<BottomNav/>
+			<CommonModals />
 			<Loader />
 		</>
 	);

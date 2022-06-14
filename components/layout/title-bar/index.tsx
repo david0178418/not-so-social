@@ -1,7 +1,5 @@
 import Link from 'next/link';
 import { BackIcon } from '@components/icons';
-import { LoginModal } from '@components/modals/login.modal';
-import { LogoutModal } from '@components/modals/logout.modal';
 import {
 	AppBar,
 	Box,
@@ -9,7 +7,6 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
-import { CreatePostModal } from '@components/modals/create-post.modal';
 
 interface Props {
 	showBack?: boolean;
@@ -23,11 +20,11 @@ function TitleBar(props: Props) {
 		<>
 			<Box
 				sx={{
-					marginBottom: 9,
+					marginBottom: 1,
 					flexGrow: 1,
 				}}
 			>
-				<AppBar position="fixed">
+				<AppBar position="relative">
 					<Toolbar>
 						{showBack && (
 							<Link href="/" passHref>
@@ -51,10 +48,6 @@ function TitleBar(props: Props) {
 					</Toolbar>
 				</AppBar>
 			</Box>
-			{/** TODO: Need to figure out where to put these */}
-			<LoginModal/>
-			<LogoutModal/>
-			<CreatePostModal/>
 		</>
 	);
 }
