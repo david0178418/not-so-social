@@ -6,7 +6,9 @@ import { Post } from '@common/types';
 import { getPosts } from '@common/server/db-calls';
 import { FeedPost } from '@components/feed-post';
 import { getSession } from 'next-auth/react';
-import { InputAdornment, TextField } from '@mui/material';
+import {
+	Box, InputAdornment, TextField,
+} from '@mui/material';
 import { SearchIcon } from '@components/icons';
 
 interface Props {
@@ -32,7 +34,22 @@ const Home: NextPage<Props> = (props) => {
 			</Head>
 			<Layout>
 				<div className="baz">
-					<div className="foo" >
+					<Box sx={{
+						paddingTop: 1,
+						paddingBottom: 2,
+						paddingLeft: {
+							xs: 2,
+							sm: 10,
+							md: 15,
+							lg: 20,
+						},
+						paddingRight: {
+							xs: 2,
+							sm: 10,
+							md: 15,
+							lg: 20,
+						},
+					}}>
 						<TextField
 							fullWidth
 							InputProps={{
@@ -43,7 +60,7 @@ const Home: NextPage<Props> = (props) => {
 								),
 							}}
 						/>
-					</div>
+					</Box>
 					<div className="bar">
 						{posts.map(p => (
 							<FeedPost
