@@ -5,20 +5,44 @@ import {
 	Box,
 	TextField,
 } from '@mui/material';
+import { useSetAtom } from 'jotai';
+import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
+import { postSave } from '@common/actions';
+import { useRefreshPage } from '@common/hooks';
 
 interface Props {
-	onCancel(): void;
-	onConfirm(): void;
+	parentId: string;
+	onClose(): void;
 }
 
 export
 function FeedPostResponseForm(props: Props) {
 	const {
-		onCancel,
-		onConfirm,
+		parentId,
+		onClose,
 	} = props;
+	const refreshPage = useRefreshPage();
+	const pustToastMsg = useSetAtom(pushToastMsgAtom);
+	const setLoading = useSetAtom(loadingAtom);
 	const [postTitle, setPostTitle] = useState('');
 	const [postBody, setPostBody] = useState('');
+
+	async function handleSave() {
+		try {
+			setLoading(true);
+			console.log(await postSave(postTitle, postBody, parentId));
+			onClose();
+		} catch(e: any) {
+			const { errors = ['Something went wrong. Try again.'] } = e;
+
+			errors.map(pustToastMsg);
+			console.log(e);
+		}
+
+		await refreshPage();
+
+		setLoading(false);
+	}
 
 	return (
 		<>
@@ -51,8 +75,8 @@ function FeedPostResponseForm(props: Props) {
 				/>
 			</Box>
 			<Box sx={{ textAlign: 'right' }}>
-				<CancelButton onClick={onCancel}/>
-				<ConfirmButton onClick={onConfirm}>
+				<CancelButton onClick={onClose}/>
+				<ConfirmButton onClick={handleSave}>
 					Respond
 				</ConfirmButton>
 			</Box>
