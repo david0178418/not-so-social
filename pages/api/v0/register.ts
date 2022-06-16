@@ -1,3 +1,4 @@
+import type { ValidationError } from 'joi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { DbCollections } from '@common/constants';
@@ -34,30 +35,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 		return res.status(400).end();
 	}
 
-	const {
-		value,
-		error,
-	} = schema.validate(req.body);
+	try {
+		const {
+			username,
+			password,
+		} = await schema.validateAsync(req.body);
+		await createUser(username, password);
 
-	if(error) {
+		res.send({ ok: true });
+	} catch(error: unknown) {
 		return res
 			.status(400)
 			.send({
 				ok: false,
-				errors: error
+				errors: (error as ValidationError)
 					.details
 					.map(d => d.message),
 			});
 	}
-
-	const {
-		username,
-		password,
-	} = value;
-
-	await createUser(username, password);
-
-	res.send({ ok: true });
 }
 
 async function createUser(username: string, password: string) {

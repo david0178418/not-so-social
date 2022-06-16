@@ -39,3 +39,11 @@ declare module 'next-auth' {
 		user: User;
 	}
 }
+
+declare module 'joi' {
+	// https://github.com/sideway/joi/pull/2727
+	interface ObjectSchema<TSchema = any> {
+		validate(value: any, options?: ValidationOptions): ValidationResult<TSchema>;
+		validateAsync(value: any, options?: AsyncValidationOptions): Promise<TSchema>;
+	}
+}
