@@ -36,7 +36,7 @@ export default NextAuth({
 				} = cred;
 
 				const credsCol = await getCollection(DbCollections.Creds);
-				const u = credsCol.findOne({ username });
+				const u = await credsCol.findOne({ username });
 
 				if(!(u && await compare(password, u.hash))) {
 					return null;
