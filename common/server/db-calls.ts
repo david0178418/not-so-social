@@ -9,7 +9,7 @@ export
 async function getPosts(userId: string): Promise<Post[]> {
 	const col = await getCollection<DbPost>(DbCollections.Posts);
 	const results = await col
-		.find()
+		.aggregate<DbPost>([{ $sort: { created: -1 } }])
 		.toArray();
 	const posts = results.map(dbPostToPost(userId));
 	const bookmarkedPosts = await fetchBookmarksFromPostIds(userId, posts.map(p => p._id || ''));
