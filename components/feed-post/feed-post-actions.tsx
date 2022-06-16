@@ -1,5 +1,4 @@
 import { Post } from '@common/types';
-import Link from 'next/link';
 import { BookmarkToggle } from './bookmark-toggle';
 import { formatCompactNumber, urlJoin } from '@common/utils';
 import { useIsLoggedIn } from '@common/hooks';
@@ -19,6 +18,7 @@ import {
 interface Props {
 	post: Post;
 	parentId?: string;
+	onCommentClick(): void
 }
 
 function getItemUrl(item: Post) {
@@ -31,7 +31,10 @@ function getItemUrl(item: Post) {
 
 export
 function PostActions(props: Props) {
-	const { post } = props;
+	const {
+		post,
+		onCommentClick,
+	} = props;
 	const size = 'medium';
 	const isLoggedIn = useIsLoggedIn();
 
@@ -40,27 +43,22 @@ function PostActions(props: Props) {
 			<Grid
 				xs
 				item
-				style={{ textAlign: 'center' }}
+				sx={{ textAlign: 'center' }}
 			>
-				<Link
-					passHref
-					shallow
-					href="/"
-				>
-					<Tooltip title="Add Point/Counter Point">
-						<Button
-							size={size}
-							startIcon={<CommentIcon/>}
-						>
-							{''}
-						</Button>
-					</Tooltip>
-				</Link>
+				<Tooltip title="Add Point/Counter Point">
+					<Button
+						size={size}
+						startIcon={<CommentIcon/>}
+						onClick={onCommentClick}
+					>
+						{''}
+					</Button>
+				</Tooltip>
 			</Grid>
 			<Grid
 				xs
 				item
-				style={{ textAlign: 'center' }}
+				sx={{ textAlign: 'center' }}
 			>
 				<Tooltip title="Boost">
 					<Button
@@ -75,7 +73,7 @@ function PostActions(props: Props) {
 			<Grid
 				xs
 				item
-				style={{ textAlign: 'center' }}
+				sx={{ textAlign: 'center' }}
 			>
 				<BookmarkToggle
 					size={size}
@@ -86,7 +84,7 @@ function PostActions(props: Props) {
 			<Grid
 				xs
 				item
-				style={{ textAlign: 'center' }}
+				sx={{ textAlign: 'center' }}
 			>
 				<Tooltip title="Copy Link">
 					<Button

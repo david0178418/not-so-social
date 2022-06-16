@@ -42,7 +42,12 @@ function Layout(props: Props) {
 					},
 				}}
 			>
-				<Grid container columns={16} spacing={2} marginY={0}>
+				<Grid
+					container
+					columns={16}
+					spacing={2}
+					marginY={0}
+				>
 					<Grid
 						item
 						sm={2}

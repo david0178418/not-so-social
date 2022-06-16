@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export
 interface Post {
 	_id?: string;
@@ -6,6 +8,7 @@ interface Post {
 	created: string;
 	isOwner: boolean;
 	lastUpdated: string;
+	parentId?: string;
 	points: number;
 	title: string;
 }
@@ -16,6 +19,15 @@ interface ApiResponse<T = any> {
 	data?: T;
 	errors?: string[];
 }
+
+export
+interface CommonButtonProps {
+	label?: string;
+	href?: string;
+	onClick?(): void;
+	children?: ReactNode;
+}
+
 
 declare module 'next-auth' {
 	interface User {

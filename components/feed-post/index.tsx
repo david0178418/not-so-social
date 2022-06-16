@@ -4,6 +4,9 @@ import { Paths } from '@common/constants';
 import { Post } from '@common/types';
 import { PostActions } from './feed-post-actions';
 import { DropdownMenu } from '@components/dropdown-menu';
+import { CreateResponseForm } from './create-response-form';
+import { useState } from 'react';
+import { useIsLoggedIn } from '@common/hooks';
 import {
 	getTimeSinceDate,
 	localizedDateFormat,
@@ -25,6 +28,8 @@ interface Props {
 export
 function FeedPost(props: Props) {
 	const { post } = props;
+	const [responseOpen, setResponseOpen] = useState(false);
+	const isLoggedIn = useIsLoggedIn();
 
 	return (
 		<Box sx={{
@@ -33,8 +38,8 @@ function FeedPost(props: Props) {
 			padding: 1,
 		}}>
 			<div>
-				<div
-					style={{
+				<Box
+					sx={{
 						cursor: 'pointer',
 						fontWeight: 'bold',
 					}}
@@ -57,7 +62,7 @@ function FeedPost(props: Props) {
 									component={MuiLink}
 									variant="body1"
 									title={post.title}
-									style={{
+									sx={{
 										fontWeight: 'bold',
 										display: 'block',
 									}}
@@ -113,7 +118,7 @@ function FeedPost(props: Props) {
 							</DropdownMenu>
 						</Grid>
 					</Grid>
-				</div>
+				</Box>
 				<Typography
 					variant="body1"
 					sx={{ mb: 1.5 }}
@@ -121,8 +126,14 @@ function FeedPost(props: Props) {
 					dangerouslySetInnerHTML={{ __html: parseContentString(post.body) }}
 				/>
 				<Grid container columns={4} alignItems="flex-end">
-					<PostActions post={post} />
+					<PostActions
+						post={post}
+						onCommentClick={() => isLoggedIn && setResponseOpen(!responseOpen)}
+					/>
 				</Grid>
+				{responseOpen && (
+					<CreateResponseForm />
+				)}
 			</div>
 		</Box>
 	);

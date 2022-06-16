@@ -6,9 +6,10 @@ import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { useIsLoggedOut } from '@common/hooks';
 import { postSave } from '@common/actions';
+import { ConfirmButton } from '@components/common/buttons/confirm.button';
+import { CancelButton } from '@components/common/buttons/cancel.button';
 import {
 	Box,
-	Button,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -103,20 +104,18 @@ function CreatePostModal() {
 			<DialogActions>
 				<Link
 					replace
-					passHref
 					shallow
+					passHref
 					href={{
 						pathname: router.pathname,
 						query: newQuery,
 					}}
 				>
-					<Button color="error">
-						Cancel
-					</Button>
+					<CancelButton />
 				</Link>
-				<Button onClick={handleSave}>
+				<ConfirmButton onClick={handleSave}>
 					Post
-				</Button>
+				</ConfirmButton>
 			</DialogActions>
 		</Dialog>
 	);
