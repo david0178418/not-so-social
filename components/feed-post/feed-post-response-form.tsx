@@ -12,7 +12,7 @@ interface Props {
 }
 
 export
-function CreateResponseForm(props: Props) {
+function FeedPostResponseForm(props: Props) {
 	const {
 		onCancel,
 		onConfirm,

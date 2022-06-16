@@ -4,7 +4,7 @@ import { Paths } from '@common/constants';
 import { Post } from '@common/types';
 import { PostActions } from './feed-post-actions';
 import { DropdownMenu } from '@components/dropdown-menu';
-import { CreateResponseForm } from './create-response-form';
+import { FeedPostResponseForm } from './feed-post-response-form';
 import { useState } from 'react';
 import { useIsLoggedIn } from '@common/hooks';
 import {
@@ -132,7 +132,7 @@ function FeedPost(props: Props) {
 					/>
 				</Grid>
 				{responseOpen && (
-					<CreateResponseForm
+					<FeedPostResponseForm
 						onCancel={() => setResponseOpen(false)}
 						onConfirm={() => setResponseOpen(false)}
 					/>
