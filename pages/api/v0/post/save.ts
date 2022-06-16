@@ -40,14 +40,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	}
 
 	try {
-		const {
-			title,
-			body,
-		} = await schema.validateAsync(req.body);
+		const postContent = await schema.validateAsync(req.body);
 
 		res.send({
 			ok: true,
-			data: { id: await createPost(title, body, session.user.id) },
+			data: { id: await createPost(postContent, session.user.id) },
 		});
 	} catch(error: any) {
 		return res
@@ -61,13 +58,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	}
 }
 
-async function createPost(title: string, body: string, ownerId: string) {
+interface PostContent {
+	title: string;
+	body: string;
+	parentId?: string;
+}
+
+async function createPost(content: PostContent, ownerId: string) {
 	const postCol = await getCollection(DbCollections.Posts);
 	const now = nowISOString();
 
 	const result = await postCol.insertOne({
-		title,
-		body,
+		...content,
+		parentId: content.parentId && new ObjectId(content.parentId),
 		created: now,
 		lastUpdated: now,
 		ownerId: new ObjectId(ownerId),
