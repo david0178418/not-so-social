@@ -1,13 +1,22 @@
 import { useState } from 'react';
+import { CancelButton } from '@components/common/buttons/cancel.button';
+import { ConfirmButton } from '@components/common/buttons/confirm.button';
 import {
 	Box,
 	TextField,
 } from '@mui/material';
-import { CancelButton } from '@components/common/buttons/cancel.button';
-import { ConfirmButton } from '@components/common/buttons/confirm.button';
+
+interface Props {
+	onCancel(): void;
+	onConfirm(): void;
+}
 
 export
-function CreateResponseForm() {
+function CreateResponseForm(props: Props) {
+	const {
+		onCancel,
+		onConfirm,
+	} = props;
 	const [postTitle, setPostTitle] = useState('');
 	const [postBody, setPostBody] = useState('');
 
@@ -42,8 +51,8 @@ function CreateResponseForm() {
 				/>
 			</Box>
 			<Box sx={{ textAlign: 'right' }}>
-				<CancelButton />
-				<ConfirmButton>
+				<CancelButton onClick={onCancel}/>
+				<ConfirmButton onClick={onConfirm}>
 					Respond
 				</ConfirmButton>
 			</Box>

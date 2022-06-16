@@ -132,7 +132,10 @@ function FeedPost(props: Props) {
 					/>
 				</Grid>
 				{responseOpen && (
-					<CreateResponseForm />
+					<CreateResponseForm
+						onCancel={() => setResponseOpen(false)}
+						onConfirm={() => setResponseOpen(false)}
+					/>
 				)}
 			</div>
 		</Box>
