@@ -6,10 +6,12 @@ import { Post } from '@common/types';
 import { getPosts } from '@common/server/db-calls';
 import { FeedPost } from '@components/feed-post';
 import { getSession } from 'next-auth/react';
-import {
-	Box, InputAdornment, TextField,
-} from '@mui/material';
 import { SearchIcon } from '@components/icons';
+import {
+	Box,
+	InputAdornment,
+	TextField,
+} from '@mui/material';
 
 interface Props {
 	posts: Post[];
