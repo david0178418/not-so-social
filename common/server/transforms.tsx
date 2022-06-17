@@ -1,8 +1,9 @@
 import type { Post } from '@common/types';
+import { isTruthy, unique } from '@common/utils';
 import type { DbPost } from './db-schema';
 
 export
-function dbPostToPost(userId: string) {
+function dbPostToPostFn(userId: string) {
 	return (post: DbPost): Post => {
 		const {
 			ownerId,
@@ -24,4 +25,22 @@ function dbPostToPost(userId: string) {
 
 		return formattedPost;
 	};
+}
+
+export
+function postToBookmarkedPostFn(bookmarkedIds: string[]) {
+	return (p: Post) => ({
+		...p,
+		bookmarked: bookmarkedIds.includes(p._id || ''),
+	});
+}
+
+export
+function postListsToIdList(...postLists: Post[][]) {
+	return unique(
+		postLists
+			.flat()
+			.map(p => p._id)
+			.filter(isTruthy),
+	);
 }

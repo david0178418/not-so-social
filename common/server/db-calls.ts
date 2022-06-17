@@ -4,7 +4,11 @@ import { isTruthy, unique } from '@common/utils';
 import { ObjectId } from 'mongodb';
 import { DbBookmark, DbPost } from './db-schema';
 import { getCollection } from './mongodb';
-import { dbPostToPost } from './transforms';
+import {
+	dbPostToPostFn,
+	postToBookmarkedPostFn,
+	postListsToIdList,
+} from './transforms';
 
 interface GetPostsReturn {
 	parentPosts: PostIdMap;
@@ -18,21 +22,26 @@ async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
 	const results = await col
 		.aggregate<DbPost>([{ $sort: { created: -1 } }])
 		.toArray();
-	const posts = results.map(dbPostToPost(userId));
-	const bookmarkedPosts = await fetchBookmarksFromPostIds(userId, posts.map(p => p._id || ''));
+	const posts = results.map(dbPostToPostFn(userId));
 	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
 	const postIds = posts.map(p => p._id) as string[];
 
 	const parentPosts = await getPosts(parentIds, userId);
 	const responsePosts = await getTopChildPosts(postIds, userId);
+	const allIds = postListsToIdList(posts, parentPosts, responsePosts);
+
+	const postToBookmarkedPost = postToBookmarkedPostFn(
+		await fetchBookmarksFromPostIds(userId, allIds)
+	);
 
 	return {
-		parentPosts: parentPosts.reduce(rollupPostsToMap, {}),
-		responsePosts: responsePosts.reduce(rollupPostsToMap, {}),
-		posts: posts.map(p => {
-			p.bookmarked = bookmarkedPosts.includes(p._id || '');
-			return p;
-		}),
+		posts: posts.map(postToBookmarkedPost),
+		parentPosts: parentPosts
+			.map(postToBookmarkedPost)
+			.reduce(rollupPostsToMap, {}),
+		responsePosts: responsePosts
+			.map(postToBookmarkedPost)
+			.reduce(rollupPostsToMap, {}),
 	};
 }
 
@@ -47,7 +56,7 @@ async function getPosts(postIds: string[], userId: string): Promise<Post[]> {
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
 		.toArray();
 
-	return results.map(dbPostToPost(userId));
+	return results.map(dbPostToPostFn(userId));
 }
 
 async function getTopChildPosts(postIds: string[], userId: string): Promise<Post[]> {
@@ -65,7 +74,7 @@ async function getTopChildPosts(postIds: string[], userId: string): Promise<Post
 		{ $replaceRoot: { newRoot: '$post' } },
 	]).toArray();
 
-	return results.map(dbPostToPost(userId));
+	return results.map(dbPostToPostFn(userId));
 }
 
 
@@ -75,7 +84,7 @@ async function getChildPosts(postId: string, userId: string): Promise<Post[]> {
 		.find<DbPost>({ parentId: new ObjectId(postId) })
 		.toArray();
 
-	return results.map(dbPostToPost(userId));
+	return results.map(dbPostToPostFn(userId));
 }
 
 interface getFocusedPostProps {
@@ -100,22 +109,16 @@ async function getFocusedPost(userId: string, id: string): Promise<getFocusedPos
 
 		const responses = await getChildPosts(id, userId);
 
-		const post = dbPostToPost(userId)(result);
+		const post = dbPostToPostFn(userId)(result);
+		const allIds = postListsToIdList([post], responses);
 
-		const bookmarkCol = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
-
-		const bookmarked = !!await bookmarkCol
-			.findOne({
-				userId,
-				postId: _id,
-			});
+		const postToBookmarkedPost = postToBookmarkedPostFn(
+			await fetchBookmarksFromPostIds(userId, allIds)
+		);
 
 		return {
-			post: {
-				...post,
-				bookmarked,
-			},
-			responses,
+			post: postToBookmarkedPost(post),
+			responses: responses.map(postToBookmarkedPost),
 		};
 	} catch {
 		return {
