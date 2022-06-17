@@ -8,6 +8,7 @@ import {
 	dbPostToPostFn,
 	postToBookmarkedPostFn,
 	postListsToIdList,
+	rollupPostsToMapFn,
 } from './transforms';
 
 interface GetPostsReturn {
@@ -38,16 +39,11 @@ async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
 		posts: posts.map(postToBookmarkedPost),
 		parentPosts: parentPosts
 			.map(postToBookmarkedPost)
-			.reduce(rollupPostsToMap, {}),
+			.reduce(rollupPostsToMapFn(), {}),
 		responsePosts: responsePosts
 			.map(postToBookmarkedPost)
-			.reduce(rollupPostsToMap, {}),
+			.reduce(rollupPostsToMapFn('parentId'), {}),
 	};
-}
-
-function rollupPostsToMap(rollup: PostIdMap, p: Post): PostIdMap {
-	rollup[p._id || ''] = p;
-	return rollup;
 }
 
 async function getPosts(postIds: string[], userId: string): Promise<Post[]> {

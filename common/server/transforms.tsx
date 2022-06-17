@@ -1,4 +1,4 @@
-import type { Post } from '@common/types';
+import type { Post, PostIdMap } from '@common/types';
 import { isTruthy, unique } from '@common/utils';
 import type { DbPost } from './db-schema';
 
@@ -43,4 +43,14 @@ function postListsToIdList(...postLists: Post[][]) {
 			.map(p => p._id)
 			.filter(isTruthy),
 	);
+}
+
+export
+function rollupPostsToMapFn(prop: keyof Pick<Post, '_id' | 'parentId'> = '_id') {
+	return (rollup: PostIdMap, p: Post): PostIdMap => {
+		if(p[prop]) {
+			rollup[p[prop] || ''] = p;
+		}
+		return rollup;
+	};
 }
