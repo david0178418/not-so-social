@@ -7,6 +7,7 @@ import { DropdownMenu } from '@components/dropdown-menu';
 import { FeedPostResponseForm } from './feed-post-response-form';
 import { useState } from 'react';
 import { useIsLoggedIn } from '@common/hooks';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
 	getTimeSinceDate,
 	localizedDateFormat,
@@ -22,122 +23,184 @@ import {
 } from '@mui/material';
 
 interface Props {
+	parentPost?: Post;
 	post: Post;
+	topResponse?: Post;
 }
 
 export
 function FeedPost(props: Props) {
-	const { post } = props;
+	const {
+		post,
+		topResponse,
+		parentPost,
+	} = props;
 	const [responseOpen, setResponseOpen] = useState(false);
 	const isLoggedIn = useIsLoggedIn();
 
 	return (
 		<Box sx={{
-			borderBottom: '1px solid',
-			borderColor: 'text.disabled',
-			padding: 1,
+			backgroundColor: 'lightgrey',
+			borderTopRightRadius: '15px',
+			borderTopLeftRadius: '15px',
 		}}>
-			<div>
-				<Box
-					sx={{
-						cursor: 'pointer',
-						fontWeight: 'bold',
-					}}
-				>
-					<Grid
-						container
-						spacing={2}
-						wrap="nowrap"
-						justifyContent="center"
-						alignItems="center"
+			{parentPost && (
+				// TODO Figure out the proper style inheritance
+				<Box sx={{
+					marginX: 3,
+					paddingTop: 2,
+					position: 'relative',
+				}}>
+					<Box sx={{
+						backgroundColor: 'white',
+						borderTopRightRadius: '15px',
+						borderTopLeftRadius: '15px',
+						overflow: 'hidden',
+					}}>
+						<FeedPost post={parentPost} />
+					</Box>
+					<Box sx={{
+						position: 'absolute',
+						bottom: 0,
+						transform: 'translate(-100%, 0)',
+					}}>
+						<KeyboardArrowDownIcon/>
+					</Box>
+				</Box>
+			)}
+			<Box sx={{
+				backgroundColor: 'white',
+				borderBottom: '1px solid',
+				borderColor: 'text.disabled',
+				padding: 1,
+			}}>
+				<div>
+					<Box
+						sx={{
+							cursor: 'pointer',
+							fontWeight: 'bold',
+						}}
 					>
 						<Grid
-							item
-							xs
-							zeroMinWidth
+							container
+							spacing={2}
+							wrap="nowrap"
+							justifyContent="center"
+							alignItems="center"
 						>
-							<Link href={urlJoin(Paths.Post, post._id)} passHref>
-								<Typography
-									noWrap
-									component={MuiLink}
-									variant="body1"
-									title={post.title}
-									sx={{
-										fontWeight: 'bold',
-										display: 'block',
-									}}
-								>
-									{post.title}
-								</Typography>
-							</Link>
-						</Grid>
-						<Grid
-							item
-							xs={5}
-							sm={4}
-							lg={3}
-						>
-							<Typography
-								color="text.secondary"
-								sx={{
-									fontSize: 14,
-									textAlign: 'right',
-								}}
+							<Grid
+								item
+								xs
+								zeroMinWidth
 							>
 								<Link href={urlJoin(Paths.Post, post._id)} passHref>
-									<Tooltip title={localizedDateFormat(post.created)} suppressHydrationWarning>
-										<strong>
-											{getTimeSinceDate(post.created)}
-										</strong>
-									</Tooltip>
+									<Typography
+										noWrap
+										component={MuiLink}
+										variant="body1"
+										title={post.title}
+										sx={{
+											fontWeight: 'bold',
+											display: 'block',
+										}}
+									>
+										{post.title}
+									</Typography>
 								</Link>
-							</Typography>
+							</Grid>
+							<Grid
+								item
+								xs={5}
+								sm={4}
+								lg={3}
+							>
+								<Typography
+									color="text.secondary"
+									sx={{
+										fontSize: 14,
+										textAlign: 'right',
+									}}
+								>
+									<Link href={urlJoin(Paths.Post, post._id)} passHref>
+										<Tooltip title={localizedDateFormat(post.created)} suppressHydrationWarning>
+											<strong>
+												{getTimeSinceDate(post.created)}
+											</strong>
+										</Tooltip>
+									</Link>
+								</Typography>
+							</Grid>
+							<Grid
+								item
+								xs={2}
+								sm={1}
+							>
+								<DropdownMenu>
+									{post.isOwner && (
+										[
+											<Link
+												key="a"
+												passHref
+												shallow
+												href="/"
+											>
+												<MenuItem>Edit</MenuItem>
+											</Link>,
+											<MenuItem key="b">Abandon Ownership</MenuItem>,
+										]
+									)}
+									<MenuItem>View Point Activity</MenuItem>
+									{!post.isOwner && (
+										<MenuItem>Mark as Spam</MenuItem>
+									)}
+								</DropdownMenu>
+							</Grid>
 						</Grid>
-						<Grid
-							item
-							xs={1}
-						>
-							<DropdownMenu>
-								{post.isOwner && (
-									[
-										<Link
-											key="a"
-											passHref
-											shallow
-											href="/"
-										>
-											<MenuItem>Edit</MenuItem>
-										</Link>,
-										<MenuItem key="b">Abandon Ownership</MenuItem>,
-									]
-								)}
-								<MenuItem>View Point Activity</MenuItem>
-								{!post.isOwner && (
-									<MenuItem>Mark as Spam</MenuItem>
-								)}
-							</DropdownMenu>
-						</Grid>
+					</Box>
+					<Typography
+						variant="body1"
+						sx={{ mb: 1.5 }}
+						style={{ overflowWrap: 'break-word' }}
+						dangerouslySetInnerHTML={{ __html: parseContentString(post.body) }}
+					/>
+					<Grid container columns={4} alignItems="flex-end">
+						<PostActions
+							post={post}
+							onCommentClick={() => isLoggedIn && setResponseOpen(!responseOpen)}
+						/>
 					</Grid>
+					{responseOpen && (
+						<FeedPostResponseForm
+							parentId={post._id as string}
+							onClose={() => setResponseOpen(false)}
+						/>
+					)}
+				</div>
+			</Box>
+			{topResponse && (
+				// TODO Figure out the proper style inheritance
+				<Box sx={{
+					marginX: 3,
+					paddingBottom: 2,
+					position: 'relative',
+				}}>
+					<Box sx={{
+						backgroundColor: 'white',
+						borderBottomRightRadius: '15px',
+						borderBottomLeftRadius: '15px',
+						overflow: 'hidden',
+					}}>
+						<FeedPost post={topResponse} />
+					</Box>
+					<Box sx={{
+						position: 'absolute',
+						top: 0,
+						transform: 'translate(-100%, -100%)',
+					}}>
+						<KeyboardArrowDownIcon/>
+					</Box>
 				</Box>
-				<Typography
-					variant="body1"
-					sx={{ mb: 1.5 }}
-					style={{ overflowWrap: 'break-word' }}
-					dangerouslySetInnerHTML={{ __html: parseContentString(post.body) }}
-				/>
-				<Grid container columns={4} alignItems="flex-end">
-					<PostActions
-						post={post}
-						onCommentClick={() => isLoggedIn && setResponseOpen(!responseOpen)}
-					/>
-				</Grid>
-				{responseOpen && (
-					<FeedPostResponseForm
-						parentId={post._id as string}
-						onClose={() => setResponseOpen(false)}
-					/>
-				)}
-			</div>
+			)}
 		</Box>
 	);
 }
