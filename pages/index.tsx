@@ -1,9 +1,9 @@
 import type { GetServerSideProps, NextPage } from 'next';
+import type { Post, PostIdMap } from '@common/types';
 
 import Head from 'next/head';
 import { Layout } from '@components/layout';
-import { Post } from '@common/types';
-import { getPosts } from '@common/server/db-calls';
+import { getFeedPosts } from '@common/server/db-calls';
 import { FeedPost } from '@components/feed-post';
 import { getSession } from 'next-auth/react';
 import { SearchIcon } from '@components/icons';
@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 
 interface Props {
+	parentPosts: PostIdMap;
 	posts: Post[];
 }
 
@@ -21,12 +22,15 @@ export
 const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
 	const session = await getSession({ req });
 	const userId = session?.user.id || '';
-	return { props: { posts: await getPosts(userId || '') } };
+	return { props: await getFeedPosts(userId || '') };
 };
 
 const Home: NextPage<Props> = (props) => {
-	const { posts } = props;
-
+	const {
+		parentPosts,
+		posts,
+	} = props;
+	console.log(parentPosts);
 	return (
 		<>
 			<Head>
@@ -66,6 +70,7 @@ const Home: NextPage<Props> = (props) => {
 					<div className="bar">
 						{posts.map(p => (
 							<FeedPost
+								parentPost={parentPosts[p.parentId || '']}
 								key={p._id}
 								post={p}
 							/>

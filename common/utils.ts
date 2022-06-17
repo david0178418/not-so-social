@@ -86,6 +86,17 @@ function defer(fn: () => any | Promise<any>) {
 }
 
 export
+function isTruthy<T>(val: T | null | undefined): val is T {
+	return !!val;
+}
+
+
+export
+function unique<T>(arr: T[]) {
+	return Array.from(new Set(arr));
+}
+
+export
 function uuid() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
 		// eslint-disable-next-line eqeqeq, no-mixed-operators

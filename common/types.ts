@@ -28,6 +28,11 @@ interface CommonButtonProps {
 	children?: ReactNode;
 }
 
+export
+interface PostIdMap {
+	[postId: string]: Post;
+}
+
 
 declare module 'next-auth' {
 	interface User {
