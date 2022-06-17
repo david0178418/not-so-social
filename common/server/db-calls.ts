@@ -6,7 +6,6 @@ import { DbBookmark, DbPost } from './db-schema';
 import { getCollection } from './mongodb';
 import { dbPostToPost } from './transforms';
 
-
 interface GetPostsReturn {
 	parentPosts: PostIdMap;
 	posts: Post[];
