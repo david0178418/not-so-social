@@ -15,6 +15,7 @@ import {
 
 interface Props {
 	parentPosts: PostIdMap;
+	responsePosts: PostIdMap;
 	posts: Post[];
 }
 
@@ -29,8 +30,9 @@ const Home: NextPage<Props> = (props) => {
 	const {
 		parentPosts,
 		posts,
+		responsePosts,
 	} = props;
-	console.log(parentPosts);
+
 	return (
 		<>
 			<Head>
@@ -71,6 +73,7 @@ const Home: NextPage<Props> = (props) => {
 						{posts.map(p => (
 							<FeedPost
 								parentPost={parentPosts[p.parentId || '']}
+								topResponse={responsePosts[p._id || '']}
 								key={p._id}
 								post={p}
 							/>

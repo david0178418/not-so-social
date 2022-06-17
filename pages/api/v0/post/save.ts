@@ -74,6 +74,7 @@ async function createPost(content: PostContent, ownerId: string) {
 		created: now,
 		lastUpdated: now,
 		ownerId: new ObjectId(ownerId),
+		points: 0,
 	});
 
 	return result.insertedId;

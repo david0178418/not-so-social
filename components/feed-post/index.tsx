@@ -47,6 +47,7 @@ function FeedPost(props: Props) {
 			{parentPost && (
 				// TODO Figure out the proper style inheritance
 				<Box sx={{
+					marginTop: 1,
 					marginX: 3,
 					paddingTop: 2,
 					position: 'relative',

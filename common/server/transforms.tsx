@@ -6,18 +6,22 @@ function dbPostToPost(userId: string) {
 	return (post: DbPost): Post => {
 		const {
 			ownerId,
+			parentId,
 			...cleanedPost
 		} = post;
 
-		return {
+		const formattedPost: Post = {
 			...cleanedPost,
 			points: 0,
 			isOwner: userId === ownerId.toString(),
 			_id: post._id?.toString(),
-			//@ts-ignore
-			userId,
-			//@ts-ignore
 			ownerId: ownerId.toString(),
 		};
+
+		if(parentId) {
+			formattedPost.parentId = parentId.toString();
+		}
+
+		return formattedPost;
 	};
 }

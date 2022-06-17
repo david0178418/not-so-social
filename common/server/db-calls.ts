@@ -20,20 +20,25 @@ async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
 		.toArray();
 	const posts = results.map(dbPostToPost(userId));
 	const bookmarkedPosts = await fetchBookmarksFromPostIds(userId, posts.map(p => p._id || ''));
+	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
+	const postIds = posts.map(p => p._id) as string[];
 
-	const parentPosts = await getPosts(unique(posts.map(p => p.parentId).filter(isTruthy)), userId);
+	const parentPosts = await getPosts(parentIds, userId);
+	const responsePosts = await getChildPosts(postIds, userId);
 
 	return {
-		parentPosts: parentPosts.reduce<PostIdMap>((rollup, p) => {
-			rollup[p._id || ''] = p;
-			return rollup;
-		}, {}),
-		responsePosts: {},
+		parentPosts: parentPosts.reduce(rollupPostsToMap, {}),
+		responsePosts: responsePosts.reduce(rollupPostsToMap, {}),
 		posts: posts.map(p => {
 			p.bookmarked = bookmarkedPosts.includes(p._id || '');
 			return p;
 		}),
 	};
+}
+
+function rollupPostsToMap(rollup: PostIdMap, p: Post): PostIdMap {
+	rollup[p._id || ''] = p;
+	return rollup;
 }
 
 async function getPosts(postIds: string[], userId: string): Promise<Post[]> {
@@ -42,7 +47,25 @@ async function getPosts(postIds: string[], userId: string): Promise<Post[]> {
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
 		.toArray();
 
-	return  results.map(dbPostToPost(userId));
+	return results.map(dbPostToPost(userId));
+}
+
+async function getChildPosts(postIds: string[], userId: string): Promise<Post[]> {
+	const col = await getCollection<DbPost>(DbCollections.Posts);
+	const postObjectIds = postIds.map(i => new ObjectId(i));
+	const results = await col.aggregate<DbPost>([
+		{ $match: { parentId: { $in: postObjectIds } } },
+		{ $sort: { points: 1 } },
+		{
+			$group: {
+				_id: '$parentId',
+				post: { '$first': '$$ROOT' },
+			},
+		},
+		{ $replaceRoot: { newRoot: '$post' } },
+	]).toArray();
+
+	return results.map(dbPostToPost(userId));
 }
 
 export

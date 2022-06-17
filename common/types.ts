@@ -8,6 +8,7 @@ interface Post {
 	created: string;
 	isOwner: boolean;
 	lastUpdated: string;
+	ownerId: string;
 	parentId?: string;
 	points: number;
 	title: string;
