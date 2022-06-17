@@ -41,8 +41,10 @@ function FeedPost(props: Props) {
 	return (
 		<Box sx={{
 			backgroundColor: 'lightgrey',
-			borderTopRightRadius: '15px',
-			borderTopLeftRadius: '15px',
+			borderTopRightRadius: parentPost && '15px',
+			borderTopLeftRadius: parentPost && '15px',
+			borderBottomRightRadius: topResponse && '15px',
+			borderBottomLeftRadius: topResponse && '15px',
 		}}>
 			{parentPost && (
 				// TODO Figure out the proper style inheritance
@@ -74,6 +76,7 @@ function FeedPost(props: Props) {
 				borderBottom: '1px solid',
 				borderColor: 'text.disabled',
 				padding: 1,
+				marginX: (parentPost && topResponse) ? 1 : 0,
 			}}>
 				<div>
 					<Box
