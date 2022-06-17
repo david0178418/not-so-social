@@ -1,5 +1,5 @@
 import type { GetServerSideProps, NextPage } from 'next';
-import type { Post, PostIdMap } from '@common/types';
+import type { AsyncFnReturnType } from '@common/types';
 
 import Head from 'next/head';
 import { Layout } from '@components/layout';
@@ -14,23 +14,23 @@ import {
 } from '@mui/material';
 
 interface Props {
-	parentPosts: PostIdMap;
-	responsePosts: PostIdMap;
-	posts: Post[];
+	data: AsyncFnReturnType<typeof getFeedPosts>;
 }
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
 	const session = await getSession({ req });
 	const userId = session?.user.id || '';
-	return { props: await getFeedPosts(userId || '') };
+	return { props: { data: await getFeedPosts(userId || '') } };
 };
 
 const Home: NextPage<Props> = (props) => {
 	const {
-		parentPosts,
-		posts,
-		responsePosts,
+		data: {
+			parentPosts,
+			posts,
+			responsePosts,
+		},
 	} = props;
 
 	return (

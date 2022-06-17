@@ -24,7 +24,7 @@ async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
 	const postIds = posts.map(p => p._id) as string[];
 
 	const parentPosts = await getPosts(parentIds, userId);
-	const responsePosts = await getChildPosts(postIds, userId);
+	const responsePosts = await getTopChildPosts(postIds, userId);
 
 	return {
 		parentPosts: parentPosts.reduce(rollupPostsToMap, {}),
@@ -50,7 +50,7 @@ async function getPosts(postIds: string[], userId: string): Promise<Post[]> {
 	return results.map(dbPostToPost(userId));
 }
 
-async function getChildPosts(postIds: string[], userId: string): Promise<Post[]> {
+async function getTopChildPosts(postIds: string[], userId: string): Promise<Post[]> {
 	const col = await getCollection<DbPost>(DbCollections.Posts);
 	const postObjectIds = postIds.map(i => new ObjectId(i));
 	const results = await col.aggregate<DbPost>([
@@ -68,8 +68,23 @@ async function getChildPosts(postIds: string[], userId: string): Promise<Post[]>
 	return results.map(dbPostToPost(userId));
 }
 
+
+async function getChildPosts(postId: string, userId: string): Promise<Post[]> {
+	const col = await getCollection<DbPost>(DbCollections.Posts);
+	const results = await col
+		.find<DbPost>({ parentId: new ObjectId(postId) })
+		.toArray();
+
+	return results.map(dbPostToPost(userId));
+}
+
+interface getFocusedPostProps {
+	post: Post | null;
+	responses: Post[];
+}
+
 export
-async function getPost(userId: string, id: string): Promise<Post | null> {
+async function getFocusedPost(userId: string, id: string): Promise<getFocusedPostProps> {
 	try {
 		const _id = new ObjectId(id);
 		const postsCol = await getCollection<DbPost>(DbCollections.Posts);
@@ -77,8 +92,13 @@ async function getPost(userId: string, id: string): Promise<Post | null> {
 		const result = await postsCol.findOne({ _id });
 
 		if(!result) {
-			return null;
+			return {
+				post: null,
+				responses: [],
+			};
 		}
+
+		const responses = await getChildPosts(id, userId);
 
 		const post = dbPostToPost(userId)(result);
 
@@ -91,11 +111,17 @@ async function getPost(userId: string, id: string): Promise<Post | null> {
 			});
 
 		return {
-			...post,
-			bookmarked,
+			post: {
+				...post,
+				bookmarked,
+			},
+			responses,
 		};
 	} catch {
-		return null;
+		return {
+			post: null,
+			responses: [],
+		};
 	}
 }
 

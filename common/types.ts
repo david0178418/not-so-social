@@ -34,6 +34,8 @@ interface PostIdMap {
 	[postId: string]: Post;
 }
 
+export
+type AsyncFnReturnType<T extends (...args: any[]) => Promise<any>> = Awaited<ReturnType<T>>;
 
 declare module 'next-auth' {
 	interface User {
