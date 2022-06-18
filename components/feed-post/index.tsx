@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Paths } from '@common/constants';
 import { Post } from '@common/types';
 import { PostActions } from './feed-post-actions';
@@ -26,6 +25,8 @@ interface Props {
 	responses?: Post[];
 }
 
+const RADIUS = '10px';
+
 export
 function FeedPost(props: Props) {
 	const {
@@ -39,11 +40,11 @@ function FeedPost(props: Props) {
 
 	return (
 		<Box sx={{
-			backgroundColor: 'lightgrey',
-			borderTopRightRadius: parentPosts.length && '15px',
-			borderTopLeftRadius: parentPosts.length && '15px',
-			borderBottomRightRadius: responses.length && '15px',
-			borderBottomLeftRadius: responses.length && '15px',
+			backgroundColor: '#e4e4e4',
+			borderTopRightRadius: parentPosts.length && RADIUS,
+			borderTopLeftRadius: parentPosts.length && RADIUS,
+			borderBottomRightRadius: responses.length && RADIUS,
+			borderBottomLeftRadius: responses.length && RADIUS,
 		}}>
 			{parentPosts.map(p => (
 				// TODO Figure out the proper style inheritance
@@ -51,25 +52,17 @@ function FeedPost(props: Props) {
 					key={p._id}
 					sx={{
 						marginTop: 1,
-						marginX: 3,
-						paddingTop: 2,
-						position: 'relative',
+						marginX: 2,
+						paddingTop: 1,
 					}}
 				>
 					<Box sx={{
 						backgroundColor: 'white',
-						borderTopRightRadius: '15px',
-						borderTopLeftRadius: '15px',
+						borderTopRightRadius: RADIUS,
+						borderTopLeftRadius: RADIUS,
 						overflow: 'hidden',
 					}}>
 						<FeedPost post={p} />
-					</Box>
-					<Box sx={{
-						position: 'absolute',
-						bottom: 0,
-						transform: 'translate(-100%, 0)',
-					}}>
-						<KeyboardArrowDownIcon/>
 					</Box>
 				</Box>
 			))}
@@ -161,14 +154,13 @@ function FeedPost(props: Props) {
 			{!!responses.length && (
 				// TODO Figure out the proper style inheritance
 				<Box sx={{
-					marginX: 3,
-					paddingBottom: 2,
-					position: 'relative',
+					marginX: 2,
+					paddingBottom: 1,
 				}}>
 					<Box sx={{
 						backgroundColor: 'white',
-						borderBottomRightRadius: '15px',
-						borderBottomLeftRadius: '15px',
+						borderBottomRightRadius: RADIUS,
+						borderBottomLeftRadius: RADIUS,
 						overflow: 'hidden',
 					}}>
 						{responses.map(p => (
@@ -177,13 +169,6 @@ function FeedPost(props: Props) {
 								post={p}
 							/>
 						))}
-					</Box>
-					<Box sx={{
-						position: 'absolute',
-						top: 0,
-						transform: 'translate(-100%, -100%)',
-					}}>
-						<KeyboardArrowDownIcon/>
 					</Box>
 				</Box>
 			)}
