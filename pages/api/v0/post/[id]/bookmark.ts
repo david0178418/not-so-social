@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { getCollection } from '@common/server/mongodb';
-import { DbCollections } from '@common/constants';
+import { DbCollections, NotLoggedInErrMsg } from '@common/constants';
 import { DbBookmark } from '@common/server/db-schema';
 import { ObjectId } from 'mongodb';
 import { nowISOString } from '@common/utils';
@@ -15,12 +15,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const { user } = await getSession({ req }) || {};
 
 		if(!user) {
-			return res
-				.status(401)
-				.send({
-					ok: false,
-					msg: 'Not logged in',
-				});
+			return res.status(401).send(NotLoggedInErrMsg);
 		}
 
 		const postObjId = new ObjectId(postId);

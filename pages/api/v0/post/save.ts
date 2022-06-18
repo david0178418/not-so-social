@@ -2,7 +2,7 @@ import type { ValidationError } from 'joi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import Joi from 'joi';
-import { DbCollections } from '@common/constants';
+import { DbCollections, NotLoggedInErrMsg } from '@common/constants';
 import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import { ObjectId } from 'mongodb';
@@ -31,12 +31,10 @@ const schema = Joi.object<Schema>({
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-	const session = await getSession({ req });
+	const { user } = await getSession({ req }) || {};
 
-	if(!session) {
-		return res
-			.status(401)
-			.end();
+	if(!user) {
+		return res.status(401).send(NotLoggedInErrMsg);
 	}
 
 	try {
@@ -44,7 +42,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
 		res.send({
 			ok: true,
-			data: { id: await createPost(postContent, session.user.id) },
+			data: { id: await createPost(postContent, user.id) },
 		});
 	} catch(error: any) {
 		return res

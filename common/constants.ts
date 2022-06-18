@@ -63,6 +63,12 @@ export
 const DOT = '\u2022';
 
 export
+const NotLoggedInErrMsg = {
+	ok: false,
+	msg: 'Not logged in',
+};
+
+export
 const BASE_REQ: RequestInit = {
 	credentials: 'include',
 	headers: {
