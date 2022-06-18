@@ -8,13 +8,13 @@ import { getFocusedPost } from '@common/server/db-calls';
 import { BackIcon } from '@components/icons';
 import { getSession } from 'next-auth/react';
 import { FeedPost } from '@components/feed-post';
+import { ScrollContent } from '@components/scroll-content';
+import { useRouter } from 'next/router';
 import {
 	Box,
 	IconButton,
 	Typography,
 } from '@mui/material';
-import { ScrollContent } from '@components/scroll-content';
-import { useRouter } from 'next/router';
 
 interface Props {
 	data: AsyncFnReturnType<typeof getFocusedPost>;
