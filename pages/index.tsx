@@ -24,7 +24,12 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	const session = await getSession(ctx);
 	const userId = session?.user.id || '';
 
-	return { props: { data: await getFeedPosts(userId || '') } };
+	return {
+		props: {
+			session,
+			data: await getFeedPosts(userId || ''),
+		},
+	};
 };
 
 const Home: NextPage<Props> = (props) => {

@@ -15,7 +15,7 @@ interface Props {
 	initialState: any;
 }
 
-function MyApp(props: AppProps<Props>) {
+function App(props: AppProps<Props>) {
 	const {
 		Component,
 		pageProps: {
@@ -23,6 +23,7 @@ function MyApp(props: AppProps<Props>) {
 			...pageProps
 		},
 	} = props;
+
 	return (
 		<>
 			<Head>
@@ -40,4 +41,4 @@ function MyApp(props: AppProps<Props>) {
 		</>);
 }
 
-export default MyApp;
+export default App;

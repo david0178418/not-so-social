@@ -32,7 +32,12 @@ const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 	const session = await getSession({ req });
 	const userId = session?.user.id || '';
 
-	return { props: { data: await getFocusedPost(userId, id) } };
+	return {
+		props: {
+			session,
+			data: await getFocusedPost(userId, id),
+		},
+	};
 };
 
 const Home: NextPage<Props> = (props) => {
