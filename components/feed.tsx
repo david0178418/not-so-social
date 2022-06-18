@@ -3,8 +3,6 @@ import type { ReactNode } from 'react';
 
 import { FeedPost } from '@components/feed-post';
 import { isTruthy } from '@common/utils';
-
-
 import { Post } from '@common/types';
 
 interface Props {
