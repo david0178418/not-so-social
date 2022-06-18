@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { ModalActions } from '@common/constants';
-import { CreateIcon, LoginIcon } from '@components/icons';
+import {
+	CreateIcon, HomeIcon, LoginIcon,
+} from '@components/icons';
 import { useRouter } from 'next/router';
 import { useIsLoggedIn, useIsLoggedOut } from '@common/hooks';
 import { ReactNode } from 'react';
@@ -60,6 +62,21 @@ function LeftRail() {
 				Pinboard
 			</Typography>
 			<List>
+				<ListItem disablePadding>
+					<Link
+						shallow
+						passHref
+						href="/"
+					>
+						<ListItemButton>
+							<RailButtonContent
+								label="Home"
+							>
+								<HomeIcon/>
+							</RailButtonContent>
+						</ListItemButton>
+					</Link>
+				</ListItem>
 				{isLoggedOut && (
 					<ListItem disablePadding>
 						<Link
