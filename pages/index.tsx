@@ -20,9 +20,10 @@ interface Props {
 }
 
 export
-const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
-	const session = await getSession({ req });
+const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+	const session = await getSession(ctx);
 	const userId = session?.user.id || '';
+
 	return { props: { data: await getFeedPosts(userId || '') } };
 };
 

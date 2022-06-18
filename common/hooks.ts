@@ -11,7 +11,6 @@ function useIsLoggedIn() {
 export
 function useIsLoggedOut() {
 	const { status } = useSession();
-
 	return status === 'unauthenticated';
 }
 

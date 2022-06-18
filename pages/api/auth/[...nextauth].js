@@ -9,7 +9,8 @@ const {
 	NEXTAUTH_SECRET,
 } = process.env;
 
-export default NextAuth({
+export
+const authOptions = {
 	// https://next-auth.js.org/configuration/providers
 	providers: [
 		CredentialsProvider({
@@ -161,4 +162,6 @@ export default NextAuth({
 
 	// Enable debug messages in the console if you are having problems
 	debug: false,
-});
+};
+
+export default NextAuth(authOptions);
