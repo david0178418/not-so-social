@@ -24,3 +24,16 @@ function useRefreshPage() {
 
 	return () => replace(asPath);
 }
+
+export
+function useRouteBackDefault(fallback = '/') {
+	const router = useRouter();
+
+	return () => {
+		if(document.referrer.startsWith(location.origin)) {
+			router.back();
+		} else {
+			router.replace(fallback);
+		}
+	};
+}

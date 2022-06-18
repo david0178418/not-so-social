@@ -9,7 +9,7 @@ import { BackIcon } from '@components/icons';
 import { getSession } from 'next-auth/react';
 import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
-import { useRouter } from 'next/router';
+import { useRouteBackDefault } from '@common/hooks';
 import {
 	Box,
 	IconButton,
@@ -37,7 +37,7 @@ const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 };
 
 const Home: NextPage<Props> = (props) => {
-	const { back } = useRouter();
+	const routeBack = useRouteBackDefault();
 	const {
 		data: {
 			parentPost,
@@ -60,7 +60,7 @@ const Home: NextPage<Props> = (props) => {
 						}}>
 							<Typography variant="h5" component="div" gutterBottom>
 								{/** TODO Capture direct links and send them to home page */}
-								<IconButton color="primary" onClick={back}>
+								<IconButton color="primary" onClick={routeBack}>
 									<BackIcon />
 								</IconButton>&nbsp;
 								Post
