@@ -25,11 +25,8 @@ interface Params extends ParsedUrlQuery {
 
 export
 const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
-	const {
-		req,
-		params: { id = '' } = {},
-	} = ctx;
-	const session = await getSession({ req });
+	const { params: { id = '' } = {} } = ctx;
+	const session = await getSession(ctx);
 	const userId = session?.user.id || '';
 
 	return {
