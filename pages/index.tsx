@@ -7,7 +7,8 @@ import { getSession } from 'next-auth/react';
 import { Layout } from '@components/layout';
 import { getFeedPosts } from '@common/server/db-calls';
 import { SearchIcon } from '@components/icons';
-import { Feed } from '@components/feed';
+import { ScrollContent } from '@components/scroll-content';
+import { FeedPost } from '@components/feed-post';
 import {
 	Box,
 	InputAdornment,
@@ -27,7 +28,13 @@ const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
 };
 
 const Home: NextPage<Props> = (props) => {
-	const { data } = props;
+	const {
+		data: {
+			parentPostMap,
+			posts,
+			responsePostMap,
+		},
+	} = props;
 
 	return (
 		<>
@@ -37,35 +44,54 @@ const Home: NextPage<Props> = (props) => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Layout>
-				<Feed {...data}>
-					<Box sx={{
-						paddingTop: 1,
-						paddingBottom: 2,
-						paddingLeft: {
-							xs: 2,
-							sm: 10,
-							md: 15,
-							lg: 20,
-						},
-						paddingRight: {
-							xs: 2,
-							sm: 10,
-							md: 15,
-							lg: 20,
-						},
-					}}>
-						<TextField
-							fullWidth
-							InputProps={{
-								endAdornment: (
-									<InputAdornment position="end">
-										<SearchIcon />
-									</InputAdornment>
-								),
-							}}
+				<ScrollContent
+					header={
+						<Box sx={{
+							paddingTop: 1,
+							paddingBottom: 2,
+							paddingLeft: {
+								xs: 2,
+								sm: 10,
+								md: 15,
+								lg: 20,
+							},
+							paddingRight: {
+								xs: 2,
+								sm: 10,
+								md: 15,
+								lg: 20,
+							},
+						}}>
+							<TextField
+								fullWidth
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											<SearchIcon />
+										</InputAdornment>
+									),
+								}}
+							/>
+						</Box>
+					}
+				>
+					{posts.map(p => (
+						<FeedPost
+							key={p._id}
+							post={p}
+							parentPosts={
+								(p.parentId && parentPostMap[p.parentId]) ?
+									[parentPostMap[p.parentId]] :
+									[]
+							}
+							responses={
+								(p._id && responsePostMap[p._id]) ?
+									[responsePostMap[p._id]] :
+									[]
+							}
 						/>
-					</Box>
-				</Feed>
+					))}
+				</ScrollContent>
 			</Layout>
 		</>
 	);

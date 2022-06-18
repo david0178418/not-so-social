@@ -12,9 +12,9 @@ import {
 } from './transforms';
 
 interface GetPostsReturn {
-	parentPosts: PostIdMap;
+	parentPostMap: PostIdMap;
 	posts: Post[];
-	responsePosts: PostIdMap;
+	responsePostMap: PostIdMap;
 }
 
 export
@@ -37,10 +37,10 @@ async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
 
 	return {
 		posts: posts.map(postToBookmarkedPost),
-		parentPosts: parentPosts
+		parentPostMap: parentPosts
 			.map(postToBookmarkedPost)
 			.reduce(rollupPostsToMapFn(), {}),
-		responsePosts: responsePosts
+		responsePostMap: responsePosts
 			.map(postToBookmarkedPost)
 			.reduce(rollupPostsToMapFn('parentId'), {}),
 	};

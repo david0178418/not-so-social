@@ -23,7 +23,7 @@ import {
 } from '@mui/material';
 
 interface Props {
-	parentPost?: Post;
+	parentPosts?: Post[];
 	post: Post;
 	responses?: Post[];
 }
@@ -33,7 +33,7 @@ function FeedPost(props: Props) {
 	const {
 		post,
 		responses = [],
-		parentPost,
+		parentPosts = [],
 	} = props;
 	const [responseOpen, setResponseOpen] = useState(false);
 	const isLoggedIn = useIsLoggedIn();
@@ -41,26 +41,29 @@ function FeedPost(props: Props) {
 	return (
 		<Box sx={{
 			backgroundColor: 'lightgrey',
-			borderTopRightRadius: parentPost && '15px',
-			borderTopLeftRadius: parentPost && '15px',
+			borderTopRightRadius: parentPosts.length && '15px',
+			borderTopLeftRadius: parentPosts.length && '15px',
 			borderBottomRightRadius: responses.length && '15px',
 			borderBottomLeftRadius: responses.length && '15px',
 		}}>
-			{parentPost && (
+			{parentPosts.map(p => (
 				// TODO Figure out the proper style inheritance
-				<Box sx={{
-					marginTop: 1,
-					marginX: 3,
-					paddingTop: 2,
-					position: 'relative',
-				}}>
+				<Box
+					key={p._id}
+					sx={{
+						marginTop: 1,
+						marginX: 3,
+						paddingTop: 2,
+						position: 'relative',
+					}}
+				>
 					<Box sx={{
 						backgroundColor: 'white',
 						borderTopRightRadius: '15px',
 						borderTopLeftRadius: '15px',
 						overflow: 'hidden',
 					}}>
-						<FeedPost post={parentPost} />
+						<FeedPost post={p} />
 					</Box>
 					<Box sx={{
 						position: 'absolute',
@@ -70,13 +73,13 @@ function FeedPost(props: Props) {
 						<KeyboardArrowDownIcon/>
 					</Box>
 				</Box>
-			)}
+			))}
 			<Box sx={{
 				backgroundColor: 'white',
 				borderBottom: '1px solid',
 				borderColor: 'text.disabled',
 				padding: 1,
-				marginX: (parentPost && responses.length) ? 1 : 0,
+				marginX: (parentPosts && responses.length) ? 1 : 0,
 			}}>
 				<div>
 					<Box
