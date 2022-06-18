@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import twttr from 'twitter-text';
 import { Paths } from '@common/constants';
 import { Post } from '@common/types';
 import { PostActions } from './feed-post-actions';
@@ -11,6 +10,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
 	getTimeSinceDate,
 	localizedDateFormat,
+	parseContentString,
 	urlJoin,
 } from '@common/utils';
 import {
@@ -25,14 +25,14 @@ import {
 interface Props {
 	parentPost?: Post;
 	post: Post;
-	topResponse?: Post;
+	responses?: Post[];
 }
 
 export
 function FeedPost(props: Props) {
 	const {
 		post,
-		topResponse,
+		responses = [],
 		parentPost,
 	} = props;
 	const [responseOpen, setResponseOpen] = useState(false);
@@ -43,8 +43,8 @@ function FeedPost(props: Props) {
 			backgroundColor: 'lightgrey',
 			borderTopRightRadius: parentPost && '15px',
 			borderTopLeftRadius: parentPost && '15px',
-			borderBottomRightRadius: topResponse && '15px',
-			borderBottomLeftRadius: topResponse && '15px',
+			borderBottomRightRadius: responses.length && '15px',
+			borderBottomLeftRadius: responses.length && '15px',
 		}}>
 			{parentPost && (
 				// TODO Figure out the proper style inheritance
@@ -76,7 +76,7 @@ function FeedPost(props: Props) {
 				borderBottom: '1px solid',
 				borderColor: 'text.disabled',
 				padding: 1,
-				marginX: (parentPost && topResponse) ? 1 : 0,
+				marginX: (parentPost && responses.length) ? 1 : 0,
 			}}>
 				<div>
 					<Box
@@ -181,7 +181,7 @@ function FeedPost(props: Props) {
 					)}
 				</div>
 			</Box>
-			{topResponse && (
+			{!!responses.length && (
 				// TODO Figure out the proper style inheritance
 				<Box sx={{
 					marginX: 3,
@@ -194,7 +194,12 @@ function FeedPost(props: Props) {
 						borderBottomLeftRadius: '15px',
 						overflow: 'hidden',
 					}}>
-						<FeedPost post={topResponse} />
+						{responses.map(p => (
+							<FeedPost
+								key={p._id}
+								post={p}
+							/>
+						))}
 					</Box>
 					<Box sx={{
 						position: 'absolute',
@@ -207,14 +212,4 @@ function FeedPost(props: Props) {
 			)}
 		</Box>
 	);
-}
-
-function parseContentString(str: string) {
-	return twttr.autoLink(str, {
-		hashtagUrlBase: '/q=',
-		cashtagUrlBase: '/q=',
-		usernameUrlBase: '/u/',
-		listUrlBase: '/',
-		targetBlank: true,
-	}).trim().replace(/(?:\r\n|\r|\n)/g, '<br>');
 }

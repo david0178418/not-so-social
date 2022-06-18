@@ -1,6 +1,9 @@
-import type { Post, PostIdMap } from '@common/types';
-import { isTruthy, unique } from '@common/utils';
+import type {
+ Nullable, Post, PostIdMap
+} from '@common/types';
 import type { DbPost } from './db-schema';
+
+import { isTruthy, unique } from '@common/utils';
 
 export
 function dbPostToPostFn(userId: string) {
@@ -35,13 +38,15 @@ function postToBookmarkedPostFn(bookmarkedIds: string[]) {
 	});
 }
 
+
+
 export
-function postListsToIdList(...postLists: Post[][]) {
+function postListsToIdList(...postLists: Nullable<Post>[][]) {
 	return unique(
 		postLists
 			.flat()
-			.map(p => p._id)
-			.filter(isTruthy),
+			.filter(isTruthy)
+			.map(p => p._id as string),
 	);
 }
 

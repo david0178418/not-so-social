@@ -46,6 +46,12 @@ async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
 	};
 }
 
+
+async function getPost(postId: string, userId: string): Promise<Post | null> {
+	const posts = await getPosts([postId], userId);
+	return posts?.[0] || null;
+}
+
 async function getPosts(postIds: string[], userId: string): Promise<Post[]> {
 	const col = await getCollection<DbPost>(DbCollections.Posts);
 	const results = await col
@@ -84,6 +90,7 @@ async function getChildPosts(postId: string, userId: string): Promise<Post[]> {
 }
 
 interface getFocusedPostProps {
+	parentPost: Post | null;
 	post: Post | null;
 	responses: Post[];
 }
@@ -91,33 +98,35 @@ interface getFocusedPostProps {
 export
 async function getFocusedPost(userId: string, id: string): Promise<getFocusedPostProps> {
 	try {
-		const _id = new ObjectId(id);
-		const postsCol = await getCollection<DbPost>(DbCollections.Posts);
+		const post = await getPost(id, userId);
 
-		const result = await postsCol.findOne({ _id });
-
-		if(!result) {
+		if(!post) {
 			return {
+				parentPost: null,
 				post: null,
 				responses: [],
 			};
 		}
 
+		const parentPost = post.parentId ?
+			await getPost(post.parentId, userId) :
+			null;
 		const responses = await getChildPosts(id, userId);
 
-		const post = dbPostToPostFn(userId)(result);
-		const allIds = postListsToIdList([post], responses);
+		const allIds = postListsToIdList([post, parentPost], responses);
 
 		const postToBookmarkedPost = postToBookmarkedPostFn(
 			await fetchBookmarksFromPostIds(userId, allIds)
 		);
 
 		return {
+			parentPost: parentPost && postToBookmarkedPost(parentPost),
 			post: postToBookmarkedPost(post),
 			responses: responses.map(postToBookmarkedPost),
 		};
 	} catch {
 		return {
+			parentPost: null,
 			post: null,
 			responses: [],
 		};

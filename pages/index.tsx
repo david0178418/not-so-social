@@ -1,12 +1,13 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import type { AsyncFnReturnType } from '@common/types';
+import type { ReactNode } from 'react';
 
 import Head from 'next/head';
+import { getSession } from 'next-auth/react';
 import { Layout } from '@components/layout';
 import { getFeedPosts } from '@common/server/db-calls';
-import { FeedPost } from '@components/feed-post';
-import { getSession } from 'next-auth/react';
 import { SearchIcon } from '@components/icons';
+import { Feed } from '@components/feed';
 import {
 	Box,
 	InputAdornment,
@@ -14,6 +15,7 @@ import {
 } from '@mui/material';
 
 interface Props {
+	children?: ReactNode;
 	data: AsyncFnReturnType<typeof getFeedPosts>;
 }
 
@@ -25,13 +27,7 @@ const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
 };
 
 const Home: NextPage<Props> = (props) => {
-	const {
-		data: {
-			parentPosts,
-			posts,
-			responsePosts,
-		},
-	} = props;
+	const { data } = props;
 
 	return (
 		<>
@@ -41,7 +37,7 @@ const Home: NextPage<Props> = (props) => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Layout>
-				<div className="baz">
+				<Feed {...data}>
 					<Box sx={{
 						paddingTop: 1,
 						paddingBottom: 2,
@@ -69,36 +65,7 @@ const Home: NextPage<Props> = (props) => {
 							}}
 						/>
 					</Box>
-					<div className="bar">
-						{posts.map(p => (
-							<FeedPost
-								parentPost={parentPosts[p.parentId || '']}
-								topResponse={responsePosts[p._id || '']}
-								key={p._id}
-								post={p}
-							/>
-						))}
-					</div>
-				</div>
-				<style jsx>{`
-					.baz {
-						display: flex;
-						flex-direction: column;
-						max-height: 100%;
-					}
-
-					.foo {
-						padding-top: 10px;
-						padding-right: 100px;
-						padding-bottom: 20px;
-						padding-left: 100px;
-					}
-
-					.bar {
-						overflow: hidden scroll;
-						flex: 1;
-					}
-				`}</style>
+				</Feed>
 			</Layout>
 		</>
 	);

@@ -37,6 +37,9 @@ interface PostIdMap {
 export
 type AsyncFnReturnType<T extends (...args: any[]) => Promise<any>> = Awaited<ReturnType<T>>;
 
+export
+type Nullable<T> = T | null;
+
 declare module 'next-auth' {
 	interface User {
 		id: string;

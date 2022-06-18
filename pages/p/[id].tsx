@@ -38,6 +38,7 @@ const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 const Home: NextPage<Props> = (props) => {
 	const {
 		data: {
+			parentPost,
 			post,
 			responses,
 		},
@@ -49,6 +50,9 @@ const Home: NextPage<Props> = (props) => {
 				<title>Pinboard - </title>
 			</Head>
 			<main>
+				{parentPost && (
+					<FeedPost post={parentPost} />
+				)}
 				{!post && (
 					<Typography variant="body1">
 						<Link href="/">
