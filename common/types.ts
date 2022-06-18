@@ -40,13 +40,20 @@ type AsyncFnReturnType<T extends (...args: any[]) => Promise<any>> = Awaited<Ret
 export
 type Nullable<T> = T | null;
 
+interface User {
+	id: string;
+	username: string;
+}
+
 declare module 'next-auth' {
-	interface User {
-		id: string;
-		username: string;
+	interface Session {
+		user: User;
 	}
 
-	interface Session {
+}
+
+declare module 'next-auth/jwt' {
+	interface JWT {
 		user: User;
 	}
 }
