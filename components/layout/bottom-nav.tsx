@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import {
-	BottomNavigation, BottomNavigationAction, Fab, Paper,
+	BottomNavigation,
+	BottomNavigationAction,
+	Fab,
+	Paper,
 } from '@mui/material';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { CreateIcon } from '@components/icons';
+import {
+	BookmarkIcon,
+	CreateIcon,
+	HomeIcon,
+} from '@components/icons';
 
 export
 function BottomNav() {
@@ -40,9 +44,8 @@ function BottomNav() {
 				value={value}
 				onChange={(event, newValue) => setValue(newValue)}
 			>
-				<BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-				<BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-				<BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+				<BottomNavigationAction label="Home" icon={<HomeIcon />} />
+				<BottomNavigationAction label="Bookmarks" icon={<BookmarkIcon />} />
 			</BottomNavigation>
 		</Paper>
 	);

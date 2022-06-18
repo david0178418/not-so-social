@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useIsLoggedIn, useIsLoggedOut } from '@common/hooks';
 import { ReactNode } from 'react';
 import {
+	BookmarkIcon,
 	CreateIcon,
 	HomeIcon,
 	LoginIcon,
@@ -71,9 +72,7 @@ function LeftRail() {
 						href="/"
 					>
 						<ListItemButton>
-							<RailButtonContent
-								label="Home"
-							>
+							<RailButtonContent label="Home">
 								<HomeIcon/>
 							</RailButtonContent>
 						</ListItemButton>
@@ -105,6 +104,19 @@ function LeftRail() {
 				)}
 				{isLoggedIn && (
 					<>
+						<ListItem disablePadding>
+							<Link
+								shallow
+								passHref
+								href="/"
+							>
+								<ListItemButton>
+									<RailButtonContent label="Bookmarks" >
+										<BookmarkIcon />
+									</RailButtonContent>
+								</ListItemButton>
+							</Link>
+						</ListItem>
 						<ListItem disablePadding>
 							<Link
 								shallow
