@@ -4,11 +4,11 @@ import Head from 'next/head';
 import { Loader } from '@components/loader';
 import { BottomNav } from './bottom-nav';
 import { LeftRail } from './left-rail';
+import { CommonModals } from './common-modals';
 import {
 	Container,
 	Grid,
 } from '@mui/material';
-import { CommonModals } from './common-modals';
 
 interface Props {
 	title?: string;
