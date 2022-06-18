@@ -1,12 +1,12 @@
 import type { ValidationError } from 'joi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import Joi from 'joi';
 import { DbCollections } from '@common/constants';
 import { getCollection } from '@common/server/mongodb';
 import { getSession } from 'next-auth/react';
 import { nowISOString } from '@common/utils';
 import { hash } from 'bcryptjs';
-import Joi from 'joi';
 
 interface Schema {
 	password: string;
