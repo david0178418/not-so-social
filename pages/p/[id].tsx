@@ -3,7 +3,6 @@ import type { ParsedUrlQuery } from 'querystring';
 import type { AsyncFnReturnType } from '@common/types';
 
 import Head from 'next/head';
-import { Layout } from '@components/layout';
 import { getFocusedPost } from '@common/server/db-calls';
 import { BackIcon } from '@components/icons';
 import { getSession } from 'next-auth/react';
@@ -51,32 +50,30 @@ const Home: NextPage<Props> = (props) => {
 			<Head>
 				<title>Pinboard - </title>
 			</Head>
-			<Layout>
-				<ScrollContent
-					header={
-						<Box sx={{
-							paddingTop: 1,
-							paddingBottom: 2,
-						}}>
-							<Typography variant="h5" component="div" gutterBottom>
-								{/** TODO Capture direct links and send them to home page */}
-								<IconButton color="primary" onClick={routeBack}>
-									<BackIcon />
-								</IconButton>&nbsp;
-								Post
-							</Typography>
-						</Box>
-					}
-				>
-					{post && (
-						<FeedPost
-							post={post}
-							parentPosts={parentPost ? [parentPost] : []}
-							responses={responses}
-						/>
-					)}
-				</ScrollContent>
-			</Layout>
+			<ScrollContent
+				header={
+					<Box sx={{
+						paddingTop: 1,
+						paddingBottom: 2,
+					}}>
+						<Typography variant="h5" component="div" gutterBottom>
+							{/** TODO Capture direct links and send them to home page */}
+							<IconButton color="primary" onClick={routeBack}>
+								<BackIcon />
+							</IconButton>&nbsp;
+							Post
+						</Typography>
+					</Box>
+				}
+			>
+				{post && (
+					<FeedPost
+						post={post}
+						parentPosts={parentPost ? [parentPost] : []}
+						responses={responses}
+					/>
+				)}
+			</ScrollContent>
 		</>
 	);
 };

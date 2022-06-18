@@ -9,6 +9,7 @@ import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import Head from 'next/head';
 import { Toast } from '@components/toast';
+import { Layout } from '@components/layout';
 
 interface Props {
 	initialState: any;
@@ -31,7 +32,9 @@ function MyApp(props: AppProps<Props>) {
 				/>
 			</Head>
 			<SessionProvider session={session}>
-				<Component {...pageProps} />
+				<Layout>
+					<Component {...pageProps} />
+				</Layout>
 				<Toast/>
 			</SessionProvider>
 		</>);

@@ -4,7 +4,6 @@ import type { ReactNode } from 'react';
 
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
-import { Layout } from '@components/layout';
 import { getFeedPosts } from '@common/server/db-calls';
 import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
@@ -43,56 +42,54 @@ const Home: NextPage<Props> = (props) => {
 				<meta name="description" content="Pinboard" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<Layout>
-				<ScrollContent
-					header={
-						<Box sx={{
-							paddingTop: 1,
-							paddingBottom: 2,
-							paddingLeft: {
-								xs: 2,
-								sm: 10,
-								md: 15,
-								lg: 20,
-							},
-							paddingRight: {
-								xs: 2,
-								sm: 10,
-								md: 15,
-								lg: 20,
-							},
-						}}>
-							<TextField
-								fullWidth
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											<SearchIcon />
-										</InputAdornment>
-									),
-								}}
-							/>
-						</Box>
-					}
-				>
-					{posts.map(p => (
-						<FeedPost
-							key={p._id}
-							post={p}
-							parentPosts={
-								(p.parentId && parentPostMap[p.parentId]) ?
-									[parentPostMap[p.parentId]] :
-									[]
-							}
-							responses={
-								(p._id && responsePostMap[p._id]) ?
-									[responsePostMap[p._id]] :
-									[]
-							}
+			<ScrollContent
+				header={
+					<Box sx={{
+						paddingTop: 1,
+						paddingBottom: 2,
+						paddingLeft: {
+							xs: 2,
+							sm: 10,
+							md: 15,
+							lg: 20,
+						},
+						paddingRight: {
+							xs: 2,
+							sm: 10,
+							md: 15,
+							lg: 20,
+						},
+					}}>
+						<TextField
+							fullWidth
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<SearchIcon />
+									</InputAdornment>
+								),
+							}}
 						/>
-					))}
-				</ScrollContent>
-			</Layout>
+					</Box>
+				}
+			>
+				{posts.map(p => (
+					<FeedPost
+						key={p._id}
+						post={p}
+						parentPosts={
+							(p.parentId && parentPostMap[p.parentId]) ?
+								[parentPostMap[p.parentId]] :
+								[]
+						}
+						responses={
+							(p._id && responsePostMap[p._id]) ?
+								[responsePostMap[p._id]] :
+								[]
+						}
+					/>
+				))}
+			</ScrollContent>
 		</>
 	);
 };
