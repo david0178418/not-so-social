@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Paths } from '@common/constants';
 import { Post } from '@common/types';
 import { PostActions } from './feed-post-actions';
@@ -6,7 +7,6 @@ import { DropdownMenu } from '@components/dropdown-menu';
 import { FeedPostResponseForm } from './feed-post-response-form';
 import { useState } from 'react';
 import { useIsLoggedIn } from '@common/hooks';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
 	getTimeSinceDate,
 	localizedDateFormat,
@@ -37,6 +37,7 @@ function FeedPost(props: Props) {
 	} = props;
 	const [responseOpen, setResponseOpen] = useState(false);
 	const isLoggedIn = useIsLoggedIn();
+
 
 	return (
 		<Box sx={{
@@ -79,7 +80,7 @@ function FeedPost(props: Props) {
 				borderBottom: '1px solid',
 				borderColor: 'text.disabled',
 				padding: 1,
-				marginX: (parentPosts && responses.length) ? 1 : 0,
+				marginX: (parentPosts.length && responses.length) ? 1 : 0,
 			}}>
 				<div>
 					<Box
