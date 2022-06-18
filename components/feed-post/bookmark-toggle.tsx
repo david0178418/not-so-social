@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { Post } from '@common/types';
 import { bookmarkPost, unbookmarkPost } from '@common/actions';
 import { useState } from 'react';
@@ -52,13 +52,13 @@ function BookmarkToggle(props: Props) {
 
 	const body = (
 		<Tooltip title="Bookmark">
-			<IconButton size={size} onClick={toggle}>
+			<Button size={size} onClick={toggle}>
 				{isBookmarked ? (
 					<BookmarkIcon color="primary"/>
 				) : (
 					<BookmarkOutlinedIcon color="primary"/>
 				)}
-			</IconButton>
+			</Button>
 		</Tooltip>
 	);
 

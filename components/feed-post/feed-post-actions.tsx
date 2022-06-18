@@ -12,8 +12,11 @@ import {
 import {
 	Button,
 	Grid,
+	MenuItem,
 	Tooltip,
 } from '@mui/material';
+import { DropdownMenu } from '@components/dropdown-menu';
+import Link from 'next/link';
 
 interface Props {
 	post: Post;
@@ -95,6 +98,31 @@ function PostActions(props: Props) {
 						{''}
 					</Button>
 				</Tooltip>
+			</Grid>
+			<Grid
+				xs
+				item
+				sx={{ textAlign: 'center' }}
+			>
+				<DropdownMenu>
+					{post.isOwner && (
+						[
+							<Link
+								key="a"
+								passHref
+								shallow
+								href="/"
+							>
+								<MenuItem>Edit</MenuItem>
+							</Link>,
+							<MenuItem key="b">Abandon Ownership</MenuItem>,
+						]
+					)}
+					<MenuItem>View Point Activity</MenuItem>
+					{!post.isOwner && (
+						<MenuItem>Mark as Spam</MenuItem>
+					)}
+				</DropdownMenu>
 			</Grid>
 		</>
 	);

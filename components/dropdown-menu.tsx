@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material';
+import { Button } from '@mui/material';
 import { Menu } from '@mui/material';
 import { MoreIcon } from '@components/icons';
 import {
@@ -7,7 +7,7 @@ import {
 	useRef,
 } from 'react';
 
-type Props = ComponentProps<typeof IconButton>;
+type Props = ComponentProps<typeof Button>;
 
 export
 function DropdownMenu(props: Props) {
@@ -21,8 +21,8 @@ function DropdownMenu(props: Props) {
 	const anchorEl = useRef(null);
 
 	return (
-		<div>
-			<IconButton
+		<>
+			<Button
 				{...triggerProps}
 				ref={anchorEl}
 				onClick={e => {
@@ -31,7 +31,7 @@ function DropdownMenu(props: Props) {
 				}}
 			>
 				<MoreIcon/>
-			</IconButton>
+			</Button>
 			<Menu
 				anchorEl={anchorEl.current}
 				onClick={() => setIsOpen(false)}
@@ -48,6 +48,6 @@ function DropdownMenu(props: Props) {
 			>
 				{children}
 			</Menu>
-		</div>
+		</>
 	);
 }

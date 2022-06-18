@@ -3,7 +3,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Paths } from '@common/constants';
 import { Post } from '@common/types';
 import { PostActions } from './feed-post-actions';
-import { DropdownMenu } from '@components/dropdown-menu';
 import { FeedPostResponseForm } from './feed-post-response-form';
 import { useState } from 'react';
 import { useIsLoggedIn } from '@common/hooks';
@@ -17,7 +16,6 @@ import {
 	Box,
 	Grid,
 	Link as MuiLink,
-	MenuItem,
 	Tooltip,
 	Typography,
 } from '@mui/material';
@@ -137,31 +135,6 @@ function FeedPost(props: Props) {
 										</Tooltip>
 									</Link>
 								</Typography>
-							</Grid>
-							<Grid
-								item
-								xs={2}
-								sm={1}
-							>
-								<DropdownMenu>
-									{post.isOwner && (
-										[
-											<Link
-												key="a"
-												passHref
-												shallow
-												href="/"
-											>
-												<MenuItem>Edit</MenuItem>
-											</Link>,
-											<MenuItem key="b">Abandon Ownership</MenuItem>,
-										]
-									)}
-									<MenuItem>View Point Activity</MenuItem>
-									{!post.isOwner && (
-										<MenuItem>Mark as Spam</MenuItem>
-									)}
-								</DropdownMenu>
 							</Grid>
 						</Grid>
 					</Box>
