@@ -148,3 +148,38 @@ async function fetchBookmarksFromPostIds(userId: string, postIds: string[]) {
 	return bookmarks.map(b => b.postId.toString());
 
 }
+
+// TODO Is there a better way to do this in MongoDB
+const DOC_PLACEHOLDER = 'docTemp';
+
+export
+async function fetchUserBookmarkedPosts(userId: string): Promise<Post[]> {
+	const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
+
+	const result = await col
+		.aggregate<DbPost>([
+		{ $match: { userId } },
+		{ $sort: { date: -1 } },
+		{
+			$lookup: {
+				from: DbCollections.Posts,
+				localField: 'postId',
+				foreignField: '_id',
+				as: DOC_PLACEHOLDER,
+			},
+		},
+		{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
+		{ $replaceRoot: { newRoot: `$${DOC_PLACEHOLDER}` } },
+	])
+		.toArray();
+
+	const dbPostToPost = dbPostToPostFn(userId);
+
+	// @ts-ignore
+	return result
+		.map(dbPostToPost)
+		.map(p => ({
+			...p,
+			bookmarked: true,
+		}));
+}

@@ -1,5 +1,7 @@
 import type {
- Nullable, Post, PostIdMap
+	Nullable,
+	Post,
+	PostIdMap,
 } from '@common/types';
 import type { DbPost } from './db-schema';
 
