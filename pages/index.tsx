@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
-import { getFeedPosts } from '@common/server/db-calls';
+import { fetchFeedPosts } from '@common/server/db-calls';
 import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
@@ -16,7 +16,7 @@ import {
 
 interface Props {
 	children?: ReactNode;
-	data: AsyncFnReturnType<typeof getFeedPosts>;
+	data: AsyncFnReturnType<typeof fetchFeedPosts>;
 }
 
 export
@@ -27,7 +27,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	return {
 		props: {
 			session,
-			data: await getFeedPosts(userId || ''),
+			data: await fetchFeedPosts(userId || ''),
 		},
 	};
 };

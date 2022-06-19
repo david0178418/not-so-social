@@ -18,7 +18,7 @@ interface GetPostsReturn {
 }
 
 export
-async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
+async function fetchFeedPosts(userId: string): Promise<GetPostsReturn> {
 	const col = await getCollection<DbPost>(DbCollections.Posts);
 	const results = await col
 		.aggregate<DbPost>([{ $sort: { created: -1 } }])
@@ -27,8 +27,8 @@ async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
 	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
 	const postIds = posts.map(p => p._id) as string[];
 
-	const parentPosts = await getPosts(parentIds, userId);
-	const responsePosts = await getTopChildPosts(postIds, userId);
+	const parentPosts = await fetchPosts(parentIds, userId);
+	const responsePosts = await fetchTopChildPosts(postIds, userId);
 	const allIds = postListsToIdList(posts, parentPosts, responsePosts);
 
 	const postToBookmarkedPost = postToBookmarkedPostFn(
@@ -47,12 +47,12 @@ async function getFeedPosts(userId: string): Promise<GetPostsReturn> {
 }
 
 
-async function getPost(postId: string, userId: string): Promise<Post | null> {
-	const posts = await getPosts([postId], userId);
+async function fetchPost(postId: string, userId: string): Promise<Post | null> {
+	const posts = await fetchPosts([postId], userId);
 	return posts?.[0] || null;
 }
 
-async function getPosts(postIds: string[], userId: string): Promise<Post[]> {
+async function fetchPosts(postIds: string[], userId: string): Promise<Post[]> {
 	const col = await getCollection<DbPost>(DbCollections.Posts);
 	const results = await col
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
@@ -61,7 +61,7 @@ async function getPosts(postIds: string[], userId: string): Promise<Post[]> {
 	return results.map(dbPostToPostFn(userId));
 }
 
-async function getTopChildPosts(postIds: string[], userId: string): Promise<Post[]> {
+async function fetchTopChildPosts(postIds: string[], userId: string): Promise<Post[]> {
 	const col = await getCollection<DbPost>(DbCollections.Posts);
 	const postObjectIds = postIds.map(i => new ObjectId(i));
 	const results = await col.aggregate<DbPost>([
@@ -80,7 +80,7 @@ async function getTopChildPosts(postIds: string[], userId: string): Promise<Post
 }
 
 
-async function getChildPosts(postId: string, userId: string): Promise<Post[]> {
+async function fetchChildPosts(postId: string, userId: string): Promise<Post[]> {
 	const col = await getCollection<DbPost>(DbCollections.Posts);
 	const results = await col
 		.find<DbPost>({ parentId: new ObjectId(postId) })
@@ -96,9 +96,9 @@ interface getFocusedPostProps {
 }
 
 export
-async function getFocusedPost(userId: string, id: string): Promise<getFocusedPostProps> {
+async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedPostProps> {
 	try {
-		const post = await getPost(id, userId);
+		const post = await fetchPost(id, userId);
 
 		if(!post) {
 			return {
@@ -109,9 +109,9 @@ async function getFocusedPost(userId: string, id: string): Promise<getFocusedPos
 		}
 
 		const parentPost = post.parentId ?
-			await getPost(post.parentId, userId) :
+			await fetchPost(post.parentId, userId) :
 			null;
-		const responses = await getChildPosts(id, userId);
+		const responses = await fetchChildPosts(id, userId);
 
 		const allIds = postListsToIdList([post, parentPost], responses);
 

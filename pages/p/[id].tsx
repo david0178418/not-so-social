@@ -3,7 +3,7 @@ import type { ParsedUrlQuery } from 'querystring';
 import type { AsyncFnReturnType } from '@common/types';
 
 import Head from 'next/head';
-import { getFocusedPost } from '@common/server/db-calls';
+import { fetchFocusedPost } from '@common/server/db-calls';
 import { BackIcon } from '@components/icons';
 import { getSession } from 'next-auth/react';
 import { FeedPost } from '@components/feed-post';
@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 
 interface Props {
-	data: AsyncFnReturnType<typeof getFocusedPost>;
+	data: AsyncFnReturnType<typeof fetchFocusedPost>;
 }
 
 interface Params extends ParsedUrlQuery {
@@ -32,7 +32,7 @@ const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 	return {
 		props: {
 			session,
-			data: await getFocusedPost(userId, id),
+			data: await fetchFocusedPost(userId, id),
 		},
 	};
 };
