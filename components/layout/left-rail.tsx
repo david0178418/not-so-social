@@ -74,7 +74,7 @@ function LeftRail() {
 					<Link
 						shallow
 						passHref
-						href="/"
+						href={Paths.Home}
 					>
 						<ListItemButton>
 							<RailButtonContent label="Home">
@@ -117,7 +117,7 @@ function LeftRail() {
 							<Link
 								shallow
 								passHref
-								href={Paths.Home}
+								href={Paths.Bookmarks}
 							>
 								<ListItemButton>
 									<RailButtonContent label="Bookmarks" >

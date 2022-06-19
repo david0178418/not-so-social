@@ -5,7 +5,7 @@ export
 enum Paths {
 	Home = '/',
 	Post = '/p',
-	Bookmarks = '/b',
+	Bookmarks = '/bookmarks',
 	UserBoosts = '/u/b',
 	UserPosts = '/u/p',
 	Profile = '/profile',
