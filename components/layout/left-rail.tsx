@@ -1,13 +1,17 @@
 import Link from 'next/link';
-import { ModalActions } from '@common/constants';
+import { ModalActions, Paths } from '@common/constants';
 import { useRouter } from 'next/router';
-import { useIsLoggedIn, useIsLoggedOut } from '@common/hooks';
 import { ReactNode } from 'react';
+import { useSession } from 'next-auth/react';
 import {
 	BookmarkIcon,
+	BookmarkActiveIcon,
 	CreateIcon,
 	HomeIcon,
+	HomeActiveIcon,
 	LoginIcon,
+	ProfileIcon,
+	ProfileActiveIcon,
 } from '@components/icons';
 import {
 	Fab,
@@ -52,12 +56,13 @@ function RailButtonContent(props: Props) {
 
 function LeftRail() {
 	const router = useRouter();
-	const isLoggedIn = useIsLoggedIn();
-	const isLoggedOut = useIsLoggedOut();
+	const { data } = useSession();
 	const {
 		pathname,
 		query,
 	} = router;
+
+	const user = data?.user;
 
 	return (
 		<>
@@ -73,12 +78,16 @@ function LeftRail() {
 					>
 						<ListItemButton>
 							<RailButtonContent label="Home">
-								<HomeIcon/>
+								{
+									Paths.Home === pathname ?
+										<HomeActiveIcon /> :
+										<HomeIcon />
+								}
 							</RailButtonContent>
 						</ListItemButton>
 					</Link>
 				</ListItem>
-				{isLoggedOut && (
+				{!user && (
 					<ListItem disablePadding>
 						<Link
 							shallow
@@ -102,17 +111,21 @@ function LeftRail() {
 						</Link>
 					</ListItem>
 				)}
-				{isLoggedIn && (
+				{user && (
 					<>
 						<ListItem disablePadding>
 							<Link
 								shallow
 								passHref
-								href="/"
+								href={Paths.Home}
 							>
 								<ListItemButton>
 									<RailButtonContent label="Bookmarks" >
-										<BookmarkIcon />
+										{
+											Paths.Bookmarks === pathname ?
+												<BookmarkActiveIcon /> :
+												<BookmarkIcon />
+										}
 									</RailButtonContent>
 								</ListItemButton>
 							</Link>
@@ -121,19 +134,15 @@ function LeftRail() {
 							<Link
 								shallow
 								passHref
-								href={{
-									pathname,
-									query: {
-										a: ModalActions.Logout,
-										...query,
-									},
-								}}
+								href={Paths.Profile}
 							>
 								<ListItemButton>
-									<RailButtonContent
-										label="Logout"
-									>
-										<LoginIcon/>
+									<RailButtonContent label={user.username}>
+										{
+											Paths.Profile === pathname ?
+												<ProfileActiveIcon /> :
+												<ProfileIcon />
+										}
 									</RailButtonContent>
 								</ListItemButton>
 							</Link>

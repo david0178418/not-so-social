@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ModalActions } from '@common/constants';
 import { useRouter } from 'next/router';
-import { BookmarkIcon, BookmarkOutlinedIcon } from '@components/icons';
+import { BookmarkActiveIcon, BookmarkIcon } from '@components/icons';
 import { pushToastMsgAtom } from '@common/atoms';
 import { useSetAtom } from 'jotai';
 
@@ -54,9 +54,9 @@ function BookmarkToggle(props: Props) {
 		<Tooltip title="Bookmark">
 			<Button size={size} onClick={toggle}>
 				{isBookmarked ? (
-					<BookmarkIcon color="primary"/>
+					<BookmarkActiveIcon color="primary"/>
 				) : (
-					<BookmarkOutlinedIcon color="primary"/>
+					<BookmarkIcon color="primary"/>
 				)}
 			</Button>
 		</Tooltip>

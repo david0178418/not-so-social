@@ -6,9 +6,9 @@ import {
 	Paper,
 } from '@mui/material';
 import {
-	BookmarkIcon,
+	BookmarkActiveIcon,
 	CreateIcon,
-	HomeIcon,
+	HomeActiveIcon,
 } from '@components/icons';
 
 export
@@ -44,8 +44,8 @@ function BottomNav() {
 				value={value}
 				onChange={(event, newValue) => setValue(newValue)}
 			>
-				<BottomNavigationAction label="Home" icon={<HomeIcon />} />
-				<BottomNavigationAction label="Bookmarks" icon={<BookmarkIcon />} />
+				<BottomNavigationAction label="Home" icon={<HomeActiveIcon />} />
+				<BottomNavigationAction label="Bookmarks" icon={<BookmarkActiveIcon />} />
 			</BottomNavigation>
 		</Paper>
 	);

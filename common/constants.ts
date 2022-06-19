@@ -8,6 +8,7 @@ enum Paths {
 	Bookmarks = '/b',
 	UserBoosts = '/u/b',
 	UserPosts = '/u/p',
+	Profile = '/profile',
 	Settings = '/settings',
 }
 
