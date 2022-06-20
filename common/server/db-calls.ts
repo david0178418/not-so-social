@@ -24,6 +24,41 @@ async function fetchFeedPosts(userId: string): Promise<GetPostsReturn> {
 		.aggregate<DbPost>([{ $sort: { created: -1 } }])
 		.toArray();
 	const posts = results.map(dbPostToPostFn(userId));
+
+	return Fooo(posts, userId);
+}
+
+// TODO Is there a better way to do this in MongoDB
+const DOC_PLACEHOLDER = 'docTemp';
+
+export
+async function fetchUserBookmarkedPosts(userId: string): Promise<GetPostsReturn> {
+	const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
+
+	const results = await col
+		.aggregate<DbPost>([
+		{ $match: { userId } },
+		{ $sort: { date: -1 } },
+		{
+			$lookup: {
+				from: DbCollections.Posts,
+				localField: 'postId',
+				foreignField: '_id',
+				as: DOC_PLACEHOLDER,
+			},
+		},
+		{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
+		{ $replaceRoot: { newRoot: `$${DOC_PLACEHOLDER}` } },
+	])
+		.toArray();
+
+	const posts = results.map(dbPostToPostFn(userId));
+
+	return Fooo(posts, userId);
+}
+
+// TODO Reorg this code commong to landing page, bookmarks, and probably others
+async function Fooo(posts: Post[], userId: string) {
 	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
 	const postIds = posts.map(p => p._id) as string[];
 
@@ -45,7 +80,6 @@ async function fetchFeedPosts(userId: string): Promise<GetPostsReturn> {
 			.reduce(rollupPostsToMapFn('parentId'), {}),
 	};
 }
-
 
 async function fetchPost(postId: string, userId: string): Promise<Post | null> {
 	const posts = await fetchPosts([postId], userId);
@@ -147,39 +181,4 @@ async function fetchBookmarksFromPostIds(userId: string, postIds: string[]) {
 
 	return bookmarks.map(b => b.postId.toString());
 
-}
-
-// TODO Is there a better way to do this in MongoDB
-const DOC_PLACEHOLDER = 'docTemp';
-
-export
-async function fetchUserBookmarkedPosts(userId: string): Promise<Post[]> {
-	const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
-
-	const result = await col
-		.aggregate<DbPost>([
-		{ $match: { userId } },
-		{ $sort: { date: -1 } },
-		{
-			$lookup: {
-				from: DbCollections.Posts,
-				localField: 'postId',
-				foreignField: '_id',
-				as: DOC_PLACEHOLDER,
-			},
-		},
-		{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
-		{ $replaceRoot: { newRoot: `$${DOC_PLACEHOLDER}` } },
-	])
-		.toArray();
-
-	const dbPostToPost = dbPostToPostFn(userId);
-
-	// @ts-ignore
-	return result
-		.map(dbPostToPost)
-		.map(p => ({
-			...p,
-			bookmarked: true,
-		}));
 }

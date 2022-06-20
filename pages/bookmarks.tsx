@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { fetchUserBookmarkedPosts } from '@common/server/db-calls';
-import { Post } from '@common/types';
+import { AsyncFnReturnType } from '@common/types';
 import { FeedPost } from '@components/feed-post';
 import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
@@ -20,19 +20,26 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	return {
 		props: {
 			session,
-			posts: userId ?
-				await fetchUserBookmarkedPosts(userId) :
-				[],
+			data: await fetchUserBookmarkedPosts(userId),
+			// posts: userId ?
+			// 	await fetchUserBookmarkedPosts(userId) :
+			// 	[],
 		},
 	};
 };
 
 interface Props {
-	posts: Post[];
+	data: AsyncFnReturnType<typeof fetchUserBookmarkedPosts>;
 }
 
 const BookmarksPage: NextPage<Props> = (props) => {
-	const { posts } = props;
+	const {
+		data: {
+			parentPostMap,
+			posts,
+			responsePostMap,
+		},
+	} = props;
 
 	return (
 		<>
@@ -77,6 +84,16 @@ const BookmarksPage: NextPage<Props> = (props) => {
 					<FeedPost
 						key={p._id}
 						post={p}
+						parentPosts={
+							(p.parentId && parentPostMap[p.parentId]) ?
+								[parentPostMap[p.parentId]] :
+								[]
+						}
+						responses={
+							(p._id && responsePostMap[p._id]) ?
+								[responsePostMap[p._id]] :
+								[]
+						}
 					/>
 				))}
 			</ScrollContent>
