@@ -61,7 +61,6 @@ function LeftRail() {
 		pathname,
 		query,
 	} = router;
-
 	const user = data?.user;
 
 	return (
@@ -111,7 +110,7 @@ function LeftRail() {
 						</Link>
 					</ListItem>
 				)}
-				{user && (
+				{!!user && (
 					<>
 						<ListItem disablePadding>
 							<Link
