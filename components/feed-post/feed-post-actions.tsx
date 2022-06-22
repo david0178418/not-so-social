@@ -5,6 +5,7 @@ import { useIsLoggedIn } from '@common/hooks';
 import { writeToClipboard } from '@common/client/utils';
 import { Paths } from '@common/constants';
 import Link from 'next/link';
+import { DropdownMenu } from '@components/dropdown-menu';
 import {
 	BoostIcon,
 	CommentIcon,
@@ -16,7 +17,6 @@ import {
 	MenuItem,
 	Tooltip,
 } from '@mui/material';
-import { DropdownMenu } from '@components/dropdown-menu';
 
 interface Props {
 	post: Post;
