@@ -4,6 +4,7 @@ import { formatCompactNumber, urlJoin } from '@common/utils';
 import { useIsLoggedIn } from '@common/hooks';
 import { writeToClipboard } from '@common/client/utils';
 import { Paths } from '@common/constants';
+import Link from 'next/link';
 import {
 	BoostIcon,
 	CommentIcon,
@@ -16,7 +17,6 @@ import {
 	Tooltip,
 } from '@mui/material';
 import { DropdownMenu } from '@components/dropdown-menu';
-import Link from 'next/link';
 
 interface Props {
 	post: Post;
