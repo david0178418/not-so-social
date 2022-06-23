@@ -20,6 +20,8 @@ import {
 } from '@mui/material';
 
 interface Props {
+	child?: boolean;
+	parent?: boolean;
 	parentPosts?: Post[];
 	post: Post;
 	responses?: Post[];
@@ -31,48 +33,79 @@ export
 function FeedPost(props: Props) {
 	const {
 		post,
+		child,
+		parent,
 		responses = [],
 		parentPosts = [],
 	} = props;
 	const [responseOpen, setResponseOpen] = useState(false);
 	const isLoggedIn = useIsLoggedIn();
+	const hasParentOrResponse = !!(parentPosts.length | responses.length);
 
+	// TODO fix this style mess
+	const styles = {
+		backgroundColor: 'white',
+		borderBottom: !(parent || (parentPosts.length && !responses.length)) ? '1px solid' : '',
+		borderTop: parentPosts.length ? '1px solid' : '',
+		borderColor: 'text.disabled',
+		padding: 1,
+		marginX: hasParentOrResponse ? 1 : 0,
+	};
+	const parentStyles = {
+		borderTop: '',
+		backgroundColor: 'white',
+		borderTopRightRadius: RADIUS,
+		borderTopLeftRadius: RADIUS,
+		overflow: 'hidden',
+	};
+	const childStyles = {
+		borderBottom: '',
+		borderTop: '',
+		backgroundColor: 'white',
+		borderBottomRightRadius: RADIUS,
+		borderBottomLeftRadius: RADIUS,
+		overflow: 'hidden',
+	};
+	const hasParentOrResponseStyles = {
+		marginTop: 1,
+		paddingBottom: 1,
+		paddingTop: 1,
+		borderTopRightRadius: RADIUS,
+		borderTopLeftRadius: RADIUS,
+		borderBottomRightRadius: RADIUS,
+		borderBottomLeftRadius: RADIUS,
+	};
+	const hasParentNoResponseStyle = {
+		borderBottomRightRadius: RADIUS,
+		borderBottomLeftRadius: RADIUS,
+	};
 
-	return (
+	const hasResponseNoParentStyle = {
+		borderTopRightRadius: RADIUS,
+		borderTopLeftRadius: RADIUS,
+	};
+
+	const appliedStyles = {
+		...styles,
+		...(parent ? parentStyles : {}),
+		...(child ? childStyles : {}),
+		...((parentPosts.length && !responses.length) ? hasParentNoResponseStyle : {}),
+		...((!parentPosts.length && responses.length) ? hasResponseNoParentStyle : {}),
+	};
+
+	const content = (
 		<Box sx={{
 			backgroundColor: '#e4e4e4',
-			borderTopRightRadius: parentPosts.length && RADIUS,
-			borderTopLeftRadius: parentPosts.length && RADIUS,
-			borderBottomRightRadius: responses.length && RADIUS,
-			borderBottomLeftRadius: responses.length && RADIUS,
+			...(hasParentOrResponse ? hasParentOrResponseStyles : {}),
 		}}>
 			{parentPosts.map(p => (
-				// TODO Figure out the proper style inheritance
-				<Box
+				<FeedPost
+					parent
 					key={p._id}
-					sx={{
-						marginTop: 1,
-						marginX: 2,
-						paddingTop: 1,
-					}}
-				>
-					<Box sx={{
-						backgroundColor: 'white',
-						borderTopRightRadius: RADIUS,
-						borderTopLeftRadius: RADIUS,
-						overflow: 'hidden',
-					}}>
-						<FeedPost post={p} />
-					</Box>
-				</Box>
+					post={p}
+				/>
 			))}
-			<Box sx={{
-				backgroundColor: 'white',
-				borderBottom: '1px solid',
-				borderColor: 'text.disabled',
-				padding: 1,
-				marginX: (parentPosts.length && responses.length) ? 1 : 0,
-			}}>
+			<Box sx={appliedStyles}>
 				<div>
 					<Box
 						sx={{
@@ -151,27 +184,42 @@ function FeedPost(props: Props) {
 					)}
 				</div>
 			</Box>
-			{!!responses.length && (
-				// TODO Figure out the proper style inheritance
-				<Box sx={{
-					marginX: 2,
-					paddingBottom: 1,
-				}}>
-					<Box sx={{
-						backgroundColor: 'white',
-						borderBottomRightRadius: RADIUS,
-						borderBottomLeftRadius: RADIUS,
-						overflow: 'hidden',
-					}}>
-						{responses.map(p => (
-							<FeedPost
-								key={p._id}
-								post={p}
-							/>
-						))}
-					</Box>
-				</Box>
-			)}
+			{responses.map(p => (
+				<FeedPost
+					child
+					key={p._id}
+					post={p}
+				/>
+			))}
 		</Box>
 	);
+
+	if(parent) {
+		return (
+			// TODO Figure out the proper style inheritance
+			<Box
+				sx={{
+					position: 'relative',
+					marginBottom: '-1px',
+					borderBottom: '1px solid #dedede',
+					marginX: 2,
+				}}
+			>
+				{content}
+			</Box>
+		);
+	} else if(child) {
+		return (
+			// TODO Figure out the proper style inheritance
+			<Box sx={{
+				marginTop: '-1px',
+				borderTop: '1px solid #dedede',
+				marginX: 2,
+			}}>
+				{content}
+			</Box>
+		);
+	} else {
+		return content;
+	}
 }
