@@ -27,7 +27,44 @@ interface Props {
 	responses?: Post[];
 }
 
+// TODO fix this style mess
+
 const RADIUS = '10px';
+const styles = {
+	backgroundColor: 'white',
+	borderColor: 'text.disabled',
+	padding: 1,
+	marginX: 1,
+};
+const parentStyles = {
+	backgroundColor: 'white',
+	borderTopRightRadius: RADIUS,
+	borderTopLeftRadius: RADIUS,
+	overflow: 'hidden',
+};
+const childStyles = {
+	backgroundColor: 'white',
+	borderBottomRightRadius: RADIUS,
+	borderBottomLeftRadius: RADIUS,
+	overflow: 'hidden',
+};
+const hasParentOrResponseStyles = {
+	marginTop: 1,
+	paddingBottom: 1,
+	paddingTop: 1,
+	borderTopRightRadius: RADIUS,
+	borderTopLeftRadius: RADIUS,
+	borderBottomRightRadius: RADIUS,
+	borderBottomLeftRadius: RADIUS,
+};
+const hasParentNoResponseStyle = {
+	borderBottomRightRadius: RADIUS,
+	borderBottomLeftRadius: RADIUS,
+};
+const hasResponseNoParentStyle = {
+	borderTopRightRadius: RADIUS,
+	borderTopLeftRadius: RADIUS,
+};
 
 export
 function FeedPost(props: Props) {
@@ -40,50 +77,6 @@ function FeedPost(props: Props) {
 	} = props;
 	const [responseOpen, setResponseOpen] = useState(false);
 	const isLoggedIn = useIsLoggedIn();
-	const hasParentOrResponse = !!(parentPosts.length | responses.length);
-
-	// TODO fix this style mess
-	const styles = {
-		backgroundColor: 'white',
-		borderBottom: !(parent || (parentPosts.length && !responses.length)) ? '1px solid' : '',
-		borderTop: parentPosts.length ? '1px solid' : '',
-		borderColor: 'text.disabled',
-		padding: 1,
-		marginX: hasParentOrResponse ? 1 : 0,
-	};
-	const parentStyles = {
-		borderTop: '',
-		backgroundColor: 'white',
-		borderTopRightRadius: RADIUS,
-		borderTopLeftRadius: RADIUS,
-		overflow: 'hidden',
-	};
-	const childStyles = {
-		borderBottom: '',
-		borderTop: '',
-		backgroundColor: 'white',
-		borderBottomRightRadius: RADIUS,
-		borderBottomLeftRadius: RADIUS,
-		overflow: 'hidden',
-	};
-	const hasParentOrResponseStyles = {
-		marginTop: 1,
-		paddingBottom: 1,
-		paddingTop: 1,
-		borderTopRightRadius: RADIUS,
-		borderTopLeftRadius: RADIUS,
-		borderBottomRightRadius: RADIUS,
-		borderBottomLeftRadius: RADIUS,
-	};
-	const hasParentNoResponseStyle = {
-		borderBottomRightRadius: RADIUS,
-		borderBottomLeftRadius: RADIUS,
-	};
-
-	const hasResponseNoParentStyle = {
-		borderTopRightRadius: RADIUS,
-		borderTopLeftRadius: RADIUS,
-	};
 
 	const appliedStyles = {
 		...styles,
@@ -92,12 +85,13 @@ function FeedPost(props: Props) {
 		...((parentPosts.length && !responses.length) ? hasParentNoResponseStyle : {}),
 		...((!parentPosts.length && responses.length) ? hasResponseNoParentStyle : {}),
 	};
+	const appliedContainerStyles = {
+		backgroundColor: '#e4e4e4',
+		...(!(parent || child) ? hasParentOrResponseStyles : {}),
+	};
 
 	const content = (
-		<Box sx={{
-			backgroundColor: '#e4e4e4',
-			...(hasParentOrResponse ? hasParentOrResponseStyles : {}),
-		}}>
+		<Box sx={appliedContainerStyles}>
 			{parentPosts.map(p => (
 				<FeedPost
 					parent
@@ -202,7 +196,7 @@ function FeedPost(props: Props) {
 					position: 'relative',
 					marginBottom: '-1px',
 					borderBottom: '1px solid #dedede',
-					marginX: 2,
+					marginX: 1,
 				}}
 			>
 				{content}
@@ -214,7 +208,7 @@ function FeedPost(props: Props) {
 			<Box sx={{
 				marginTop: '-1px',
 				borderTop: '1px solid #dedede',
-				marginX: 2,
+				marginX: 1,
 			}}>
 				{content}
 			</Box>
