@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ModalActions, Paths } from '@common/constants';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import {
 	BottomNavigation,
 	BottomNavigationAction,
@@ -18,7 +19,6 @@ import {
 	ProfileActiveIcon,
 	ProfileIcon,
 } from '@components/icons';
-import Link from 'next/link';
 
 export
 function BottomNav() {
@@ -76,41 +76,58 @@ function BottomNav() {
 						}
 					/>
 				</Link>
-				<Link
-					shallow
-					passHref
-					href={{
-						pathname,
-						query: {
-							a: ModalActions.LoginRegister,
-							...query,
-						},
-					}}
-				>
-					<BottomNavigationAction
-						label="Login"
-						icon={<LoginIcon />}
-					/>
-				</Link>
+				{!user && (
+					<Link
+						shallow
+						passHref
+						href={{
+							pathname,
+							query: {
+								a: ModalActions.LoginRegister,
+								...query,
+							},
+						}}
+					>
+						<BottomNavigationAction
+							label="Login"
+							icon={<LoginIcon />}
+						/>
+					</Link>
+				)}
 				{!!user && (
-					<>
-						<BottomNavigationAction
-							label="Bookmarks"
-							icon={
-								Paths.Bookmarks === pathname ?
-									<BookmarkActiveIcon /> :
-									<BookmarkIcon />
-							}
-						/>
-						<BottomNavigationAction
-							label={user.username}
-							icon={
-								Paths.Profile === pathname ?
-									<ProfileActiveIcon /> :
-									<ProfileIcon />
-							}
-						/>
-					</>
+					[
+						<Link
+							key="a"
+							shallow
+							passHref
+							href={Paths.Bookmarks}
+						>
+							<BottomNavigationAction
+								key="a"
+								label="Bookmarks"
+								icon={
+									Paths.Bookmarks === pathname ?
+										<BookmarkActiveIcon /> :
+										<BookmarkIcon />
+								}
+							/>
+						</Link>,
+						<Link
+							key="b"
+							shallow
+							passHref
+							href={Paths.Profile}
+						>
+							<BottomNavigationAction
+								label={user.username}
+								icon={
+									Paths.Profile === pathname ?
+										<ProfileActiveIcon /> :
+										<ProfileIcon />
+								}
+							/>
+						</Link>,
+					]
 				)}
 			</BottomNavigation>
 		</Paper>
