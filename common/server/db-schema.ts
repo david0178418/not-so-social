@@ -14,6 +14,7 @@ interface DbPost extends SavedPostProps {
 	_id?: ObjectId;
 	ownerId: ObjectId;
 	parentId?: ObjectId;
+	points: 0;
 }
 
 export

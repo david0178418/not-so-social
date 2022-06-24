@@ -8,6 +8,7 @@ import { nowISOString } from '@common/utils';
 import { ObjectId } from 'mongodb';
 import { getSession } from 'next-auth/react';
 import { ObjectIdValidation } from '@common/server/validations';
+import { DbPost } from '@common/server/db-schema';
 
 interface Schema {
 	body: string;
@@ -65,15 +66,24 @@ interface PostContent {
 async function createPost(content: PostContent, ownerId: string) {
 	const postCol = await getCollection(DbCollections.Posts);
 	const now = nowISOString();
+	const {
+		parentId,
+		...newPostContent
+	} = content;
 
-	const result = await postCol.insertOne({
-		...content,
-		parentId: content.parentId && new ObjectId(content.parentId),
+	const newPost: DbPost = {
+		...newPostContent,
 		created: now,
 		lastUpdated: now,
 		ownerId: new ObjectId(ownerId),
 		points: 0,
-	});
+	};
+
+	if(parentId) {
+		newPost.parentId = new ObjectId(parentId);
+	}
+
+	const result = await postCol.insertOne(newPost);
 
 	return result.insertedId;
 }
