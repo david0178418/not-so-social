@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { getCollection } from '@common/server/mongodb';
 import { DbCollections, NotLoggedInErrMsg } from '@common/constants';
-import { DbBookmark } from '@common/server/db-schema';
 import { ObjectId } from 'mongodb';
 import { nowISOString } from '@common/utils';
 import { getSession } from 'next-auth/react';
@@ -20,7 +19,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		const postObjId = new ObjectId(postId);
 
-		const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
+		const col = await getCollection(DbCollections.PostBookmarks);
 		await col.updateOne(
 			{
 				userId: user.id,

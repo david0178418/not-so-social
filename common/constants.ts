@@ -79,10 +79,9 @@ const BASE_REQ: RequestInit = {
 };
 
 export
-enum ActivityTypes {
-	BookmarkListView = 'bookmark-list-view',
-	FeedView = 'feed-view',
-	PostView = 'post-view',
+enum UserActivityTypes {
+	Navigate = 'navigate',
+	BookmarkItem = 'bookmark-item',
 }
 
 export

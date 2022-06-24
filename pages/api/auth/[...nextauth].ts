@@ -1,7 +1,8 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { DbCollections } from '@common/constants';
-import { getCollection } from '../../../common/server/mongodb';
+import { DbCollections, UserActivityTypes } from '@common/constants';
+import { getCollection } from '@common/server/mongodb';
+import { recordActivity } from '@common/server/db-calls';
 import { compare } from 'bcryptjs';
 
 const {
@@ -10,7 +11,7 @@ const {
 } = process.env;
 
 export
-const authOptions = {
+const authOptions: NextAuthOptions = {
 	// https://next-auth.js.org/configuration/providers
 	providers: [
 		CredentialsProvider({
@@ -31,6 +32,10 @@ const authOptions = {
 				},
 			},
 			async authorize(cred) {
+				if(!cred) {
+					return null;
+				}
+
 				const {
 					username,
 					password,
@@ -102,6 +107,7 @@ const authOptions = {
 		// A secret to use for key generation (you should set this explicitly)
 		secret: JWT_SECRET,
 		// Set to true to use encryption (default: false)
+		// @ts-ignore TODO Figure out type error. Is this deprecated or is type wrong?
 		encryption: true,
 		// You can define your own encode/decode functions for signing and encryption
 		// if you want to override the default behaviour.
@@ -114,13 +120,13 @@ const authOptions = {
 	// The routes shown here are the default URLs that will be used when a custom
 	// pages is not specified for that route.
 	// https://next-auth.js.org/configuration/pages
-	pages: {
-		// signIn: '/auth/signin',  // Displays signin buttons
-		// signOut: '/auth/signout', // Displays form with sign out button
-		// error: '/auth/error', // Error code passed in query string as ?error=
-		// verifyRequest: '/auth/verify-request', // Used for check email page
-		newUser: null, // If set, new users will be directed here on first sign in
-	},
+	// pages: {
+	// signIn: '/auth/signin',  // Displays signin buttons
+	// signOut: '/auth/signout', // Displays form with sign out button
+	// error: '/auth/error', // Error code passed in query string as ?error=
+	// verifyRequest: '/auth/verify-request', // Used for check email page
+	// newUser: null, // If set, new users will be directed here on first sign in
+	// },
 
 	// Callbacks are asynchronous functions you can use to control what happens
 	// when an action is performed.
@@ -139,6 +145,7 @@ const authOptions = {
 			} = args;
 
 			if(user) {
+				// @ts-ignore TODO again, figure out if type info is correct or not
 				token.user = user;
 			}
 
@@ -158,7 +165,18 @@ const authOptions = {
 
 	// Events are useful for logging
 	// https://next-auth.js.org/configuration/events
-	events: {},
+	events: {
+		// async signIn(message) { /* on successful sign in */ },
+		// async signOut(message) { /* on signout */ },
+		// async createUser(message) { /* user created */ },
+		// async updateUser(message) { /* user updated - e.g. their email was verified */ },
+		// async linkAccount(message) { /* account (e.g. Twitter) linked to a user */ },
+		// async session(message) { /* session is active */ },
+		async session(message: any) {
+			const { session: { user: { id } } } = message;
+			recordActivity(id, UserActivityTypes.Navigate);
+		},
+	},
 
 	// Enable debug messages in the console if you are having problems
 	debug: false,

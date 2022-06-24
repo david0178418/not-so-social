@@ -1,8 +1,10 @@
-import { DbCollections } from '@common/constants';
+import { DbCollections, UserActivityTypes } from '@common/constants';
 import { Post, PostIdMap } from '@common/types';
-import { isTruthy, unique } from '@common/utils';
+import {
+	isTruthy, nowISOString, unique,
+} from '@common/utils';
 import { ObjectId } from 'mongodb';
-import { DbBookmark, DbPost } from './db-schema';
+import { DbPost, DbUserActivity } from './db-schema';
 import { getCollection } from './mongodb';
 import {
 	dbPostToPostFn,
@@ -19,7 +21,7 @@ interface GetPostsReturn {
 
 export
 async function fetchFeedPosts(userId: string): Promise<GetPostsReturn> {
-	const col = await getCollection<DbPost>(DbCollections.Posts);
+	const col = await getCollection(DbCollections.Posts);
 	const results = await col
 		.aggregate<DbPost>([{ $sort: { created: -1 } }])
 		.toArray();
@@ -33,7 +35,7 @@ const DOC_PLACEHOLDER = 'docTemp';
 
 export
 async function fetchUserBookmarkedPosts(userId: string): Promise<GetPostsReturn> {
-	const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
+	const col = await getCollection(DbCollections.PostBookmarks);
 
 	const results = await col
 		.aggregate<DbPost>([
@@ -87,7 +89,7 @@ async function fetchPost(postId: string, userId: string): Promise<Post | null> {
 }
 
 async function fetchPosts(postIds: string[], userId: string): Promise<Post[]> {
-	const col = await getCollection<DbPost>(DbCollections.Posts);
+	const col = await getCollection(DbCollections.Posts);
 	const results = await col
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
 		.toArray();
@@ -96,7 +98,7 @@ async function fetchPosts(postIds: string[], userId: string): Promise<Post[]> {
 }
 
 async function fetchTopChildPosts(postIds: string[], userId: string): Promise<Post[]> {
-	const col = await getCollection<DbPost>(DbCollections.Posts);
+	const col = await getCollection(DbCollections.Posts);
 	const postObjectIds = postIds.map(i => new ObjectId(i));
 	const results = await col.aggregate<DbPost>([
 		{ $match: { parentId: { $in: postObjectIds } } },
@@ -115,7 +117,7 @@ async function fetchTopChildPosts(postIds: string[], userId: string): Promise<Po
 
 
 async function fetchChildPosts(postId: string, userId: string): Promise<Post[]> {
-	const col = await getCollection<DbPost>(DbCollections.Posts);
+	const col = await getCollection(DbCollections.Posts);
 	const results = await col
 		.find<DbPost>({ parentId: new ObjectId(postId) })
 		.toArray();
@@ -173,7 +175,7 @@ async function fetchBookmarksFromPostIds(userId: string, postIds: string[]) {
 		return [];
 	}
 
-	const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
+	const col = await getCollection(DbCollections.PostBookmarks);
 	const bookmarks = await col.find({
 		userId,
 		postId: { $in: postIds.map(p => new ObjectId(p)) },
@@ -181,4 +183,23 @@ async function fetchBookmarksFromPostIds(userId: string, postIds: string[]) {
 
 	return bookmarks.map(b => b.postId.toString());
 
+}
+
+export
+async function recordActivity(userId: string, type: UserActivityTypes, params?: any) {
+	const col = await getCollection(DbCollections.UserActivity);
+	const record: DbUserActivity = {
+		date: nowISOString(),
+		userId: new ObjectId(userId),
+		type,
+	};
+
+	if(params) {
+		record.params = params;
+	}
+
+	await col.replaceOne({
+		userId: record.userId,
+		type,
+	}, record, { upsert: true });
 }

@@ -17,7 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(401).send(NotLoggedInErrMsg);
 		}
 
-		const col = await getCollection<DbBookmark>(DbCollections.PostBookmarks);
+		const col = await getCollection(DbCollections.PostBookmarks);
 
 		await col.deleteOne(
 			{

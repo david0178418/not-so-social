@@ -1,3 +1,4 @@
+import { UserActivityTypes } from '@common/constants';
 import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 
@@ -18,12 +19,32 @@ interface DbPost extends SavedPostProps {
 export
 interface DbCreds {
 	username: string;
-	userId: string;
-	pwHash: string;
+	userId: ObjectId;
+	hash: string;
 }
 
 export
 interface DbBookmark {
 	userId: string;
 	postId: ObjectId;
+}
+
+export
+interface DbUser {
+	username: string;
+}
+
+export
+interface DbUserActivity {
+	date: string;
+	userId: ObjectId;
+	type: UserActivityTypes;
+	params?: any;
+}
+
+export
+interface DbUserMeta {
+	userId: ObjectId;
+	created: string;
+	pointBalance: number;
 }

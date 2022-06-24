@@ -63,6 +63,7 @@ async function createUser(username: string, password: string) {
 		.insertOne({
 			userId: result.insertedId,
 			created: nowISOString(),
+			pointBalance: 0,
 		});
 
 	(await getCollection(DbCollections.Creds))

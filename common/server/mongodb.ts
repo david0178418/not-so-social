@@ -1,9 +1,13 @@
 import { DbCollections, MONGODB_DB } from '@common/constants';
 import {
+	Collection,
 	Db,
 	MongoClient,
 	MongoClientOptions,
 } from 'mongodb';
+import {
+	DbBookmark, DbCreds, DbPost, DbUser, DbUserActivity, DbUserMeta,
+} from './db-schema';
 
 const uri = process.env.MONGODB_URI || '';
 const options: MongoClientOptions = {};
@@ -34,10 +38,20 @@ if (process.env.NODE_ENV === 'development') {
 		.then((client) => client.db(MONGODB_DB));
 }
 
-async function getCollection<T = any>(collection: DbCollections) {
+
+type CollectionType<T> =
+T extends DbCollections.Creds ? DbCreds :
+	T extends DbCollections.PostBookmarks ? DbBookmark :
+		T extends DbCollections.Posts ? DbPost :
+			T extends DbCollections.Users ? DbUser :
+				T extends DbCollections.UserActivity ? DbUserActivity :
+					T extends DbCollections.UsersMeta ? DbUserMeta :
+						never;
+
+async function getCollection<T extends DbCollections>(collection: T): Promise<Collection<CollectionType<T>>> {
 	const db = await dbClientPromise;
 
-	return db.collection<T>(collection);
+	return db.collection<CollectionType<T>>(collection);
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a
