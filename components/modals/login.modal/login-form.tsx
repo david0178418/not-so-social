@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Key } from 'ts-key-enum';
 import { login } from '@common/actions';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { pushToastMsgAtom } from '@common/atoms';
 import Link from 'next/link';
 import {
@@ -21,7 +21,7 @@ interface Props {
 export
 function LoginForm(props: Props) {
 	const { urlObj } = props;
-	const [, pustToastMsg] = useAtom(pushToastMsgAtom);
+	const pustToastMsg = useSetAtom(pushToastMsgAtom);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const valid = !!(password && username);
