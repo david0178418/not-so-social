@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ModalActions } from '@common/constants';
+import { ModalActions, Paths } from '@common/constants';
 import { Box, Button } from '@mui/material';
 import { GetServerSideProps, NextPage } from 'next';
 import { useSession } from 'next-auth/react';
@@ -8,7 +8,18 @@ import { getServerSession } from '@common/server/auth-options';
 
 export
 const getServerSideProps: GetServerSideProps = async (ctx) => {
-	return { props: { session: await getServerSession(ctx.req, ctx.res) } };
+	const session = await getServerSession(ctx.req, ctx.res);
+
+	if(!session) {
+		return {
+			redirect: {
+				permanent: false,
+				destination: Paths.Home,
+			},
+		};
+	}
+
+	return { props: { session } };
 };
 
 const ProfilePage: NextPage<any> = () => {

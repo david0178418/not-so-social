@@ -11,16 +11,25 @@ import {
 	InputAdornment,
 	TextField,
 } from '@mui/material';
+import { Paths } from '@common/constants';
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	const session = await getServerSession(ctx.req, ctx.res);
-	const userId = session?.user.id || '';
+
+	if(!session) {
+		return {
+			redirect: {
+				permanent: false,
+				destination: Paths.Home,
+			},
+		};
+	}
 
 	return {
 		props: {
 			session,
-			data: await fetchUserBookmarkedPosts(userId),
+			data: await fetchUserBookmarkedPosts(session.user.id),
 			// posts: userId ?
 			// 	await fetchUserBookmarkedPosts(userId) :
 			// 	[],

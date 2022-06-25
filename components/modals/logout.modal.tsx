@@ -36,9 +36,8 @@ function LogoutModal() {
 			router.replace({
 				pathname: router.pathname,
 				query: newQuery,
-			}, undefined, { shallow: true });
+			});
 		}
-
 	}, [actionIsLogin, isLoggedOut]);
 
 	async function handleLogout() {
