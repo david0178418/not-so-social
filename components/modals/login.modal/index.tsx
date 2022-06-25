@@ -29,6 +29,7 @@ function LoginModal() {
 	};
 	const actionIsLoginRegister = action === ModalActions.LoginRegister;
 	const isOpen = actionIsLoginRegister && !isLoggedIn;
+	console.log(actionIsLoginRegister, !isLoggedIn);
 
 	useEffect(() => {
 		if(!actionIsLoginRegister) {
@@ -39,7 +40,7 @@ function LoginModal() {
 			router.replace({
 				pathname: router.pathname,
 				query: newQuery,
-			}, undefined, { shallow: true });
+			});
 		}
 	}, [actionIsLoginRegister, isLoggedIn]);
 
