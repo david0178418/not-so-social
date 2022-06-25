@@ -42,7 +42,12 @@ const authOptions: NextAuthOptions = {
 				} = cred;
 
 				const credsCol = await getCollection(DbCollections.Creds);
-				const u = await credsCol.findOne({ username });
+				const result = await credsCol.aggregate([
+					{ $match: { $expr: { $eq: [ { $toLower: '$username' }, username.toLowerCase() ] } } },
+					{ $limit: 1 },
+				]).toArray();
+
+				const u = result[0];
 
 				if(!(u && await compare(password, u.hash))) {
 					return null;
@@ -50,7 +55,7 @@ const authOptions: NextAuthOptions = {
 
 				return {
 					id: u._id,
-					username,
+					username: u.username,
 				};
 			},
 		}),
