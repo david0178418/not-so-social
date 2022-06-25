@@ -2,16 +2,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { getCollection } from '@common/server/mongodb';
 import { DbCollections, NotLoggedInErrMsg } from '@common/constants';
-import { DbBookmark } from '@common/server/db-schema';
 import { ObjectId } from 'mongodb';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from '@common/server/auth-options';
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const postId = req.query.id as string;
 
 	try {
-		const { user } = await getSession({ req }) || {};
+		const { user } = await getServerSession(req, res) || {};
 
 		if(!user) {
 			return res.status(401).send(NotLoggedInErrMsg);

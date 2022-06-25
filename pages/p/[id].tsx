@@ -5,7 +5,6 @@ import type { AsyncFnReturnType } from '@common/types';
 import Head from 'next/head';
 import { fetchFocusedPost } from '@common/server/db-calls';
 import { BackIcon } from '@components/icons';
-import { getSession } from 'next-auth/react';
 import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
@@ -14,6 +13,7 @@ import {
 	IconButton,
 	Typography,
 } from '@mui/material';
+import { getServerSession } from '@common/server/auth-options';
 
 interface Props {
 	data: AsyncFnReturnType<typeof fetchFocusedPost>;
@@ -26,7 +26,7 @@ interface Params extends ParsedUrlQuery {
 export
 const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 	const { params: { id = '' } = {} } = ctx;
-	const session = await getSession(ctx);
+	const session = await getServerSession(ctx.req, ctx.res);
 	const userId = session?.user.id || '';
 
 	return {

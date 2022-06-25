@@ -4,9 +4,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Joi from 'joi';
 import { DbCollections } from '@common/constants';
 import { getCollection } from '@common/server/mongodb';
-import { getSession } from 'next-auth/react';
 import { nowISOString } from '@common/utils';
 import { hash } from 'bcryptjs';
+import { getServerSession } from '@common/server/auth-options';
 
 interface Schema {
 	password: string;
@@ -29,7 +29,7 @@ const schema = Joi.object<Schema>({
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-	const session = await getSession({ req });
+	const session = await getServerSession(req, res);
 
 	if(session) {
 		return res.status(400).end();

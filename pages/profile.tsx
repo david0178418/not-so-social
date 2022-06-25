@@ -2,12 +2,13 @@ import Link from 'next/link';
 import { ModalActions } from '@common/constants';
 import { Box, Button } from '@mui/material';
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { getServerSession } from '@common/server/auth-options';
 
 export
 const getServerSideProps: GetServerSideProps = async (ctx) => {
-	return { props: { session: await getSession(ctx) } };
+	return { props: { session: await getServerSession(ctx.req, ctx.res) } };
 };
 
 const ProfilePage: NextPage<any> = () => {

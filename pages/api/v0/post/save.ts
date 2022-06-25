@@ -6,9 +6,9 @@ import { DbCollections, NotLoggedInErrMsg } from '@common/constants';
 import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import { ObjectId } from 'mongodb';
-import { getSession } from 'next-auth/react';
 import { ObjectIdValidation } from '@common/server/validations';
 import { DbPost } from '@common/server/db-schema';
+import { getServerSession } from '@common/server/auth-options';
 
 interface Schema {
 	body: string;
@@ -32,7 +32,7 @@ const schema = Joi.object<Schema>({
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-	const { user } = await getSession({ req }) || {};
+	const { user } = await getServerSession(req, res) || {};
 
 	if(!user) {
 		return res.status(401).send(NotLoggedInErrMsg);

@@ -5,7 +5,7 @@ import { FeedPost } from '@components/feed-post';
 import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from '@common/server/auth-options';
 import {
 	Box,
 	InputAdornment,
@@ -14,7 +14,7 @@ import {
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-	const session = await getSession(ctx);
+	const session = await getServerSession(ctx.req, ctx.res);
 	const userId = session?.user.id || '';
 
 	return {

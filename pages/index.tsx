@@ -3,11 +3,11 @@ import type { AsyncFnReturnType } from '@common/types';
 import type { ReactNode } from 'react';
 
 import Head from 'next/head';
-import { getSession } from 'next-auth/react';
 import { fetchFeedPosts } from '@common/server/db-calls';
 import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
+import { getServerSession } from '@common/server/auth-options';
 import {
 	Box,
 	InputAdornment,
@@ -21,7 +21,7 @@ interface Props {
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-	const session = await getSession(ctx);
+	const session = await getServerSession(ctx.req, ctx.res);
 	const userId = session?.user.id || '';
 
 	return {
