@@ -1,4 +1,6 @@
-import { PointTransactionTypes, UserActivityTypes } from '@common/constants';
+import {
+	PointTransactionTypes, UserActivityTypes, UserRoles,
+} from '@common/constants';
 import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 
@@ -28,6 +30,7 @@ interface DbPost extends SavedPostProps {
 
 export
 interface DbCreds {
+	role?: UserRoles;
 	username: string;
 	userId: ObjectId;
 	hash: string;

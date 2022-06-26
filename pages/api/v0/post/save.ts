@@ -16,6 +16,7 @@ import {
 	NotLoggedInErrMsg,
 	OWN_POST_RATIO,
 	PointTransactionTypes,
+	UserRoles,
 } from '@common/constants';
 
 interface Schema {
@@ -57,17 +58,23 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 		const postContent = await schema.validateAsync(req.body);
 		const ownerId = new ObjectId(user.id);
 		const balance = await fetchUserBalance(ownerId, postContent.points);
+		const isAdmin = user.role === UserRoles.admin;
 
-		if(postContent.points > balance) {
+		if(
+			!isAdmin &&
+			postContent.points > balance
+		) {
 			return res.send({
 				ok: false,
-				errors: [`Not enough points. Current balance: ${balance}`],
+				errors: [
+					`Not enough points. Current balance: ${balance}`,
+				],
 			});
 		}
 
 		res.send({
 			ok: true,
-			data: { id: await createPost(postContent, ownerId) },
+			data: { id: await createPost(postContent, ownerId, isAdmin) },
 		});
 	} catch(error: any) {
 		return res
@@ -88,7 +95,7 @@ interface PostContent {
 	parentId?: string;
 }
 
-async function createPost(content: PostContent, ownerId: ObjectId) {
+async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = false) {
 	const postCol = await getCollection(DbCollections.Posts);
 	const now = nowISOString();
 	const {
@@ -119,7 +126,7 @@ async function createPost(content: PostContent, ownerId: ObjectId) {
 		getCollection(DbCollections.PointTransactions),
 	]);
 
-	await Promise.all([
+	const calls: Promise<any>[] = [
 		postCol.insertOne(newPost),
 		pointPostCol
 			.insertOne({
@@ -129,9 +136,16 @@ async function createPost(content: PostContent, ownerId: ObjectId) {
 				date: now,
 				points: appliedPoints,
 			}),
-		usersCol
-			.updateOne({ _id: ownerId }, { $inc: { pointBalance: -spentPoints } }),
-	]);
+	];
+
+	if(!isAdmin) {
+		calls.push(
+			usersCol
+				.updateOne({ _id: ownerId }, { $inc: { pointBalance: -spentPoints } })
+		);
+	}
+
+	await Promise.all(calls);
 
 	return newPostId;
 }

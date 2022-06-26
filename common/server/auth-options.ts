@@ -7,7 +7,7 @@ import { NextAuthOptions, unstable_getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { fetchUserCreds, recordActivity } from '@common/server/db-calls';
 import { compare } from 'bcryptjs';
-import { UserActivityTypes } from '@common/constants';
+import { UserActivityTypes, UserRoles } from '@common/constants';
 
 const {
 	JWT_SECRET,
@@ -53,15 +53,16 @@ const authOptions: NextAuthOptions = {
 					password,
 				} = cred;
 
-				const u = await fetchUserCreds(username);
+				const credentials = await fetchUserCreds(username);
 
-				if(!(u && await compare(password, u.hash))) {
+				if(!(credentials && await compare(password, credentials.hash))) {
 					return null;
 				}
 
 				return {
-					id: u.userId,
-					username: u.username,
+					id: credentials.userId,
+					username: credentials.username,
+					role: credentials.role || UserRoles.user,
 				};
 			},
 		}),

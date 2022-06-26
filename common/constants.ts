@@ -118,3 +118,9 @@ enum PointTransactionTypes {
 	postBoost = 'post-boost',
 	userTransfer = 'user-transfer',
 }
+
+export
+enum UserRoles {
+	admin = 'admin',
+	user = 'user'
+}

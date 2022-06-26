@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { UserRoles } from './constants';
 
 export
 interface Post {
@@ -43,6 +44,7 @@ type Nullable<T> = T | null;
 interface User {
 	id: string;
 	username: string;
+	role: UserRoles;
 }
 
 declare module 'next-auth' {
