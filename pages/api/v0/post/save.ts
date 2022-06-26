@@ -8,6 +8,7 @@ import { ObjectId } from 'mongodb';
 import { ObjectIdValidation } from '@common/server/validations';
 import { DbPost } from '@common/server/db-schema';
 import { getServerSession } from '@common/server/auth-options';
+import { fetchUserBalance } from '@common/server/db-calls';
 import {
 	DbCollections,
 	MAX_POST_COST,
@@ -15,7 +16,6 @@ import {
 	NotLoggedInErrMsg,
 	OWN_POST_RATIO,
 } from '@common/constants';
-import { fetchUserBalance } from '@common/server/db-calls';
 
 interface Schema {
 	body: string;
