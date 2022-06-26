@@ -15,6 +15,7 @@ import {
 	NotLoggedInErrMsg,
 	OWN_POST_RATIO,
 } from '@common/constants';
+import { fetchUserBalance } from '@common/server/db-calls';
 
 interface Schema {
 	body: string;
@@ -38,17 +39,14 @@ const schema = Joi.object<Schema>({
 		.number()
 		.min(MIN_POST_COST)
 		.max(MAX_POST_COST)
-		.required(),
+		.required()
+		.messages({ 'number.min': 'Must spend at least {#limit} points' }),
 	parentId: ObjectIdValidation.optional(),
 });
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-	const x: any = await getServerSession(req, res) || {};
-
-	console.log('x', x);
-
-	const { user } = x;
+	const { user } = await getServerSession(req, res) || {};
 
 	if(!user) {
 		return res.status(401).send(NotLoggedInErrMsg);
@@ -56,10 +54,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
 	try {
 		const postContent = await schema.validateAsync(req.body);
+		const ownerId = new ObjectId(user.id);
+		const balance = await fetchUserBalance(ownerId, postContent.points);
+
+		if(postContent.points > balance) {
+			return res.send({
+				ok: false,
+				errors: [`Not enough points. Current balance: ${balance}`],
+			});
+		}
 
 		res.send({
 			ok: true,
-			data: { id: await createPost(postContent, user.id) },
+			data: { id: await createPost(postContent, ownerId) },
 		});
 	} catch(error: any) {
 		return res
@@ -80,7 +87,7 @@ interface PostContent {
 	parentId?: string;
 }
 
-async function createPost(content: PostContent, ownerId: string) {
+async function createPost(content: PostContent, ownerId: ObjectId) {
 	const postCol = await getCollection(DbCollections.Posts);
 	const now = nowISOString();
 	const {
@@ -88,58 +95,40 @@ async function createPost(content: PostContent, ownerId: string) {
 		points: spentPoints,
 		...newPostContent
 	} = content;
-	const ownerIdObj = new ObjectId(ownerId);
 	const appliedPoints = Math.floor(OWN_POST_RATIO * spentPoints);
-
+	const newPostId = new ObjectId();
 	const newPost: DbPost = {
 		...newPostContent,
 		created: now,
 		lastUpdated: now,
-		ownerId: ownerIdObj,
+		ownerId,
 		points: appliedPoints,
+		_id: newPostId,
 	};
 
 	if(parentId) {
 		newPost.parentId = new ObjectId(parentId);
 	}
 
-	const result = await postCol.insertOne(newPost);
-
-	await foo({
-		from: ownerIdObj,
-		spentPoints: spentPoints,
-		appliedPoints: appliedPoints,
-		postId: result.insertedId,
-	});
-
-	return result.insertedId;
-}
-
-interface FooArgs {
-	appliedPoints: number;
-	from: ObjectId;
-	postId: ObjectId;
-	spentPoints?: number;
-}
-
-export
-async function foo(args: FooArgs) {
-	const {
-		appliedPoints,
-		postId,
-		from,
-		spentPoints = appliedPoints,
-	} = args;
-
-	const postPointsCol = await getCollection(DbCollections.PostPointHistorys);
-	const userCol = await getCollection(DbCollections.Users);
+	const [
+		usersCol,
+		pointPostCol,
+	] = await Promise.all([
+		getCollection(DbCollections.Users),
+		getCollection(DbCollections.PostPointHistorys),
+	]);
 
 	await Promise.all([
-		postPointsCol.insertOne({
-			fromUserId: from,
-			postId,
-			points: appliedPoints,
-		}),
-		userCol.updateOne({ _id: from }, { $inc: { pointBalance: -spentPoints } }),
+		postCol.insertOne(newPost),
+		pointPostCol
+			.insertOne({
+				fromUserId: ownerId,
+				postId: newPostId,
+				points: appliedPoints,
+			}),
+		usersCol
+			.updateOne({ _id: ownerId }, { $inc: { pointBalance: -spentPoints } }),
 	]);
+
+	return newPostId;
 }

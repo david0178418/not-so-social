@@ -219,3 +219,15 @@ async function recordActivity(userId: string, type: UserActivityTypes, params?: 
 		type,
 	}, record, { upsert: true });
 }
+
+export
+async function fetchUserBalance(userId: ObjectId, points: number) {
+	const col = await getCollection(DbCollections.Users);
+
+	const result = await col.findOne({
+		_id: userId,
+		pointBalance: { $gte: points },
+	});
+
+	return result?.pointBalance || 0;
+}
