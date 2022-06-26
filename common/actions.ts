@@ -33,13 +33,16 @@ async function logout() {
 	await signOut();
 }
 
+interface PostSaveArgs {
+	title: string;
+	body: string;
+	points: number;
+	parentId?: string;
+}
+
 export
-async function postSave(title: string, body: string, parentId?: string) {
-	const { data } = await apiPost<ApiResponse>('/post/save', {
-		title,
-		body,
-		parentId,
-	});
+async function postSave(args: PostSaveArgs) {
+	const { data } = await apiPost<ApiResponse>('/post/save', args);
 
 	return data;
 }

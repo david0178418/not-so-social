@@ -14,6 +14,7 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	Grid,
 	TextField,
 } from '@mui/material';
 
@@ -23,8 +24,9 @@ function CreatePostModal() {
 	const setLoading = useSetAtom(loadingAtom);
 	const isLoggedOut = useIsLoggedOut();
 	const router = useRouter();
-	const [postTitle, setPostTitle] = useState('');
-	const [postBody, setPostBody] = useState('');
+	const [title, setTitle] = useState('');
+	const [body, setBody] = useState('');
+	const [points, setPoints] = useState(0);
 	const {
 		a: action,
 		...newQuery
@@ -49,7 +51,11 @@ function CreatePostModal() {
 	async function handleSave() {
 		try {
 			setLoading(true);
-			console.log(await postSave(postTitle, postBody));
+			console.log(await postSave({
+				title,
+				body,
+				points,
+			}));
 			close();
 		} catch(e: any) {
 			const { errors = ['Something went wrong. Try again.'] } = e;
@@ -62,8 +68,9 @@ function CreatePostModal() {
 	}
 
 	function close() {
-		setPostBody('');
-		setPostTitle('');
+		setBody('');
+		setTitle('');
+		setPoints(0);
 		router.back();
 	}
 
@@ -78,16 +85,30 @@ function CreatePostModal() {
 					autoComplete="off"
 					component="form"
 				>
-					<TextField
-						autoFocus
-						fullWidth
-						label="Title"
-						variant="standard"
-						placeholder="Post title"
-						type="text"
-						value={postTitle}
-						onChange={e => setPostTitle(e.target.value)}
-					/>
+					<Grid container>
+						<Grid item xs>
+							<TextField
+								autoFocus
+								fullWidth
+								label="Title"
+								variant="standard"
+								placeholder="Post title"
+								type="text"
+								value={title}
+								onChange={e => setTitle(e.target.value)}
+							/>
+						</Grid>
+						<Grid item xs={2}>
+							<TextField
+								fullWidth
+								type="number"
+								label="Points"
+								variant="standard"
+								value={points}
+								onChange={e => setPoints(+e.target.value)}
+							/>
+						</Grid>
+					</Grid>
 					<TextField
 						fullWidth
 						multiline
@@ -96,8 +117,8 @@ function CreatePostModal() {
 						placeholder="Post title"
 						type="text"
 						minRows={3}
-						value={postBody}
-						onChange={e => setPostBody(e.target.value)}
+						value={body}
+						onChange={e => setBody(e.target.value)}
 					/>
 				</Box>
 			</DialogContent>
