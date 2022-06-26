@@ -164,4 +164,11 @@ function range(size: number, startValue = 0) {
 }
 
 export
+function truncate(input: string, maxLen = 50) {
+	return input.length > maxLen ?
+		`${input.substring(0, maxLen)}…` :
+		input;
+}
+
+export
 const NoOp = () => {};

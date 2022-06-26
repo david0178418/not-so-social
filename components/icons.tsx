@@ -24,3 +24,4 @@ export { default as PostOutlinedIcon } from '@mui/icons-material/ArticleOutlined
 export { default as SearchIcon } from '@mui/icons-material/Search';
 export { default as SettingsIcon } from '@mui/icons-material/Settings';
 export { default as SettingsOutlinedIcon } from '@mui/icons-material/SettingsOutlined';
+export { default as InfoIcon } from '@mui/icons-material/Info';

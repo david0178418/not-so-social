@@ -1,22 +1,29 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { ModalActions } from '@common/constants';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { useIsLoggedOut } from '@common/hooks';
 import { postSave } from '@common/actions';
 import { ConfirmButton } from '@components/common/buttons/confirm.button';
 import { CancelButton } from '@components/common/buttons/cancel.button';
+import { formatCompactNumber } from '@common/utils';
+import {
+	MinPostCost,
+	ModalActions,
+	PostCreatePointRatio,
+} from '@common/constants';
 import {
 	Box,
 	Dialog,
 	DialogActions,
 	DialogContent,
+	DialogContentText,
 	DialogTitle,
 	Grid,
 	TextField,
 } from '@mui/material';
+import { InfoIconButton } from '@components/common/info-icon-button';
 
 export
 function CreatePostModal() {
@@ -26,7 +33,7 @@ function CreatePostModal() {
 	const router = useRouter();
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
-	const [points, setPoints] = useState(0);
+	const [points, setPoints] = useState(MinPostCost);
 	const {
 		a: action,
 		...newQuery
@@ -102,7 +109,7 @@ function CreatePostModal() {
 							<TextField
 								fullWidth
 								type="number"
-								label="Points"
+								label="Point Spend"
 								variant="standard"
 								value={points}
 								onChange={e => setPoints(+e.target.value)}
@@ -138,6 +145,17 @@ function CreatePostModal() {
 					Post
 				</ConfirmButton>
 			</DialogActions>
+			<DialogContent>
+				<DialogContentText>
+					<em>
+						Post with {formatCompactNumber(Math.floor(points * PostCreatePointRatio))}pts
+						<InfoIconButton
+							label="When creating or boosting your own post, half of the points spent are applied."
+							placement="right"
+						/>
+					</em>
+				</DialogContentText>
+			</DialogContent>
 		</Dialog>
 	);
 }

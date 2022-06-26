@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { BookmarkActiveIcon, BookmarkIcon } from '@components/icons';
 import { pushToastMsgAtom } from '@common/atoms';
 import { useSetAtom } from 'jotai';
+import { truncate } from '@common/utils';
 
 interface Props {
 	post: Post;
@@ -40,9 +41,11 @@ function BookmarkToggle(props: Props) {
 			unbookmarkPost(post._id) :
 			bookmarkPost(post._id);
 
+		const shortTitle = truncate(post.title);
+
 		const msg = post.bookmarked ?
-			'Bookmark removed' :
-			'Bookmarked';
+			`"${shortTitle}" removed` :
+			`Bookmarked "${shortTitle}"`;
 
 		// TODO Nicer/cleaner way to update this without mutating
 		post.bookmarked = !post.bookmarked;

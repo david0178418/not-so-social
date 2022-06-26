@@ -35,7 +35,7 @@ const schema = Joi.object<Schema>({
 	title: Joi
 		.string()
 		.min(3)
-		.max(100)
+		.max(150)
 		.required(),
 	points: Joi
 		.number()
