@@ -1,4 +1,4 @@
-import { BASE_REQ } from '@common/constants';
+import { BaseReq } from '@common/constants';
 import { objectToArgs } from '@common/utils';
 import { Key } from 'ts-key-enum';
 
@@ -6,7 +6,7 @@ export
 async function get<T = any>(path: string, params?: any): Promise<T | null> {
 	const paramString = params ? `?${objectToArgs(params)}` : '';
 
-	const response = await fetch(`${path}${paramString}`, { ...BASE_REQ });
+	const response = await fetch(`${path}${paramString}`, { ...BaseReq });
 
 	if(!response.ok) {
 		throw await response.json();

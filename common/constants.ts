@@ -2,16 +2,16 @@ export
 const AppName = 'BublUpper';
 
 export
-const MONGODB_DB = 'pinboard';
+const MongoDbName = 'pinboard';
 
 export
-const MIN_POST_COST = 10;
+const MinPostCost = 10;
 
 export
-const MAX_POST_COST = 1_00_000;
+const MaxPostCost = 1_00_000;
 
 export
-const OWN_POST_RATIO = 0.5;
+const OwnPostRatio = 0.5;
 
 
 export
@@ -32,49 +32,49 @@ export
 const API_URL = '/api/v0';
 
 export
-const COOKIE_NAME = AppName;
+const CookieName = AppName;
 
 export
-const AUTH_USER_COOKIE_NAME = `${COOKIE_NAME}.AuthUser`;
+const AuthUserCookieName = `${CookieName}.AuthUser`;
 
 export
-const AUTH_USER_TOKENS_COOKIE_NAME = `${COOKIE_NAME}.AuthUserTokens`;
+const AuthUser_tokensCookieName = `${CookieName}.AuthUserTokens`;
 
 export
-const IS_DEV = process.env.NODE_ENV !== 'production';
+const IsDev = process.env.NODE_ENV !== 'production';
 
 export
-const MIN_POST_BODY_LENGTH = 10;
+const MinPostBodyLength = 10;
 
 export
-const MAX_POST_BODY_LENGTH = 500;
+const MaxPostBodyLength = 500;
 
 export
-const MAX_POST_RESPONSE_LENGTH = 200;
+const MaxPostResponseLength = 200;
 
 export
-const MIN_POST_TITLE_LENGTH = 6;
+const MinPostTitleLength = 6;
 
 export
-const MAX_POST_TITLE_LENGTH = 100;
+const MaxPostTitleLength = 100;
 
 export
-const MIN_POST_POINTS = 10;
+const MinPostPoints = 10;
 
 export
-const MONGO_ID_LENGTH = 24;
+const MongoIdLength = 24;
 
 export
-const NOOP = () => {};
+const NoOp = () => {};
 
 export
-const POST_CREATE_POINT_RATIO = 0.5;
+const PostCreatePointRatio = 0.5;
 
 export
-const NBSP = '\u00A0';
+const Nbsp = '\u00A0';
 
 export
-const DOT = '\u2022';
+const Dot = '\u2022';
 
 export
 const NotLoggedInErrMsg = {
@@ -83,7 +83,7 @@ const NotLoggedInErrMsg = {
 };
 
 export
-const BASE_REQ: RequestInit = {
+const BaseReq: RequestInit = {
 	credentials: 'include',
 	headers: {
 		Accept: 'application/json, text/plain, */*',

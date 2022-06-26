@@ -11,10 +11,10 @@ import { getServerSession } from '@common/server/auth-options';
 import { fetchUserBalance } from '@common/server/db-calls';
 import {
 	DbCollections,
-	MAX_POST_COST,
-	MIN_POST_COST,
+	MaxPostCost,
+	MinPostCost,
 	NotLoggedInErrMsg,
-	OWN_POST_RATIO,
+	OwnPostRatio,
 	PointTransactionTypes,
 	UserRoles,
 } from '@common/constants';
@@ -39,8 +39,8 @@ const schema = Joi.object<Schema>({
 		.required(),
 	points: Joi
 		.number()
-		.min(MIN_POST_COST)
-		.max(MAX_POST_COST)
+		.min(MinPostCost)
+		.max(MaxPostCost)
 		.required()
 		.messages({ 'number.min': 'Must spend at least {#limit} points' }),
 	parentId: ObjectIdValidation.optional(),
@@ -103,7 +103,7 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 		points: spentPoints,
 		...newPostContent
 	} = content;
-	const appliedPoints = Math.floor(OWN_POST_RATIO * spentPoints);
+	const appliedPoints = Math.floor(OwnPostRatio * spentPoints);
 	const newPostId = new ObjectId();
 	const newPost: DbPost = {
 		...newPostContent,

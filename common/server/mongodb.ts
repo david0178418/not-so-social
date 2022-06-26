@@ -1,4 +1,4 @@
-import { DbCollections, MONGODB_DB } from '@common/constants';
+import { DbCollections, MongoDbName } from '@common/constants';
 import {
 	Collection,
 	Db,
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'development') {
 		dbClient = new MongoClient(uri, options);
 		// @ts-ignore
 		global._mongoClientPromise = dbClient.connect()
-			.then((client) => client.db(MONGODB_DB));
+			.then((client) => client.db(MongoDbName));
 	}
 	// @ts-ignore
 	dbClientPromise = global._mongoClientPromise;
@@ -41,7 +41,7 @@ if (process.env.NODE_ENV === 'development') {
 	// In production mode, it's best to not use a global variable.
 	dbClient = new MongoClient(uri, options);
 	dbClientPromise = dbClient.connect()
-		.then((client) => client.db(MONGODB_DB));
+		.then((client) => client.db(MongoDbName));
 }
 
 /* eslint-disable @typescript-eslint/indent */
