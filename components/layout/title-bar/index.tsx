@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BackIcon } from '@components/icons';
+import { AppName } from '@common/constants';
 import {
 	AppBar,
 	Box,
@@ -43,7 +44,7 @@ function TitleBar(props: Props) {
 							component="div"
 							sx={{ flexGrow: 1 }}
 						>
-							Pinboard
+							{AppName}
 						</Typography>
 					</Toolbar>
 				</AppBar>

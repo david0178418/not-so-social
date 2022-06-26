@@ -11,7 +11,7 @@ import {
 	InputAdornment,
 	TextField,
 } from '@mui/material';
-import { Paths } from '@common/constants';
+import { AppName, Paths } from '@common/constants';
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
@@ -53,8 +53,8 @@ const BookmarksPage: NextPage<Props> = (props) => {
 	return (
 		<>
 			<Head>
-				<title>Pinboard</title>
-				<meta name="description" content="Pinboard - Bookmarks" />
+				<title>{AppName}</title>
+				<meta name="description" content={`${AppName} - Bookmarks`} />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent

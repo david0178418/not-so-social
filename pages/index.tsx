@@ -13,6 +13,7 @@ import {
 	InputAdornment,
 	TextField,
 } from '@mui/material';
+import { AppName } from '@common/constants';
 
 interface Props {
 	children?: ReactNode;
@@ -44,8 +45,8 @@ const Home: NextPage<Props> = (props) => {
 	return (
 		<>
 			<Head>
-				<title>Pinboard</title>
-				<meta name="description" content="Pinboard" />
+				<title>{AppName}</title>
+				<meta name="description" content={AppName} />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent

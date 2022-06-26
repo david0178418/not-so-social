@@ -1,4 +1,7 @@
 export
+const AppName = 'BublUpper';
+
+export
 const MONGODB_DB = 'pinboard';
 
 export
@@ -29,7 +32,7 @@ export
 const API_URL = '/api/v0';
 
 export
-const COOKIE_NAME = 'Pinboard';
+const COOKIE_NAME = AppName;
 
 export
 const AUTH_USER_COOKIE_NAME = `${COOKIE_NAME}.AuthUser`;

@@ -8,12 +8,13 @@ import { BackIcon } from '@components/icons';
 import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
+import { getServerSession } from '@common/server/auth-options';
+import { AppName } from '@common/constants';
 import {
 	Box,
 	IconButton,
 	Typography,
 } from '@mui/material';
-import { getServerSession } from '@common/server/auth-options';
 
 interface Props {
 	data: AsyncFnReturnType<typeof fetchFocusedPost>;
@@ -50,7 +51,7 @@ const Home: NextPage<Props> = (props) => {
 	return (
 		<>
 			<Head>
-				<title>Pinboard - </title>
+				<title>{AppName}</title>
 			</Head>
 			<ScrollContent
 				header={

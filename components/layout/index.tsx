@@ -5,6 +5,7 @@ import { Loader } from '@components/loader';
 import { BottomNav } from './bottom-nav';
 import { LeftRail } from './left-rail';
 import { CommonModals } from './common-modals';
+import { AppName } from '@common/constants';
 import {
 	Container,
 	Grid,
@@ -25,8 +26,8 @@ function Layout(props: Props) {
 	return (
 		<>
 			<Head>
-				<title>Pinboard {title ? `- ${title}` : ''}</title>
-				<meta name="description" content="Pinboard" />
+				<title>{AppName} {title ? `- ${title}` : ''}</title>
+				<meta name="description" content={AppName} />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 

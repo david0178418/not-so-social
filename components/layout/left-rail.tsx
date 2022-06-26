@@ -1,8 +1,12 @@
 import Link from 'next/link';
-import { ModalActions, Paths } from '@common/constants';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
+import {
+	AppName,
+	ModalActions,
+	Paths,
+} from '@common/constants';
 import {
 	BookmarkIcon,
 	BookmarkActiveIcon,
@@ -66,7 +70,7 @@ function LeftRail() {
 	return (
 		<>
 			<Typography>
-				Pinboard
+				{AppName}
 			</Typography>
 			<List>
 				<ListItem disablePadding>
