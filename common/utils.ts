@@ -162,3 +162,6 @@ function range(size: number, startValue = 0) {
 	// @ts-ignore
 	return [ ...Array(size).keys() ].map(i => i + startValue);
 }
+
+export
+const NoOp = () => {};

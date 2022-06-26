@@ -65,9 +65,6 @@ export
 const MongoIdLength = 24;
 
 export
-const NoOp = () => {};
-
-export
 const PostCreatePointRatio = 0.5;
 
 export
