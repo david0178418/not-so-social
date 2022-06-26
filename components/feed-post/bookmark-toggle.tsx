@@ -44,7 +44,7 @@ function BookmarkToggle(props: Props) {
 		const shortTitle = truncate(post.title);
 
 		const msg = post.bookmarked ?
-			`"${shortTitle}" removed` :
+			`Removed "${shortTitle}" from bookmarks` :
 			`Bookmarked "${shortTitle}"`;
 
 		// TODO Nicer/cleaner way to update this without mutating
