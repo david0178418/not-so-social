@@ -44,16 +44,17 @@ if (process.env.NODE_ENV === 'development') {
 		.then((client) => client.db(MONGODB_DB));
 }
 
-
+/* eslint-disable @typescript-eslint/indent */
 type CollectionType<T> =
-T extends DbCollections.Creds ? DbCreds :
+	T extends DbCollections.Creds ? DbCreds :
 	T extends DbCollections.PostBookmarks ? DbBookmark :
-		T extends DbCollections.PostPointHistorys ? DbPostPoints :
-			T extends DbCollections.Posts ? DbPost :
-				T extends DbCollections.Users ? DbUser :
-					T extends DbCollections.UserActivity ? DbUserActivity :
-						T extends DbCollections.UsersMeta ? DbUserMeta :
-							never;
+	T extends DbCollections.PostPointHistorys ? DbPostPoints :
+	T extends DbCollections.Posts ? DbPost :
+	T extends DbCollections.Users ? DbUser :
+	T extends DbCollections.UserActivity ? DbUserActivity :
+	T extends DbCollections.UsersMeta ? DbUserMeta :
+	never;
+/* eslint-enable @typescript-eslint/indent */
 
 async function getCollection<T extends DbCollections>(collection: T): Promise<Collection<CollectionType<T>>> {
 	const db = await dbClientPromise;
