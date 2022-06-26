@@ -71,10 +71,10 @@ export
 const PostCreatePointRatio = 0.5;
 
 export
-const Nbsp = '\u00A0';
-
-export
-const Dot = '\u2022';
+const UnicodeChars = {
+	NBSP: '\u00A0',
+	DOT: '\u2022',
+};
 
 export
 const NotLoggedInErrMsg = {

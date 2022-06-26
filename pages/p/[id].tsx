@@ -9,7 +9,7 @@ import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
 import { getServerSession } from '@common/server/auth-options';
-import { AppName } from '@common/constants';
+import { AppName, UnicodeChars } from '@common/constants';
 import {
 	Box,
 	IconButton,
@@ -63,7 +63,7 @@ const Home: NextPage<Props> = (props) => {
 							{/** TODO Capture direct links and send them to home page */}
 							<IconButton color="primary" onClick={routeBack}>
 								<BackIcon />
-							</IconButton>&nbsp;
+							</IconButton>{UnicodeChars.NBSP}
 							Post
 						</Typography>
 					</Box>
