@@ -2,6 +2,16 @@ export
 const MONGODB_DB = 'pinboard';
 
 export
+const MIN_POST_COST = 10;
+
+export
+const MAX_POST_COST = 1_00_000;
+
+export
+const OWN_POST_RATIO = 0.5;
+
+
+export
 enum Paths {
 	Home = '/',
 	Post = '/p',
@@ -90,7 +100,7 @@ enum DbCollections {
 	PostBookmarks = 'post-bookmarks',
 	Posts = 'posts',
 	PostEditHistory = 'post-edit-history',
-	PostPoints = 'post-points',
+	PostPointHistorys = 'post-point-history',
 	UserActivity = 'user-activity',
 	Users = 'users',
 	UsersMeta = 'users-meta',

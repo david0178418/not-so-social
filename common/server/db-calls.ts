@@ -1,11 +1,17 @@
 import { DbCollections, UserActivityTypes } from '@common/constants';
 import { Post, PostIdMap } from '@common/types';
-import {
-	isTruthy, nowISOString, unique,
-} from '@common/utils';
 import { ObjectId } from 'mongodb';
-import { DbPost, DbUserActivity } from './db-schema';
 import { getCollection } from './mongodb';
+import {
+	isTruthy,
+	nowISOString,
+	unique,
+} from '@common/utils';
+import {
+	DbCreds,
+	DbPost,
+	DbUserActivity,
+} from './db-schema';
 import {
 	dbPostToPostFn,
 	postToBookmarkedPostFn,
@@ -185,9 +191,9 @@ async function fetchBookmarksFromPostIds(userId: string, postIds: string[]) {
 }
 
 export
-async function fetchUser(username: string) {
+async function fetchUserCreds(username: string): Promise<DbCreds | null> {
 	const credsCol = await getCollection(DbCollections.Creds);
-	const result = await credsCol.aggregate([
+	const result = await credsCol.aggregate<DbCreds>([
 		{ $match: { $expr: { $eq: [ { $toLower: '$username' }, username.toLowerCase() ] } } },
 		{ $limit: 1 },
 	]).toArray();

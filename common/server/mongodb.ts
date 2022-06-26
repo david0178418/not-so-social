@@ -6,7 +6,13 @@ import {
 	MongoClientOptions,
 } from 'mongodb';
 import {
-	DbBookmark, DbCreds, DbPost, DbUser, DbUserActivity, DbUserMeta,
+	DbBookmark,
+	DbCreds,
+	DbPost,
+	DbPostPoints,
+	DbUser,
+	DbUserActivity,
+	DbUserMeta,
 } from './db-schema';
 
 const uri = process.env.MONGODB_URI || '';
@@ -42,11 +48,12 @@ if (process.env.NODE_ENV === 'development') {
 type CollectionType<T> =
 T extends DbCollections.Creds ? DbCreds :
 	T extends DbCollections.PostBookmarks ? DbBookmark :
-		T extends DbCollections.Posts ? DbPost :
-			T extends DbCollections.Users ? DbUser :
-				T extends DbCollections.UserActivity ? DbUserActivity :
-					T extends DbCollections.UsersMeta ? DbUserMeta :
-						never;
+		T extends DbCollections.PostPointHistorys ? DbPostPoints :
+			T extends DbCollections.Posts ? DbPost :
+				T extends DbCollections.Users ? DbUser :
+					T extends DbCollections.UserActivity ? DbUserActivity :
+						T extends DbCollections.UsersMeta ? DbUserMeta :
+							never;
 
 async function getCollection<T extends DbCollections>(collection: T): Promise<Collection<CollectionType<T>>> {
 	const db = await dbClientPromise;

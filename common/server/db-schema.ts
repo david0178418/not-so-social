@@ -10,11 +10,18 @@ type SavedPostProps = Pick<Post,
 >;
 
 export
+interface DbPostPoints {
+	points: number;
+	postId: ObjectId;
+	fromUserId: ObjectId;
+}
+
+export
 interface DbPost extends SavedPostProps {
 	_id?: ObjectId;
 	ownerId: ObjectId;
 	parentId?: ObjectId;
-	points: 0;
+	points: number;
 }
 
 export
@@ -33,6 +40,7 @@ interface DbBookmark {
 export
 interface DbUser {
 	username: string;
+	pointBalance: number;
 }
 
 export
@@ -47,5 +55,4 @@ export
 interface DbUserMeta {
 	userId: ObjectId;
 	created: string;
-	pointBalance: number;
 }

@@ -7,7 +7,7 @@ import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import { hash } from 'bcryptjs';
 import { getServerSession } from '@common/server/auth-options';
-import { fetchUser } from '@common/server/db-calls';
+import { fetchUserCreds } from '@common/server/db-calls';
 
 interface Schema {
 	password: string;
@@ -42,7 +42,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 			password,
 		} = await schema.validateAsync(req.body);
 
-		if(await fetchUser(username)) {
+		if(await fetchUserCreds(username)) {
 			return res.send({
 				ok: false,
 				errors: [
@@ -68,13 +68,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
 async function createUser(username: string, password: string) {
 	const usersCol = await getCollection(DbCollections.Users);
-	const result = await usersCol.insertOne({ username });
+	const result = await usersCol.insertOne({
+		username,
+		pointBalance: 0,
+	});
 
 	(await getCollection(DbCollections.UsersMeta))
 		.insertOne({
 			userId: result.insertedId,
 			created: nowISOString(),
-			pointBalance: 0,
 		});
 
 	(await getCollection(DbCollections.Creds))
