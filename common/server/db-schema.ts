@@ -6,7 +6,8 @@ type SavedPostProps = Pick<Post,
 'body' |
 'title' |
 'created' |
-'lastUpdated'
+'lastUpdated' |
+'points'
 >;
 
 export
@@ -21,7 +22,6 @@ interface DbPost extends SavedPostProps {
 	_id?: ObjectId;
 	ownerId: ObjectId;
 	parentId?: ObjectId;
-	points: number;
 }
 
 export

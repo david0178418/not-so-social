@@ -18,7 +18,6 @@ function dbPostToPostFn(userId: string) {
 
 		const formattedPost: Post = {
 			...cleanedPost,
-			points: 0,
 			isOwner: userId === ownerId.toString(),
 			_id: post._id?.toString(),
 			ownerId: ownerId.toString(),
