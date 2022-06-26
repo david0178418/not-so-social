@@ -7,6 +7,7 @@ import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import { hash } from 'bcryptjs';
 import { getServerSession } from '@common/server/auth-options';
+import { fetchUser } from '@common/server/db-calls';
 
 interface Schema {
 	password: string;
@@ -40,6 +41,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 			username,
 			password,
 		} = await schema.validateAsync(req.body);
+
+		if(await fetchUser(username)) {
+			return res.send({
+				ok: false,
+				errors: [
+					`User "${username}" already exists`,
+				],
+			});
+		}
+
 		await createUser(username, password);
 
 		res.send({ ok: true });

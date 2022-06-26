@@ -182,7 +182,17 @@ async function fetchBookmarksFromPostIds(userId: string, postIds: string[]) {
 	}).toArray();
 
 	return bookmarks.map(b => b.postId.toString());
+}
 
+export
+async function fetchUser(username: string) {
+	const credsCol = await getCollection(DbCollections.Creds);
+	const result = await credsCol.aggregate([
+		{ $match: { $expr: { $eq: [ { $toLower: '$username' }, username.toLowerCase() ] } } },
+		{ $limit: 1 },
+	]).toArray();
+
+	return result[0] || null;
 }
 
 export

@@ -5,10 +5,9 @@ import type {
 } from 'next';
 import { NextAuthOptions, unstable_getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { DbCollections, UserActivityTypes } from '@common/constants';
-import { getCollection } from '@common/server/mongodb';
-import { recordActivity } from '@common/server/db-calls';
+import { fetchUser, recordActivity } from '@common/server/db-calls';
 import { compare } from 'bcryptjs';
+import { UserActivityTypes } from '@common/constants';
 
 const {
 	JWT_SECRET,
@@ -54,13 +53,7 @@ const authOptions: NextAuthOptions = {
 					password,
 				} = cred;
 
-				const credsCol = await getCollection(DbCollections.Creds);
-				const result = await credsCol.aggregate([
-					{ $match: { $expr: { $eq: [ { $toLower: '$username' }, username.toLowerCase() ] } } },
-					{ $limit: 1 },
-				]).toArray();
-
-				const u = result[0];
+				const u = await fetchUser(username);
 
 				if(!(u && await compare(password, u.hash))) {
 					return null;
