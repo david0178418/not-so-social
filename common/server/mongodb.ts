@@ -9,7 +9,7 @@ import {
 	DbBookmark,
 	DbCreds,
 	DbPost,
-	DbPostPoints,
+	DbPointTransaction,
 	DbUser,
 	DbUserActivity,
 	DbUserMeta,
@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === 'development') {
 type CollectionType<T> =
 	T extends DbCollections.Creds ? DbCreds :
 	T extends DbCollections.PostBookmarks ? DbBookmark :
-	T extends DbCollections.PostPointHistorys ? DbPostPoints :
+	T extends DbCollections.PointTransactions ? DbPointTransaction :
 	T extends DbCollections.Posts ? DbPost :
 	T extends DbCollections.Users ? DbUser :
 	T extends DbCollections.UserActivity ? DbUserActivity :

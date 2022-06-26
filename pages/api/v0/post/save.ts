@@ -15,6 +15,7 @@ import {
 	MIN_POST_COST,
 	NotLoggedInErrMsg,
 	OWN_POST_RATIO,
+	PointTransactionTypes,
 } from '@common/constants';
 
 interface Schema {
@@ -115,15 +116,17 @@ async function createPost(content: PostContent, ownerId: ObjectId) {
 		pointPostCol,
 	] = await Promise.all([
 		getCollection(DbCollections.Users),
-		getCollection(DbCollections.PostPointHistorys),
+		getCollection(DbCollections.PointTransactions),
 	]);
 
 	await Promise.all([
 		postCol.insertOne(newPost),
 		pointPostCol
 			.insertOne({
+				type: PointTransactionTypes.postBoost,
 				fromUserId: ownerId,
-				postId: newPostId,
+				toId: newPostId,
+				date: now,
 				points: appliedPoints,
 			}),
 		usersCol

@@ -100,7 +100,7 @@ enum DbCollections {
 	PostBookmarks = 'post-bookmarks',
 	Posts = 'posts',
 	PostEditHistory = 'post-edit-history',
-	PostPointHistorys = 'post-point-history',
+	PointTransactions = 'point-transactions',
 	UserActivity = 'user-activity',
 	Users = 'users',
 	UsersMeta = 'users-meta',
@@ -111,4 +111,10 @@ enum ModalActions {
 	CreatePost = 'create-post',
 	LoginRegister = 'login-register',
 	Logout = 'logout',
+}
+
+export
+enum PointTransactionTypes {
+	postBoost = 'post-boost',
+	userTransfer = 'user-transfer',
 }

@@ -1,4 +1,4 @@
-import { UserActivityTypes } from '@common/constants';
+import { PointTransactionTypes, UserActivityTypes } from '@common/constants';
 import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 
@@ -11,9 +11,11 @@ type SavedPostProps = Pick<Post,
 >;
 
 export
-interface DbPostPoints {
+interface DbPointTransaction {
+	type: PointTransactionTypes;
 	points: number;
-	postId: ObjectId;
+	toId: ObjectId;
+	date: string;
 	fromUserId: ObjectId;
 }
 
