@@ -221,13 +221,10 @@ async function recordActivity(userId: string, type: UserActivityTypes, params?: 
 }
 
 export
-async function fetchUserBalance(userId: ObjectId, points: number) {
+async function fetchUserBalance(userId: ObjectId) {
 	const col = await getCollection(DbCollections.Users);
 
-	const result = await col.findOne({
-		_id: userId,
-		pointBalance: { $gte: points },
-	});
+	const result = await col.findOne({ _id: userId });
 
 	return result?.pointBalance || 0;
 }
