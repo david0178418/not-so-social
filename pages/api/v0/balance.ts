@@ -18,6 +18,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 	res.send({
 		ok: true,
-		data: balance,
+		data: { balance },
 	});
 }

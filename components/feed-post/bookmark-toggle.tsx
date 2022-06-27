@@ -1,8 +1,8 @@
+import Link from 'next/link';
 import { Button, Tooltip } from '@mui/material';
 import { Post } from '@common/types';
 import { bookmarkPost, unbookmarkPost } from '@common/actions';
 import { useState } from 'react';
-import Link from 'next/link';
 import { ModalActions } from '@common/constants';
 import { useRouter } from 'next/router';
 import { BookmarkActiveIcon, BookmarkIcon } from '@components/icons';
@@ -24,7 +24,7 @@ function BookmarkToggle(props: Props) {
 		size = 'medium',
 	} = props;
 	const [isBookmarked, setIsBookmarked] = useState(!!post.bookmarked);
-	const pustToastMsg = useSetAtom(pushToastMsgAtom);
+	const pushToastMsg = useSetAtom(pushToastMsgAtom);
 	const {
 		pathname,
 		query,
@@ -50,7 +50,7 @@ function BookmarkToggle(props: Props) {
 		// TODO Nicer/cleaner way to update this without mutating
 		post.bookmarked = !post.bookmarked;
 
-		pustToastMsg(msg);
+		pushToastMsg(msg);
 	}
 
 	const body = (

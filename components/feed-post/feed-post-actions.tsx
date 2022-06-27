@@ -17,6 +17,8 @@ import {
 	MenuItem,
 	Tooltip,
 } from '@mui/material';
+import { useSetAtom } from 'jotai';
+import { boostPostAtom } from '@common/atoms';
 
 interface Props {
 	post: Post;
@@ -32,13 +34,15 @@ function getItemUrl(item: Post) {
 	return urlJoin(location.host, Paths.Post, item._id);
 }
 
+const Size = 'medium';
+
 export
 function PostActions(props: Props) {
 	const {
 		post,
 		onCommentClick,
 	} = props;
-	const size = 'medium';
+	const setBoostPost = useSetAtom(boostPostAtom);
 	const isLoggedIn = useIsLoggedIn();
 
 	return (
@@ -50,7 +54,7 @@ function PostActions(props: Props) {
 			>
 				<Tooltip title="Add Point/Counter Point">
 					<Button
-						size={size}
+						size={Size}
 						startIcon={<CommentIcon/>}
 						onClick={onCommentClick}
 					>
@@ -65,9 +69,10 @@ function PostActions(props: Props) {
 			>
 				<Tooltip title="Boost">
 					<Button
-						size={size}
+						size={Size}
 						color="success"
 						startIcon={<BoostIcon fontSize="inherit" />}
+						onClick={() => setBoostPost(post)}
 					>
 						{formatCompactNumber(post.points)}
 					</Button>
@@ -79,7 +84,7 @@ function PostActions(props: Props) {
 				sx={{ textAlign: 'center' }}
 			>
 				<BookmarkToggle
-					size={size}
+					size={Size}
 					isLoggedIn={!!isLoggedIn}
 					post={post}
 				/>
@@ -91,7 +96,7 @@ function PostActions(props: Props) {
 			>
 				<Tooltip title="Copy Link">
 					<Button
-						size={size}
+						size={Size}
 						startIcon={<CopyIcon fontSize="inherit" />}
 						onClick={() => writeToClipboard(getItemUrl(post))}
 					>

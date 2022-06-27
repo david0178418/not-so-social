@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 export
 function useIsLoggedIn() {
@@ -35,4 +36,21 @@ function useRouteBackDefault(fallback = '/') {
 			router.replace(fallback);
 		}
 	};
+}
+
+export
+function useDebounce<T>(value: T, delay: number) {
+	const [debouncedValue, setDebouncedValue] = useState(value);
+
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			setDebouncedValue(value);
+		}, delay);
+
+		return () => {
+			clearTimeout(handler);
+		};
+	}, [value, delay]);
+
+	return debouncedValue;
 }

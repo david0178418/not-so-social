@@ -15,7 +15,8 @@ type SavedPostProps = Pick<Post,
 export
 interface DbPointTransaction {
 	type: PointTransactionTypes;
-	points: number;
+	spentPoints?: number;
+	appliedPoints: number;
 	toId: ObjectId;
 	date: string;
 	fromUserId: ObjectId;

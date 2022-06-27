@@ -1,7 +1,7 @@
 import type { ApiResponse } from './types';
 
 import { signIn, signOut } from 'next-auth/react';
-import { post } from '@common/client/utils';
+import { get, post } from '@common/client/utils';
 import { urlJoin } from './utils';
 import { API_URL } from './constants';
 
@@ -47,6 +47,10 @@ async function postSave(args: PostSaveArgs) {
 	return data;
 }
 
+export async function postBoost(postId: string, points: number) {
+	await apiPost(`/post/${postId}/boost`, { points });
+}
+
 export
 async function bookmarkPost(id: string) {
 	return apiPost(`post/${id}/bookmark`);
@@ -57,10 +61,17 @@ async function unbookmarkPost(id: string) {
 	return apiPost(`post/${id}/remove-bookmark`);
 }
 
+export
+async function getBalance() {
+	const { data } = await apiGet('/balance');
+
+	return data?.balance || 0;
+}
+
 function apiPost<T = any>(path: string, requestBody?: any) {
 	return post<T>(urlJoin(API_URL, path), requestBody);
 }
 
-// function apiGet(path: string, params?: any) {
-// 	return get(urlJoin(API_URL, path), params);
-// }
+function apiGet(path: string, params?: any) {
+	return get(urlJoin(API_URL, path), params);
+}

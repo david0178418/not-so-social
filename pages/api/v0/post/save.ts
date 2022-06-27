@@ -134,7 +134,7 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 				fromUserId: ownerId,
 				toId: newPostId,
 				date: now,
-				points: appliedPoints,
+				spentPoints: appliedPoints,
 			}),
 	];
 

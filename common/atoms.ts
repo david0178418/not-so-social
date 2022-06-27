@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { Post } from './types';
 
 export
 const loadingAtom = atom(false);
@@ -7,6 +8,9 @@ const toastQueueAtom = atom<string[]>([]);
 
 export
 const toastMsgAtom = atom(get => get(toastQueueAtom)[0] || '');
+
+export
+const boostPostAtom = atom<Post | null>(null);
 
 export
 const pushToastMsgAtom = atom(
