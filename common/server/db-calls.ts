@@ -8,7 +8,7 @@ import {
 	unique,
 } from '@common/utils';
 import {
-	DbCreds,
+	DbUser,
 	DbPost,
 	DbUserActivity,
 } from './db-schema';
@@ -191,9 +191,9 @@ async function fetchBookmarksFromPostIds(userId: string, postIds: string[]) {
 }
 
 export
-async function fetchUserCreds(username: string): Promise<DbCreds | null> {
-	const credsCol = await getCollection(DbCollections.Creds);
-	const result = await credsCol.aggregate<DbCreds>([
+async function fetchUser(username: string): Promise<DbUser | null> {
+	const usersCol = await getCollection(DbCollections.Users);
+	const result = await usersCol.aggregate<DbUser>([
 		{ $match: { $expr: { $eq: [ { $toLower: '$username' }, username.toLowerCase() ] } } },
 		{ $limit: 1 },
 	]).toArray();

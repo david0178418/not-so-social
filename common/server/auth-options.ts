@@ -5,7 +5,7 @@ import type {
 } from 'next';
 import { NextAuthOptions, unstable_getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { fetchUserCreds, recordActivity } from '@common/server/db-calls';
+import { fetchUser, recordActivity } from '@common/server/db-calls';
 import { compare } from 'bcryptjs';
 import { UserActivityTypes, UserRoles } from '@common/constants';
 
@@ -43,26 +43,26 @@ const authOptions: NextAuthOptions = {
 					type: 'password',
 				},
 			},
-			async authorize(cred) {
-				if(!cred) {
+			async authorize(credentials) {
+				if(!credentials) {
 					return null;
 				}
 
 				const {
 					username,
 					password,
-				} = cred;
+				} = credentials;
 
-				const credentials = await fetchUserCreds(username);
-
-				if(!(credentials && await compare(password, credentials.hash))) {
+				const user = await fetchUser(username);
+				console.log('user', user);
+				if(!(user && await compare(password, user.hash))) {
 					return null;
 				}
 
 				return {
-					id: credentials.userId,
-					username: credentials.username,
-					role: credentials.role || UserRoles.User,
+					id: user._id,
+					username: user.username,
+					role: user.role || UserRoles.User,
 				};
 			},
 		}),

@@ -30,23 +30,18 @@ interface DbPost extends SavedPostProps {
 }
 
 export
-interface DbCreds {
+interface DbUser {
+	_id?: ObjectId;
 	role?: UserRoles;
 	username: string;
-	userId: ObjectId;
 	hash: string;
+	pointBalance: number;
 }
 
 export
 interface DbBookmark {
 	userId: string;
 	postId: ObjectId;
-}
-
-export
-interface DbUser {
-	username: string;
-	pointBalance: number;
 }
 
 export
