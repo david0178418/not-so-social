@@ -120,7 +120,6 @@ function PostActions(props: Props) {
 							>
 								<MenuItem>Edit</MenuItem>
 							</Link>,
-							<MenuItem key="b">Abandon Ownership</MenuItem>,
 						]
 					)}
 					<MenuItem>View Point Activity</MenuItem>
