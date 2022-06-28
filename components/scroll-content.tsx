@@ -25,7 +25,7 @@ function ScrollContent(props: Props) {
 				}
 
 				.bar {
-					overflow: hidden scroll;
+					overflow: hidden auto;
 					flex: 1;
 				}
 			`}</style>
