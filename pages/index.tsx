@@ -69,6 +69,7 @@ const Home: NextPage<Props> = (props) => {
 					}}>
 						<TextField
 							fullWidth
+							placeholder={`Search ${AppName}`}
 							InputProps={{
 								endAdornment: (
 									<InputAdornment position="end">
