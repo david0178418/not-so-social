@@ -8,10 +8,11 @@ import { postSave } from '@common/actions';
 import { ConfirmButton } from '@components/common/buttons/confirm.button';
 import { CancelButton } from '@components/common/buttons/cancel.button';
 import { formatCompactNumber } from '@common/utils';
+import { InfoIconButton } from '@components/common/info-icon-button';
 import {
 	MinPostCost,
 	ModalActions,
-	PostCreatePointRatio,
+	OwnPostRatio,
 } from '@common/constants';
 import {
 	Box,
@@ -23,7 +24,6 @@ import {
 	Grid,
 	TextField,
 } from '@mui/material';
-import { InfoIconButton } from '@components/common/info-icon-button';
 
 export
 function CreatePostModal() {
@@ -148,7 +148,7 @@ function CreatePostModal() {
 			<DialogContent>
 				<DialogContentText>
 					<em>
-						Post with {formatCompactNumber(Math.floor(points * PostCreatePointRatio))}pts
+						Post with {formatCompactNumber(Math.floor(points * OwnPostRatio))}pts
 						<InfoIconButton
 							label="When creating or boosting your own post, half of the points spent are applied."
 							placement="right"
