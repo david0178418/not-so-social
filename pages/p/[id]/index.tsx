@@ -38,7 +38,7 @@ const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 	};
 };
 
-const Home: NextPage<Props> = (props) => {
+const PostPage: NextPage<Props> = (props) => {
 	const routeBack = useRouteBackDefault();
 	const {
 		data: {
@@ -81,4 +81,4 @@ const Home: NextPage<Props> = (props) => {
 	);
 };
 
-export default Home;
+export default PostPage;

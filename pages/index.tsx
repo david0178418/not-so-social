@@ -33,7 +33,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	};
 };
 
-const Home: NextPage<Props> = (props) => {
+const HomePage: NextPage<Props> = (props) => {
 	const {
 		data: {
 			parentPostMap,
@@ -102,4 +102,4 @@ const Home: NextPage<Props> = (props) => {
 	);
 };
 
-export default Home;
+export default HomePage;
