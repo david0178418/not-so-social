@@ -62,7 +62,7 @@ const authOptions: NextAuthOptions = {
 				return {
 					id: credentials.userId,
 					username: credentials.username,
-					role: credentials.role || UserRoles.user,
+					role: credentials.role || UserRoles.User,
 				};
 			},
 		}),

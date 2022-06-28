@@ -8,9 +8,11 @@ import { ObjectId } from 'mongodb';
 import {
 	DbCollections,
 	NotLoggedInErrMsg,
+	OwnPostRatio,
 	PointTransactionTypes,
-	PostCreatePointRatio,
+	UserRoles,
 } from '@common/constants';
+import { fetchUserBalance } from '@common/server/db-calls';
 
 interface Schema {
 	id: string;
@@ -18,13 +20,15 @@ interface Schema {
 }
 
 const schema = Joi.object<Schema>({
-	points: Joi.number(),
+	points: Joi
+		.number()
+		.integer()
+		.required(),
 	id: Joi
 		.string()
 		.length(24)
 		.required(),
 });
-
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -43,7 +47,30 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(401).send(NotLoggedInErrMsg);
 		}
 
-		await boostPost(new ObjectId(postId), new ObjectId(user.id), points);
+		const ownerId = new ObjectId(user.id);
+		const balance = await fetchUserBalance(ownerId);
+		const isAdmin = user.role === UserRoles.Admin;
+
+		console.log(user.role);
+
+		if(
+			!isAdmin &&
+			points > balance
+		) {
+			return res.send({
+				ok: false,
+				errors: [
+					`Not enough points. Current balance: ${balance}`,
+				],
+			});
+		}
+
+		await boostPost({
+			postId: new ObjectId(postId),
+			userId: new ObjectId(user.id),
+			points,
+			isAdmin,
+		});
 
 		return res
 			.status(200)
@@ -60,7 +87,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	}
 }
 
-async function boostPost(postId: ObjectId, userId: ObjectId, points: number) {
+interface BoostPostProps {
+	postId: ObjectId;
+	userId: ObjectId;
+	points: number;
+	isAdmin?: boolean;
+}
+
+async function boostPost(props: BoostPostProps) {
+	const {
+		postId,
+		userId,
+		points,
+		isAdmin = false,
+	} = props;
 	const date = nowISOString();
 	const postCol = await getCollection(DbCollections.Posts);
 
@@ -71,7 +111,7 @@ async function boostPost(postId: ObjectId, userId: ObjectId, points: number) {
 	}
 
 	const isOwner = post.ownerId.equals(userId);
-	const appliedPoints = isOwner ? points * PostCreatePointRatio : points;
+	const appliedPoints = isOwner ? points * OwnPostRatio : points;
 	const [
 		usersCol,
 		transactionCol,
@@ -92,15 +132,25 @@ async function boostPost(postId: ObjectId, userId: ObjectId, points: number) {
 		transaction.spentPoints = points;
 	}
 
-	await Promise.all([
+	const calls: Promise<any>[] = [
 		transactionCol.insertOne(transaction),
 		postCol.updateOne(
 			{ _id: postId },
 			{ $inc: { points: appliedPoints } }
 		),
-		usersCol.updateOne(
-			{ _id: userId },
-			{ $inc: { pointBalance: -points } }
-		),
-	]);
+	];
+
+	console.log('isAdmin', isAdmin,
+		{ $inc: { pointBalance: -points } });
+
+	if(!isAdmin) {
+		calls.push(
+			usersCol.updateOne(
+				{ _id: userId },
+				{ $inc: { pointBalance: -points } }
+			)
+		);
+	}
+
+	await Promise.all(calls);
 }

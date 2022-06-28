@@ -58,7 +58,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 		const postContent = await schema.validateAsync(req.body);
 		const ownerId = new ObjectId(user.id);
 		const balance = await fetchUserBalance(ownerId);
-		const isAdmin = user.role === UserRoles.admin;
+		const isAdmin = user.role === UserRoles.Admin;
 
 		if(
 			!isAdmin &&

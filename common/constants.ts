@@ -13,7 +13,6 @@ const MaxPostCost = 1_00_000;
 export
 const OwnPostRatio = 0.5;
 
-
 export
 enum Paths {
 	Home = '/',
@@ -63,9 +62,6 @@ const MinPostPoints = 10;
 
 export
 const MongoIdLength = 24;
-
-export
-const PostCreatePointRatio = 0.5;
 
 export
 const UnicodeChars = {
@@ -121,6 +117,6 @@ enum PointTransactionTypes {
 
 export
 enum UserRoles {
-	admin = 'admin',
-	user = 'user'
+	Admin = 'admin',
+	User = 'user'
 }

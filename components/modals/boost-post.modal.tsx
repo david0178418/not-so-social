@@ -6,10 +6,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ClampedNumberInput } from '@components/common/clamped-number-input';
 import { useEffect, useState } from 'react';
-import { Alert } from '@mui/material';
-import { useRefreshPage } from '@common/hooks';
+import { Alert, TextField } from '@mui/material';
+import { useIsAdmin, useRefreshPage } from '@common/hooks';
 import { useAtom, useSetAtom } from 'jotai';
-import { PostCreatePointRatio } from '@common/constants';
+import { OwnPostRatio } from '@common/constants';
 import { BoostIcon } from '@components/icons';
 import { getBalance, postBoost } from '@common/actions';
 import { exec } from '@common/utils';
@@ -21,6 +21,7 @@ import {
 
 export
 function BoostPostModal() {
+	const isAdmin = useIsAdmin();
 	const pushToastMsg = useSetAtom(pushToastMsgAtom);
 	const [post, setPost] = useAtom(boostPostAtom);
 	const [balance, setBalance] = useState(1);
@@ -29,8 +30,8 @@ function BoostPostModal() {
 	const reload = useRefreshPage();
 
 	const isOwner = !!post?.isOwner;
-	const pointSpend = isOwner ? points / PostCreatePointRatio : points;
-	const maxSpend = isOwner ? balance * PostCreatePointRatio : points;
+	const pointSpend = isOwner ? points / OwnPostRatio : points;
+	const maxSpend = isOwner ? balance * OwnPostRatio : balance;
 	const noBalance = !balance;
 
 	useEffect(() => {
@@ -82,28 +83,40 @@ function BoostPostModal() {
 				</Alert>
 			)}
 			<DialogTitle>Boost</DialogTitle>
-			<DialogContent>
-				<DialogContentText>
-					<strong>
-						{balance.toLocaleString()}pts
-					</strong><br/>
-					- {pointSpend.toLocaleString()}
-				</DialogContentText>
-				<DialogContentText>
-					<strong>
-						{(balance - pointSpend).toLocaleString()}
-					</strong> remaining
-				</DialogContentText>
-				<ClampedNumberInput
-					autoFocus
-					label="Boost Amount"
-					disabled={noBalance}
-					min={1}
-					max={maxSpend}
-					value={points}
-					onChange={setPoints}
-				/>
-			</DialogContent>
+			{isAdmin ? (
+				<DialogContent>
+					<TextField
+						sx={{ marginTop: 1 }}
+						autoFocus
+						label="Boost Amount"
+						value={points}
+						onChange={e => setPoints(+e.target.value)}
+					/>
+				</DialogContent>
+			) : (
+				<DialogContent>
+					<DialogContentText>
+						<strong>
+							{balance.toLocaleString()}pts
+						</strong><br/>
+						- {pointSpend.toLocaleString()}
+					</DialogContentText>
+					<DialogContentText>
+						<strong>
+							{(balance - pointSpend).toLocaleString()}
+						</strong> remaining
+					</DialogContentText>
+					<ClampedNumberInput
+						autoFocus
+						label="Boost Amount"
+						disabled={noBalance}
+						min={1}
+						max={maxSpend}
+						value={points}
+						onChange={setPoints}
+					/>
+				</DialogContent>
+			)}
 			<DialogActions>
 				<Button
 					color="error"

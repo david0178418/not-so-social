@@ -1,6 +1,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { UserRoles } from './constants';
 
 export
 function useIsLoggedIn() {
@@ -13,6 +14,13 @@ export
 function useIsLoggedOut() {
 	const { status } = useSession();
 	return status === 'unauthenticated';
+}
+
+export
+function useIsAdmin() {
+	const { data } = useSession();
+
+	return data?.user.role === UserRoles.Admin;
 }
 
 export
