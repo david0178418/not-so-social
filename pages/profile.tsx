@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { ModalActions, Paths } from '@common/constants';
-import { Box, Button } from '@mui/material';
 import { GetServerSideProps, NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { getServerSession } from '@common/server/auth-options';
+import { Button } from '@mui/material';
+import { PasswordChangeForm } from '@components/password-change-form';
 
 export
 const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -31,11 +32,9 @@ const ProfilePage: NextPage<any> = () => {
 	} = router;
 
 	return (
-		<Box>
+		<div>
 			Signed in as {session.data?.user.username}
-
 			<div>
-
 				<Link
 					shallow
 					passHref
@@ -52,8 +51,11 @@ const ProfilePage: NextPage<any> = () => {
 					</Button>
 				</Link>
 			</div>
-		</Box>
+			<PasswordChangeForm />
+		</div>
 	);
 };
 
 export default ProfilePage;
+
+

@@ -26,6 +26,9 @@ export
 const PasswordMaxLength = 128;
 
 export
+const PasswordSaltLength = 10;
+
+export
 enum Paths {
 	Home = '/',
 	HomeNew = '/new',

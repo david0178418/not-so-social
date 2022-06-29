@@ -22,10 +22,15 @@ async function login(username: string, password: string) {
 
 export
 function register(username: string, password: string) {
-	return apiPost<ApiResponse>('/register', {
+	return apiPost<ApiResponse>('/user/register', {
 		username,
 		password,
 	});
+}
+
+export
+function updatePassword(password: string) {
+	return apiPost<ApiResponse>('/user/update-password', { password });
 }
 
 export

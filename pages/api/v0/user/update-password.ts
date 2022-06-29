@@ -3,30 +3,20 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import Joi from 'joi';
 import { getCollection } from '@common/server/mongodb';
-import { nowISOString } from '@common/utils';
-import { hash } from 'bcryptjs';
 import { getServerSession } from '@common/server/auth-options';
-import { fetchUser } from '@common/server/db-calls';
+import { passwordToHash } from '@common/server/transforms';
+import { ObjectId } from 'mongodb';
 import {
 	DbCollections,
 	PasswordMaxLength,
 	PasswordMinLength,
-	UsernameMaxLength,
-	UsernameMinLength,
 } from '@common/constants';
 
 interface Schema {
 	password: string;
-	username: string;
 }
 
 const schema = Joi.object<Schema>({
-	username: Joi
-		.string()
-		.alphanum()
-		.min(UsernameMinLength)
-		.max(UsernameMaxLength)
-		.required(),
 	password: Joi
 		.string()
 		.min(PasswordMinLength)
@@ -38,29 +28,18 @@ export default
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	const session = await getServerSession(req, res);
 
-	if(session) {
-		return res.status(400).end();
+	if(!session?.user) {
+		return res.status(401).end();
 	}
 
 	try {
-		const {
-			username,
-			password,
-		} = await schema.validateAsync(req.body);
+		const { password } = await schema.validateAsync(req.body);
 
-		if(await fetchUser(username)) {
-			return res.send({
-				ok: false,
-				errors: [
-					`User "${username}" already exists`,
-				],
-			});
-		}
-
-		await createUser(username, password);
+		await updatePassword(session.user.id, password);
 
 		res.send({ ok: true });
 	} catch(error: unknown) {
+		console.log(error);
 		return res
 			.status(400)
 			.send({
@@ -72,20 +51,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	}
 }
 
-async function createUser(username: string, password: string) {
+async function updatePassword(userId: string, password: string) {
 	const usersCol = await getCollection(DbCollections.Users);
+	const hash = await passwordToHash(password);
+	const _id = new ObjectId(userId);
 
-	const result = await usersCol
-		.insertOne({
-			username,
-			pointBalance: 0,
-			hash: (await hash(password, 10)),
-		});
-
-	(await getCollection(DbCollections.UsersMeta))
-		.insertOne({
-			userId: result.insertedId,
-			created: nowISOString(),
-		});
-
+	await usersCol.updateOne({ _id }, { $set: { hash } });
 }

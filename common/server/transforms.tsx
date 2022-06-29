@@ -1,11 +1,12 @@
+import type { DbPost } from './db-schema';
+import { hash } from 'bcryptjs';
+import { isTruthy, unique } from '@common/utils';
 import type {
 	Nullable,
 	Post,
 	PostIdMap,
 } from '@common/types';
-import type { DbPost } from './db-schema';
-
-import { isTruthy, unique } from '@common/utils';
+import { PasswordSaltLength } from '@common/constants';
 
 export
 function dbPostToPostFn(userId: string) {
@@ -59,4 +60,9 @@ function rollupPostsToMapFn(prop: keyof Pick<Post, '_id' | 'parentId'> = '_id') 
 		}
 		return rollup;
 	};
+}
+
+export
+function passwordToHash(password: string) {
+	return hash(password, PasswordSaltLength);
 }
