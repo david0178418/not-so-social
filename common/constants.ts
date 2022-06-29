@@ -14,6 +14,18 @@ export
 const OwnPostRatio = 0.5;
 
 export
+const UsernameMinLength = 3;
+
+export
+const UsernameMaxLength = 24;
+
+export
+const PasswordMinLength = 6;
+
+export
+const PasswordMaxLength = 128;
+
+export
 enum Paths {
 	Home = '/',
 	HomeNew = '/new',

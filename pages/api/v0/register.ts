@@ -2,12 +2,18 @@ import type { ValidationError } from 'joi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import Joi from 'joi';
-import { DbCollections } from '@common/constants';
 import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import { hash } from 'bcryptjs';
 import { getServerSession } from '@common/server/auth-options';
 import { fetchUser } from '@common/server/db-calls';
+import {
+	DbCollections,
+	PasswordMaxLength,
+	PasswordMinLength,
+	UsernameMaxLength,
+	UsernameMinLength,
+} from '@common/constants';
 
 interface Schema {
 	password: string;
@@ -18,13 +24,13 @@ const schema = Joi.object<Schema>({
 	username: Joi
 		.string()
 		.alphanum()
-		.min(3)
-		.max(20)
+		.min(UsernameMinLength)
+		.max(UsernameMaxLength)
 		.required(),
 	password: Joi
 		.string()
-		.min(6)
-		.max(50)
+		.min(PasswordMinLength)
+		.max(PasswordMaxLength)
 		.required(),
 });
 
