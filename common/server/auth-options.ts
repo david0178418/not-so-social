@@ -54,7 +54,7 @@ const authOptions: NextAuthOptions = {
 				} = credentials;
 
 				const user = await fetchUser(username);
-				console.log('user', user);
+
 				if(!(user && await compare(password, user.hash))) {
 					return null;
 				}
