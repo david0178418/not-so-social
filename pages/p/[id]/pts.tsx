@@ -44,11 +44,6 @@ const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 		fetchPostTransactions(id),
 	]);
 
-	console.log('post', {
-		post,
-		transactions,
-	});
-
 	return {
 		props: {
 			session,
@@ -68,8 +63,6 @@ const PostPointsPage: NextPage<Props> = (props) => {
 			transactions,
 		},
 	} = props;
-
-	console.log(transactions);
 
 	return (
 		<>
