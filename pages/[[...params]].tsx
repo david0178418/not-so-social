@@ -8,12 +8,13 @@ import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
 import { getServerSession } from '@common/server/auth-options';
+import { AppName } from '@common/constants';
+import { HomeSortTabs } from '@components/home-sort-tabs';
 import {
 	Box,
 	InputAdornment,
 	TextField,
 } from '@mui/material';
-import { AppName } from '@common/constants';
 
 interface Props {
 	children?: ReactNode;
@@ -81,6 +82,7 @@ const HomePage: NextPage<Props> = (props) => {
 					</Box>
 				}
 			>
+				<HomeSortTabs />
 				{posts.map(p => (
 					<FeedPost
 						key={p._id}

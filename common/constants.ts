@@ -16,6 +16,8 @@ const OwnPostRatio = 0.5;
 export
 enum Paths {
 	Home = '/',
+	HomeNew = '/new',
+	HomeTop = '/top',
 	Post = '/p',
 	Bookmarks = '/bookmarks',
 	UserBoosts = '/u/b',
