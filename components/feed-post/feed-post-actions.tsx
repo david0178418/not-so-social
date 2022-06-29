@@ -116,13 +116,19 @@ function PostActions(props: Props) {
 								key="a"
 								passHref
 								shallow
-								href="/"
+								href={Paths.Home}
 							>
 								<MenuItem>Edit</MenuItem>
 							</Link>,
 						]
 					)}
-					<MenuItem>View Point Activity</MenuItem>
+					<Link
+						passHref
+						shallow
+						href={`${Paths.Post}/${post._id}/pts`}
+					>
+						<MenuItem>View Point Activity</MenuItem>
+					</Link>
 					{!post.isOwner && (
 						<MenuItem>Mark as Spam</MenuItem>
 					)}
@@ -131,3 +137,5 @@ function PostActions(props: Props) {
 		</>
 	);
 }
+
+

@@ -1,4 +1,6 @@
-import { DbCollections, UserActivityTypes } from '@common/constants';
+import {
+	DbCollections, PointTransactionTypes, UserActivityTypes,
+} from '@common/constants';
 import { Post, PostIdMap } from '@common/types';
 import { ObjectId } from 'mongodb';
 import { getCollection } from './mongodb';
@@ -89,12 +91,13 @@ async function Fooo(posts: Post[], userId: string) {
 	};
 }
 
-async function fetchPost(postId: string, userId: string): Promise<Post | null> {
+export
+async function fetchPost(postId: string, userId = ''): Promise<Post | null> {
 	const posts = await fetchPosts([postId], userId);
 	return posts?.[0] || null;
 }
 
-async function fetchPosts(postIds: string[], userId: string): Promise<Post[]> {
+async function fetchPosts(postIds: string[], userId = ''): Promise<Post[]> {
 	const col = await getCollection(DbCollections.Posts);
 	const results = await col
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
@@ -173,6 +176,23 @@ async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedP
 			responses: [],
 		};
 	}
+}
+
+export
+async function fetchPostTransactions(id: string) {
+	const col = await getCollection(DbCollections.PointTransactions);
+
+	const result = await col.find({
+		type: PointTransactionTypes.postBoost,
+		toId: new ObjectId(id),
+	}).toArray();
+
+	return result.map(t => ({
+		...t,
+		toId: t.toId.toString(),
+		fromUserId: t.fromUserId.toString(),
+		_id: t._id.toString(),
+	}));
 }
 
 export

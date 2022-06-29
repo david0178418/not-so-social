@@ -1,8 +1,10 @@
-import {
-	PointTransactionTypes, UserActivityTypes, UserRoles,
-} from '@common/constants';
 import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
+import {
+	PointTransactionTypes,
+	UserActivityTypes,
+	UserRoles,
+} from '@common/constants';
 
 type SavedPostProps = Pick<Post,
 'body' |
