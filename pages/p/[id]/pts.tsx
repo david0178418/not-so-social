@@ -9,6 +9,7 @@ import { useRouteBackDefault } from '@common/hooks';
 import { getServerSession } from '@common/server/auth-options';
 import { AppName, UnicodeChars } from '@common/constants';
 import { fetchPost, fetchPostTransactions } from '@common/server/db-calls';
+import { formatDate } from '@common/utils';
 import {
 	Box,
 	IconButton,
@@ -17,7 +18,6 @@ import {
 	ListItemText,
 	Typography,
 } from '@mui/material';
-import { formatCompactNumber, formatDate } from '@common/utils';
 
 interface Props {
 	data: {
