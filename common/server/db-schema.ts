@@ -42,7 +42,7 @@ interface DbUser {
 
 export
 interface DbBookmark {
-	userId: string;
+	userId: ObjectId;
 	postId: ObjectId;
 }
 

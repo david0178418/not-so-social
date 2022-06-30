@@ -17,17 +17,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			return res.status(401).send(NotLoggedInErrMsg);
 		}
 
+		const userId = new ObjectId(user.id);
 		const postObjId = new ObjectId(postId);
 
 		const col = await getCollection(DbCollections.PostBookmarks);
 		await col.updateOne(
 			{
-				userId: user.id,
+				userId,
 				postId: postObjId,
 			},
 			{
 				$setOnInsert: {
-					userId: user.id,
+					userId,
 					postId: postObjId,
 					date: nowISOString(),
 				},

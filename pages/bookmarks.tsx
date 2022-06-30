@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { fetchUserBookmarkedPosts } from '@common/server/queries/feed-queries';
+import { fetchFeed } from '@common/server/queries/feed';
 import { AsyncFnReturnType } from '@common/types';
 import { FeedPost } from '@components/feed-post';
 import { SearchIcon } from '@components/icons';
@@ -29,7 +29,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	return {
 		props: {
 			session,
-			data: await fetchUserBookmarkedPosts(session.user.id),
+			data: await fetchFeed('bookmarks', session.user.id),
 			// posts: userId ?
 			// 	await fetchUserBookmarkedPosts(userId) :
 			// 	[],
@@ -38,7 +38,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 };
 
 interface Props {
-	data: AsyncFnReturnType<typeof fetchUserBookmarkedPosts>;
+	data: AsyncFnReturnType<typeof fetchFeed>;
 }
 
 const BookmarksPage: NextPage<Props> = (props) => {

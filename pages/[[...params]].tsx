@@ -3,7 +3,7 @@ import type { AsyncFnReturnType } from '@common/types';
 import type { ReactNode } from 'react';
 
 import Head from 'next/head';
-import { fetchFeed } from '@common/server/queries/feed-queries';
+import { fetchFeed } from '@common/server/queries/feed';
 import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
