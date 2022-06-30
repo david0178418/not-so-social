@@ -19,18 +19,27 @@ import {
 
 interface Props {
 	children?: ReactNode;
-	data: AsyncFnReturnType<typeof fetchFeed>;
+	data: {
+		feedType: string;
+		feed: AsyncFnReturnType<typeof fetchFeed>;
+	};
 }
 
 export
-const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 	const session = await getServerSession(ctx.req, ctx.res);
 	const userId = session?.user.id || '';
+
+	const { params = ['hot'] } = ctx.params;
+	const feedType = params[0];
 
 	return {
 		props: {
 			session,
-			data: await fetchFeed('top', userId || '', subDays(new Date(), 4).toISOString()),
+			data: {
+				feedType,
+				feed: await fetchFeed(feedType, userId || '', subDays(new Date(), 7).toISOString()),
+			},
 		},
 	};
 };
@@ -38,9 +47,11 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 const HomePage: NextPage<Props> = (props) => {
 	const {
 		data: {
-			parentPostMap,
-			posts,
-			responsePostMap,
+			feed: {
+				parentPostMap,
+				posts,
+				responsePostMap,
+			},
 		},
 	} = props;
 
