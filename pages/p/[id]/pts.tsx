@@ -8,7 +8,7 @@ import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
 import { getServerSession } from '@common/server/auth-options';
 import { AppName, UnicodeChars } from '@common/constants';
-import { fetchPost, fetchPostTransactions } from '@common/server/db-calls';
+import { fetchPost, fetchPostTransactions } from '@common/server/queries';
 import { formatDate } from '@common/utils';
 import {
 	Box,

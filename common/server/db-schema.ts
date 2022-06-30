@@ -11,7 +11,7 @@ type SavedPostProps = Pick<Post,
 'title' |
 'created' |
 'lastUpdated' |
-'points'
+'totalPoints'
 >;
 
 export

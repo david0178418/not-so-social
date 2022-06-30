@@ -1,141 +1,22 @@
-import { Post, PostIdMap } from '@common/types';
+import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
-import { getCollection } from './mongodb';
+import { getCollection } from '../mongodb';
+import { nowISOString } from '@common/utils';
 import {
 	DbCollections,
 	PointTransactionTypes,
 	UserActivityTypes,
 } from '@common/constants';
 import {
-	isTruthy,
-	nowISOString,
-	unique,
-} from '@common/utils';
-import {
 	DbUser,
 	DbPost,
 	DbUserActivity,
-} from './db-schema';
+} from '../db-schema';
 import {
 	dbPostToPostFn,
 	postToBookmarkedPostFn,
 	postListsToIdList,
-	rollupPostsToMapFn,
-} from './transforms';
-
-interface GetPostsReturn {
-	parentPostMap: PostIdMap;
-	posts: Post[];
-	responsePostMap: PostIdMap;
-}
-
-// TODO Is there a better way to do this in MongoDB
-const DOC_PLACEHOLDER = 'docTemp';
-
-// const Sorts = {
-// 	'new': { created: -1 },
-// 	'top': {  },
-// 	'hot': {  },
-// };
-
-export
-async function fetchHotPosts(userId: string, cutoffDate: string) {
-	const col = await getCollection(DbCollections.PointTransactions);
-	const results = await col.aggregate<DbPost>([
-		{
-			$match: {
-				type: PointTransactionTypes.postBoost,
-				date: { $gte: cutoffDate },
-			},
-		},
-		{
-			$group: {
-				_id: '$toId',
-				points: { $sum: '$appliedPoints' },
-			},
-		},
-		{
-			$lookup: {
-				from: DbCollections.Posts,
-				localField: '_id',
-				foreignField: '_id',
-				as: DOC_PLACEHOLDER,
-			},
-		},
-		{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
-		{
-			$replaceWith: {
-				$mergeObjects: [
-					`$${DOC_PLACEHOLDER}`,
-					{ points: '$points' },
-				],
-			},
-		},
-		{ $sort: { points: -1 } },
-	]).toArray();
-	const posts = results.map(dbPostToPostFn(userId));
-
-	return Fooo(posts, userId);
-}
-
-export
-async function fetchFeedPosts(userId: string): Promise<GetPostsReturn> {
-	const col = await getCollection(DbCollections.Posts);
-	const results = await col
-		.aggregate<DbPost>([{ $sort: { created: -1 } }])
-		.toArray();
-	const posts = results.map(dbPostToPostFn(userId));
-
-	return Fooo(posts, userId);
-}
-
-export
-async function fetchUserBookmarkedPosts(userId: string): Promise<GetPostsReturn> {
-	const col = await getCollection(DbCollections.PostBookmarks);
-
-	const results = await col.aggregate<DbPost>([
-		{ $match: { userId } },
-		{ $sort: { date: -1 } },
-		{
-			$lookup: {
-				from: DbCollections.Posts,
-				localField: 'postId',
-				foreignField: '_id',
-				as: DOC_PLACEHOLDER,
-			},
-		},
-		{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
-		{ $replaceRoot: { newRoot: `$${DOC_PLACEHOLDER}` } },
-	]).toArray();
-
-	const posts = results.map(dbPostToPostFn(userId));
-
-	return Fooo(posts, userId);
-}
-
-// TODO Reorg this code commong to landing page, bookmarks, and probably others
-async function Fooo(posts: Post[], userId: string) {
-	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
-	const postIds = posts.map(p => p._id) as string[];
-
-	const parentPosts = await fetchPosts(parentIds, userId);
-	const responsePosts = await fetchTopChildPosts(postIds, userId);
-	const allIds = postListsToIdList(posts, parentPosts, responsePosts);
-
-	const postToBookmarkedPost = postToBookmarkedPostFn(
-		await fetchBookmarksFromPostIds(userId, allIds)
-	);
-
-	return {
-		posts: posts.map(postToBookmarkedPost),
-		parentPostMap: parentPosts
-			.map(postToBookmarkedPost)
-			.reduce(rollupPostsToMapFn(), {}),
-		responsePostMap: responsePosts
-			.map(postToBookmarkedPost)
-			.reduce(rollupPostsToMapFn('parentId'), {}),
-	};
-}
+} from '../transforms';
 
 export
 async function fetchPost(postId: string, userId = ''): Promise<Post | null> {
@@ -143,6 +24,7 @@ async function fetchPost(postId: string, userId = ''): Promise<Post | null> {
 	return posts?.[0] || null;
 }
 
+export
 async function fetchPosts(postIds: string[], userId = ''): Promise<Post[]> {
 	const col = await getCollection(DbCollections.Posts);
 	const results = await col
@@ -152,6 +34,7 @@ async function fetchPosts(postIds: string[], userId = ''): Promise<Post[]> {
 	return results.map(dbPostToPostFn(userId));
 }
 
+export
 async function fetchTopChildPosts(postIds: string[], userId: string): Promise<Post[]> {
 	const col = await getCollection(DbCollections.Posts);
 	const postObjectIds = postIds.map(i => new ObjectId(i));

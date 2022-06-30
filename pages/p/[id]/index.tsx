@@ -3,7 +3,7 @@ import type { ParsedUrlQuery } from 'querystring';
 import type { AsyncFnReturnType } from '@common/types';
 
 import Head from 'next/head';
-import { fetchFocusedPost } from '@common/server/db-calls';
+import { fetchFocusedPost } from '@common/server/queries';
 import { BackIcon } from '@components/icons';
 import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';

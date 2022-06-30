@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb';
 import { ObjectIdValidation } from '@common/server/validations';
 import { DbPost } from '@common/server/db-schema';
 import { getServerSession } from '@common/server/auth-options';
-import { fetchUserBalance } from '@common/server/db-calls';
+import { fetchUserBalance } from '@common/server/queries';
 import {
 	DbCollections,
 	MaxPostCost,
@@ -110,7 +110,7 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 		created: now,
 		lastUpdated: now,
 		ownerId,
-		points: appliedPoints,
+		totalPoints: appliedPoints,
 		_id: newPostId,
 	};
 

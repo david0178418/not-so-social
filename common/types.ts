@@ -11,7 +11,8 @@ interface Post {
 	lastUpdated: string;
 	ownerId: string;
 	parentId?: string;
-	points: number;
+	totalPoints: number;
+	points?: number;
 	title: string;
 }
 

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { fetchUserBookmarkedPosts } from '@common/server/db-calls';
+import { fetchUserBookmarkedPosts } from '@common/server/queries';
 import { AsyncFnReturnType } from '@common/types';
 import { FeedPost } from '@components/feed-post';
 import { SearchIcon } from '@components/icons';

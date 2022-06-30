@@ -3,11 +3,12 @@ import type {
 	NextApiRequest,
 	NextApiResponse,
 } from 'next';
+
 import { NextAuthOptions, unstable_getServerSession } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { fetchUser, recordActivity } from '@common/server/db-calls';
-import { compare } from 'bcryptjs';
+import { fetchUser, recordActivity } from '@common/server/queries';
 import { UserActivityTypes, UserRoles } from '@common/constants';
+import { compare } from 'bcryptjs';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 const {
 	JWT_SECRET,

@@ -3,7 +3,7 @@ import type { AsyncFnReturnType } from '@common/types';
 import type { ReactNode } from 'react';
 
 import Head from 'next/head';
-import { fetchFeedPosts, fetchHotPosts } from '@common/server/db-calls';
+import { fetchFeed } from '@common/server/queries/feed-queries';
 import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
@@ -19,7 +19,7 @@ import {
 
 interface Props {
 	children?: ReactNode;
-	data: AsyncFnReturnType<typeof fetchFeedPosts>;
+	data: AsyncFnReturnType<typeof fetchFeed>;
 }
 
 export
@@ -30,7 +30,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	return {
 		props: {
 			session,
-			data: await fetchHotPosts(userId || '', subDays(new Date(), 2).toISOString()),
+			data: await fetchFeed('top', userId || '', subDays(new Date(), 4).toISOString()),
 		},
 	};
 };

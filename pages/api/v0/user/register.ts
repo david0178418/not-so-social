@@ -5,7 +5,7 @@ import Joi from 'joi';
 import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import { getServerSession } from '@common/server/auth-options';
-import { fetchUser } from '@common/server/db-calls';
+import { fetchUser } from '@common/server/queries';
 import { passwordToHash } from '@common/server/transforms';
 import {
 	DbCollections,

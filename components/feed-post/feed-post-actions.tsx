@@ -52,7 +52,7 @@ function PostActions(props: Props) {
 				item
 				sx={{ textAlign: 'center' }}
 			>
-				<Tooltip title="Add Point/Counter Point">
+				<Tooltip title="Respond">
 					<Button
 						size={Size}
 						startIcon={<CommentIcon/>}
@@ -74,7 +74,7 @@ function PostActions(props: Props) {
 						startIcon={<BoostIcon fontSize="inherit" />}
 						onClick={() => setBoostPost(post)}
 					>
-						{formatCompactNumber(post.points)}
+						{formatCompactNumber(post.points || post.totalPoints)}
 					</Button>
 				</Tooltip>
 			</Grid>

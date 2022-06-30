@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { NotLoggedInErrMsg } from '@common/constants';
 import { getServerSession } from '@common/server/auth-options';
-import { fetchUserBalance } from '@common/server/db-calls';
+import { fetchUserBalance } from '@common/server/queries';
 import { ObjectId } from 'mongodb';
 
 export default

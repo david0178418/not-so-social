@@ -12,7 +12,7 @@ import {
 	PointTransactionTypes,
 	UserRoles,
 } from '@common/constants';
-import { fetchUserBalance } from '@common/server/db-calls';
+import { fetchUserBalance } from '@common/server/queries';
 
 interface Schema {
 	id: string;
