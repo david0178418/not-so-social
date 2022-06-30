@@ -140,9 +140,6 @@ async function boostPost(props: BoostPostProps) {
 		),
 	];
 
-	console.log('isAdmin', isAdmin,
-		{ $inc: { pointBalance: -points } });
-
 	if(!isAdmin) {
 		calls.push(
 			usersCol.updateOne(
