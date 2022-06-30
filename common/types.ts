@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { UserRoles } from './constants';
+import { DbPointTransaction } from './server/db-schema';
 
 export
 interface Post {
@@ -9,11 +10,24 @@ interface Post {
 	created: string;
 	isOwner: boolean;
 	lastUpdated: string;
-	ownerId: string;
 	parentId?: string;
 	totalPoints: number;
 	points?: number;
 	title: string;
+}
+
+
+type SharedPointTransactionProps = Pick<DbPointTransaction,
+'type' |
+'spentPoints' |
+'appliedPoints' |
+'date'
+>;
+
+export
+interface PointTransaction extends SharedPointTransactionProps {
+	_id?: string;
+	postId?: string;
 }
 
 export

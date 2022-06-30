@@ -16,6 +16,7 @@ import {
 	dbPostToPostFn,
 	postToBookmarkedPostFn,
 	postListsToIdList,
+	dbPointTransactionToPointTransaction,
 } from '../transforms';
 
 export
@@ -113,15 +114,10 @@ async function fetchPostTransactions(id: string) {
 
 	const result = await col.find({
 		type: PointTransactionTypes.postBoost,
-		toId: new ObjectId(id),
+		postId: new ObjectId(id),
 	}).toArray();
 
-	return result.map(t => ({
-		...t,
-		toId: t.toId.toString(),
-		fromUserId: t.fromUserId.toString(),
-		_id: t._id.toString(),
-	}));
+	return result.map(dbPointTransactionToPointTransaction);
 }
 
 export

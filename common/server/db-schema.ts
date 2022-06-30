@@ -6,7 +6,7 @@ import {
 	UserRoles,
 } from '@common/constants';
 
-type SavedPostProps = Pick<Post,
+type SharedPostProps = Pick<Post,
 'body' |
 'title' |
 'created' |
@@ -15,20 +15,22 @@ type SavedPostProps = Pick<Post,
 >;
 
 export
-interface DbPointTransaction {
-	type: PointTransactionTypes;
-	spentPoints?: number;
-	appliedPoints: number;
-	toId: ObjectId;
-	date: string;
-	fromUserId: ObjectId;
-}
-
-export
-interface DbPost extends SavedPostProps {
+interface DbPost extends SharedPostProps {
 	_id?: ObjectId;
 	ownerId: ObjectId;
 	parentId?: ObjectId;
+}
+
+export
+interface DbPointTransaction {
+	_id?: ObjectId;
+	type: PointTransactionTypes;
+	spentPoints?: number;
+	appliedPoints: number;
+	postId?: ObjectId;
+	userId?: ObjectId;
+	date: string;
+	fromUserId: ObjectId;
 }
 
 export

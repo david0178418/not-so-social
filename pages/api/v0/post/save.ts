@@ -132,7 +132,7 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 			.insertOne({
 				type: PointTransactionTypes.postBoost,
 				fromUserId: ownerId,
-				toId: newPostId,
+				postId: newPostId,
 				date: now,
 				appliedPoints,
 				spentPoints,

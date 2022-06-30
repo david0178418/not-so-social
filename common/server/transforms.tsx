@@ -1,8 +1,9 @@
-import type { DbPost } from './db-schema';
+import type { DbPointTransaction, DbPost } from './db-schema';
 import { hash } from 'bcryptjs';
 import { isTruthy, unique } from '@common/utils';
 import type {
 	Nullable,
+	PointTransaction,
 	Post,
 	PostIdMap,
 } from '@common/types';
@@ -21,7 +22,6 @@ function dbPostToPostFn(userId: string) {
 			...cleanedPost,
 			isOwner: userId === ownerId.toString(),
 			_id: post._id?.toString(),
-			ownerId: ownerId.toString(),
 		};
 
 		if(parentId) {
@@ -33,8 +33,25 @@ function dbPostToPostFn(userId: string) {
 }
 
 export
+function dbPointTransactionToPointTransaction(transaction: DbPointTransaction): PointTransaction {
+	/* eslint-disable @typescript-eslint/no-unused-vars */
+	const {
+		userId,
+		fromUserId,
+		...cleanedTxn
+	} = transaction;
+	/* eslint-enable @typescript-eslint/no-unused-vars */
+
+	return {
+		...cleanedTxn,
+		postId: transaction.postId?.toString(),
+		_id: transaction._id?.toString(),
+	};
+}
+
+export
 function postToBookmarkedPostFn(bookmarkedIds: string[]) {
-	return (p: Post) => ({
+	return (p: Post): Post => ({
 		...p,
 		bookmarked: bookmarkedIds.includes(p._id || ''),
 	});
@@ -43,7 +60,7 @@ function postToBookmarkedPostFn(bookmarkedIds: string[]) {
 
 
 export
-function postListsToIdList(...postLists: Nullable<Post>[][]) {
+function postListsToIdList(...postLists: Nullable<Post>[][]): string[] {
 	return unique(
 		postLists
 			.flat()
