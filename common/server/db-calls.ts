@@ -1,9 +1,11 @@
-import {
-	DbCollections, PointTransactionTypes, UserActivityTypes,
-} from '@common/constants';
 import { Post, PostIdMap } from '@common/types';
 import { ObjectId } from 'mongodb';
 import { getCollection } from './mongodb';
+import {
+	DbCollections,
+	PointTransactionTypes,
+	UserActivityTypes,
+} from '@common/constants';
 import {
 	isTruthy,
 	nowISOString,
@@ -27,6 +29,55 @@ interface GetPostsReturn {
 	responsePostMap: PostIdMap;
 }
 
+// TODO Is there a better way to do this in MongoDB
+const DOC_PLACEHOLDER = 'docTemp';
+
+// const Sorts = {
+// 	'new': { created: -1 },
+// 	'top': {  },
+// 	'hot': {  },
+// };
+
+export
+async function fetchHotPosts(userId: string, cutoffDate: string) {
+	const col = await getCollection(DbCollections.PointTransactions);
+	const results = await col.aggregate<DbPost>([
+		{
+			$match: {
+				type: PointTransactionTypes.postBoost,
+				date: { $gte: cutoffDate },
+			},
+		},
+		{
+			$group: {
+				_id: '$toId',
+				points: { $sum: '$appliedPoints' },
+			},
+		},
+		{
+			$lookup: {
+				from: DbCollections.Posts,
+				localField: '_id',
+				foreignField: '_id',
+				as: DOC_PLACEHOLDER,
+			},
+		},
+		{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
+		{
+			$replaceWith: {
+				$mergeObjects: [
+					`$${DOC_PLACEHOLDER}`,
+					{ points: '$points' },
+				],
+			},
+		},
+		{ $sort: { points: -1 } },
+	]).toArray();
+	const posts = results.map(dbPostToPostFn(userId));
+
+	return Fooo(posts, userId);
+}
+
 export
 async function fetchFeedPosts(userId: string): Promise<GetPostsReturn> {
 	const col = await getCollection(DbCollections.Posts);
@@ -38,15 +89,11 @@ async function fetchFeedPosts(userId: string): Promise<GetPostsReturn> {
 	return Fooo(posts, userId);
 }
 
-// TODO Is there a better way to do this in MongoDB
-const DOC_PLACEHOLDER = 'docTemp';
-
 export
 async function fetchUserBookmarkedPosts(userId: string): Promise<GetPostsReturn> {
 	const col = await getCollection(DbCollections.PostBookmarks);
 
-	const results = await col
-		.aggregate<DbPost>([
+	const results = await col.aggregate<DbPost>([
 		{ $match: { userId } },
 		{ $sort: { date: -1 } },
 		{
@@ -59,8 +106,7 @@ async function fetchUserBookmarkedPosts(userId: string): Promise<GetPostsReturn>
 		},
 		{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
 		{ $replaceRoot: { newRoot: `$${DOC_PLACEHOLDER}` } },
-	])
-		.toArray();
+	]).toArray();
 
 	const posts = results.map(dbPostToPostFn(userId));
 

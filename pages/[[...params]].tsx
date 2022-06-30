@@ -3,13 +3,14 @@ import type { AsyncFnReturnType } from '@common/types';
 import type { ReactNode } from 'react';
 
 import Head from 'next/head';
-import { fetchFeedPosts } from '@common/server/db-calls';
+import { fetchFeedPosts, fetchHotPosts } from '@common/server/db-calls';
 import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
 import { getServerSession } from '@common/server/auth-options';
 import { AppName } from '@common/constants';
 import { HomeSortTabs } from '@components/home-sort-tabs';
+import { subDays } from 'date-fns';
 import {
 	Box,
 	InputAdornment,
@@ -29,7 +30,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	return {
 		props: {
 			session,
-			data: await fetchFeedPosts(userId || ''),
+			data: await fetchHotPosts(userId || '', subDays(new Date(), 2).toISOString()),
 		},
 	};
 };
