@@ -27,6 +27,7 @@ function BottomNav() {
 	const [value, setValue] = useState(0);
 	const user = data?.user;
 	const {
+		asPath,
 		pathname,
 		query,
 	} = router;
@@ -70,7 +71,7 @@ function BottomNav() {
 					<BottomNavigationAction
 						label="Home"
 						icon={
-							Paths.Home === pathname ?
+							['/', '/top', '/new'].includes(asPath) ?
 								<HomeActiveIcon /> :
 								<HomeIcon />
 						}
@@ -106,7 +107,7 @@ function BottomNav() {
 								key="a"
 								label="Bookmarks"
 								icon={
-									Paths.Bookmarks === pathname ?
+									Paths.Bookmarks === asPath ?
 										<BookmarkActiveIcon /> :
 										<BookmarkIcon />
 								}
@@ -121,7 +122,7 @@ function BottomNav() {
 							<BottomNavigationAction
 								label={user.username}
 								icon={
-									Paths.Profile === pathname ?
+									Paths.Profile === asPath ?
 										<ProfileActiveIcon /> :
 										<ProfileIcon />
 								}

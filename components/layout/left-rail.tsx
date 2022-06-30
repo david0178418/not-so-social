@@ -58,11 +58,14 @@ function RailButtonContent(props: Props) {
 	);
 }
 
+// TODO Implement better path matching for active icon
+
 function LeftRail() {
 	const router = useRouter();
 	const { data } = useSession();
 	const {
 		pathname,
+		asPath,
 		query,
 	} = router;
 	const user = data?.user;
@@ -82,7 +85,7 @@ function LeftRail() {
 						<ListItemButton>
 							<RailButtonContent label="Home">
 								{
-									Paths.Home === pathname ?
+									['/', '/top', '/new'].includes(asPath) ?
 										<HomeActiveIcon /> :
 										<HomeIcon />
 								}
@@ -125,7 +128,7 @@ function LeftRail() {
 								<ListItemButton>
 									<RailButtonContent label="Bookmarks" >
 										{
-											Paths.Bookmarks === pathname ?
+											Paths.Bookmarks === asPath ?
 												<BookmarkActiveIcon /> :
 												<BookmarkIcon />
 										}
@@ -142,7 +145,7 @@ function LeftRail() {
 								<ListItemButton>
 									<RailButtonContent label={user.username}>
 										{
-											Paths.Profile === pathname ?
+											Paths.Profile === asPath ?
 												<ProfileActiveIcon /> :
 												<ProfileIcon />
 										}
