@@ -1,5 +1,6 @@
 import { getCollection } from '../mongodb';
 import { DbPost } from '../db-schema';
+import { ObjectId } from 'mongodb';
 import {
 	DbCollections,
 	PointTransactionTypes,
@@ -19,7 +20,6 @@ import {
 	fetchPosts,
 	fetchTopChildPosts,
 } from '.';
-import { ObjectId } from 'mongodb';
 
 // TODO Is there a better way to do this in MongoDB?
 const DOC_PLACEHOLDER = 'docTemp';
