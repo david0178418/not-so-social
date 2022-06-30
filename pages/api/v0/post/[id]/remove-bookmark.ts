@@ -20,7 +20,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		await col.deleteOne(
 			{
-				userId: user.id,
+				userId: new ObjectId(user.id),
 				postId: new ObjectId(postId),
 			},
 		);
