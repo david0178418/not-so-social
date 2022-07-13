@@ -50,40 +50,45 @@ async function fetchFeed(type: keyof typeof Aggregations, userId: string, cutoff
 }
 
 const Aggregations = {
-	async new() {
-		const col = await getCollection(DbCollections.Posts);
-
-		return col.aggregate<DbPost>([{ $sort: { created: -1 } }]).toArray();
-	},
-	async top(cutoffDate: string) {
-		const col = await getCollection(DbCollections.Posts);
-
-		return col.aggregate<DbPost>([
-			{ $sort: { totalPoints: -1 } },
-			{ $match: { created: { $gt: cutoffDate } } },
-		]).toArray();
-	},
-	async bookmarks(userId: string) {
-		const col = await getCollection(DbCollections.PostBookmarks);
-
-		return col.aggregate<DbPost>([
-			{ $match: { userId: new ObjectId(userId) } },
-			{ $sort: { date: -1 } },
-			{
-				$lookup: {
-					from: DbCollections.Posts,
-					localField: 'postId',
-					foreignField: '_id',
-					as: DocPlaceholder,
-				},
-			},
-			{ $unwind: { path: `$${DocPlaceholder}` } },
-			{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
-		]).toArray();
-	},
-	// TODO See how this can be simplified
+	new: getNewPosts,
+	top: getTopPosts,
+	bookmarks: getBookmarkedPosts,
 	hot: getHotPosts,
 };
+
+async function getNewPosts() {
+	const col = await getCollection(DbCollections.Posts);
+
+	return col.aggregate<DbPost>([{ $sort: { created: -1 } }]).toArray();
+}
+
+async function getTopPosts() {
+	const col = await getCollection(DbCollections.Posts);
+
+	return col.aggregate<DbPost>([
+		{ $sort: { totalPoints: -1 } },
+		// { $match: { created: { $gt: cutoffDate } } },
+	]).toArray();
+}
+
+async function getBookmarkedPosts(userId: string) {
+	const col = await getCollection(DbCollections.PostBookmarks);
+
+	return col.aggregate<DbPost>([
+		{ $match: { userId: new ObjectId(userId) } },
+		{ $sort: { date: -1 } },
+		{
+			$lookup: {
+				from: DbCollections.Posts,
+				localField: 'postId',
+				foreignField: '_id',
+				as: DocPlaceholder,
+			},
+		},
+		{ $unwind: { path: `$${DocPlaceholder}` } },
+		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
+	]).toArray();
+}
 
 async function getHotPosts() {
 	const txnCol = await getCollection(DbCollections.PointTransactions);
