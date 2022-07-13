@@ -17,8 +17,8 @@ module.exports = {
 		'plugin:@typescript-eslint/recommended',
 	],
 	env: {
-		'browser': true,
-		'es6': true,
+		browser: true,
+		es6: true,
 	},
 	plugins: [
 		'react-hooks',
@@ -38,6 +38,7 @@ module.exports = {
 		'object-curly-spacing': [ERR, 'always'],
 		'object-property-newline': ERR,
 		'prefer-const': ERR,
+		'quote-props': [ERR, 'as-needed'],
 		'react-hooks/exhaustive-deps': OFF,
 		'react/display-name': OFF,
 		'react/jsx-no-target-blank': OFF,
@@ -45,7 +46,7 @@ module.exports = {
 		'react/react-in-jsx-scope': OFF,
 		'space-before-blocks': ERR,
 		'space-in-parens': [ERR, 'never'],
-		'space-infix-ops': [ERR, { 'int32Hint': true }],
+		'space-infix-ops': [ERR, { int32Hint: true }],
 		indent: OFF,
 		quotes: [WARN, 'single'],
 		semi: ERR,
@@ -57,21 +58,21 @@ module.exports = {
 		'@typescript-eslint/no-shadow': ERR,
 		'@typescript-eslint/no-use-before-define': OFF,
 		'object-curly-newline': [ERR, {
-			'ObjectExpression': {
-				'multiline': true,
-				'minProperties': 2,
+			ObjectExpression: {
+				multiline: true,
+				minProperties: 2,
 			},
-			'ObjectPattern': {
-				'multiline': true,
-				'minProperties': 2,
+			ObjectPattern: {
+				multiline: true,
+				minProperties: 2,
 			},
-			'ImportDeclaration': {
-				'multiline': true,
-				'minProperties': 3,
+			ImportDeclaration: {
+				multiline: true,
+				minProperties: 3,
 			},
-			'ExportDeclaration': {
-				'multiline': true,
-				'minProperties': 3,
+			ExportDeclaration: {
+				multiline: true,
+				minProperties: 3,
 			},
 		}],
 	},

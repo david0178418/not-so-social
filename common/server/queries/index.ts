@@ -45,7 +45,7 @@ async function fetchTopChildPosts(postIds: string[], userId: string): Promise<Po
 		{
 			$group: {
 				_id: '$parentId',
-				post: { '$first': '$$ROOT' },
+				post: { $first: '$$ROOT' },
 			},
 		},
 		{ $replaceRoot: { newRoot: '$post' } },

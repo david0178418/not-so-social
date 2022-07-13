@@ -1,10 +1,7 @@
 import { getCollection } from '../mongodb';
-import { DbPost } from '../db-schema';
+import { DbPointTransaction, DbPost } from '../db-schema';
 import { ObjectId } from 'mongodb';
-import {
-	DbCollections,
-	PointTransactionTypes,
-} from '@common/constants';
+import { DbCollections } from '@common/constants';
 import {
 	isTruthy,
 	unique,
@@ -22,16 +19,12 @@ import {
 } from '.';
 
 // TODO Is there a better way to do this in MongoDB?
-const DOC_PLACEHOLDER = 'docTemp';
+const DocPlaceholder = 'docTemp';
+const PageLimit = 3;
 
 export
 async function fetchFeed(type: keyof typeof Aggregations, userId: string, cutoffDate = '') {
-	const {
-		baseCollection,
-		pipeline,
-	} = Aggregations[type](cutoffDate || userId);
-	const col = await getCollection(baseCollection);
-	const results = await col.aggregate<DbPost>(pipeline).toArray();
+	const results = await Aggregations[type](cutoffDate || userId);
 	const posts = results.map(dbPostToPostFn(userId));
 
 	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
@@ -57,20 +50,23 @@ async function fetchFeed(type: keyof typeof Aggregations, userId: string, cutoff
 }
 
 const Aggregations = {
-	new: () => ({
-		baseCollection: DbCollections.Posts,
-		pipeline: [{ $sort: { created: -1 } }],
-	}),
-	top: (cutoffDate: string) => ({
-		baseCollection: DbCollections.Posts,
-		pipeline: [
+	async new() {
+		const col = await getCollection(DbCollections.Posts);
+
+		return col.aggregate<DbPost>([{ $sort: { created: -1 } }]).toArray();
+	},
+	async top(cutoffDate: string) {
+		const col = await getCollection(DbCollections.Posts);
+
+		return col.aggregate<DbPost>([
 			{ $sort: { totalPoints: -1 } },
 			{ $match: { created: { $gt: cutoffDate } } },
-		],
-	}),
-	bookmarks: (userId: string) => ({
-		baseCollection: DbCollections.PostBookmarks,
-		pipeline: [
+		]).toArray();
+	},
+	async bookmarks(userId: string) {
+		const col = await getCollection(DbCollections.PostBookmarks);
+
+		return col.aggregate<DbPost>([
 			{ $match: { userId: new ObjectId(userId) } },
 			{ $sort: { date: -1 } },
 			{
@@ -78,46 +74,51 @@ const Aggregations = {
 					from: DbCollections.Posts,
 					localField: 'postId',
 					foreignField: '_id',
-					as: DOC_PLACEHOLDER,
+					as: DocPlaceholder,
 				},
 			},
-			{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
-			{ $replaceRoot: { newRoot: `$${DOC_PLACEHOLDER}` } },
-		],
-	}),
-	hot: (cutoffDate: string) => ({
-		baseCollection: DbCollections.PointTransactions,
-		pipeline: [
-			{
-				$match: {
-					type: PointTransactionTypes.postBoost,
-					date: { $gte: cutoffDate },
-				},
-			},
-			{
-				$group: {
-					_id: '$toId',
-					points: { $sum: '$appliedPoints' },
-				},
-			},
-			{
-				$lookup: {
-					from: DbCollections.Posts,
-					localField: '_id',
-					foreignField: '_id',
-					as: DOC_PLACEHOLDER,
-				},
-			},
-			{ $unwind: { path: `$${DOC_PLACEHOLDER}` } },
-			{
-				$replaceWith: {
-					$mergeObjects: [
-						`$${DOC_PLACEHOLDER}`,
-						{ points: '$points' },
-					],
-				},
-			},
-			{ $sort: { points: -1 } },
-		],
-	}),
+			{ $unwind: { path: `$${DocPlaceholder}` } },
+			{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
+		]).toArray();
+	},
+	// TODO See how this can be simplified
+	hot: getHotPosts,
 };
+
+async function getHotPosts() {
+	const txnCol = await getCollection(DbCollections.PointTransactions);
+
+	const txnAgg = await txnCol.aggregate<DbPointTransaction>([
+		{ $sort: { date: -1 } },
+	]);
+
+	const pointRollup: Record<string, number> = {};
+
+	while(await txnAgg.hasNext()) {
+		const doc = await txnAgg.next();
+
+		if(!doc?.postId) {
+			continue;
+		}
+
+		const postId = doc.postId.toString();
+
+		if(!pointRollup[postId]) {
+			if(Object.keys(pointRollup).length === PageLimit) {
+				break;
+			}
+
+			pointRollup[postId] = 0;
+		}
+
+		pointRollup[postId] = pointRollup[postId] + doc.appliedPoints;
+	}
+
+	const postIds = Object.keys(pointRollup).sort((idA, idB) => pointRollup[idA] - pointRollup[idB]);
+
+	const col = await getCollection(DbCollections.Posts);
+
+	return col
+		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
+		.toArray();
+}
