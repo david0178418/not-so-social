@@ -1,6 +1,6 @@
 import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
-import { getCollection } from '../mongodb';
+import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import {
 	DbCollections,
@@ -11,13 +11,13 @@ import {
 	DbUser,
 	DbPost,
 	DbUserActivity,
-} from '../db-schema';
+} from '@common/server/db-schema';
 import {
 	dbPostToPostFn,
 	postToBookmarkedPostFn,
 	postListsToIdList,
 	dbPointTransactionToPointTransaction,
-} from '../transforms';
+} from '@common/server/transforms';
 
 export
 async function fetchPost(postId: string, userId = ''): Promise<Post | null> {

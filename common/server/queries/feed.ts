@@ -1,5 +1,5 @@
-import { getCollection } from '../mongodb';
-import { DbPointTransaction, DbPost } from '../db-schema';
+import { getCollection } from '@common/server/mongodb';
+import { DbPointTransaction, DbPost } from '@common/server/db-schema';
 import { ObjectId } from 'mongodb';
 import { DbCollections } from '@common/constants';
 import {
