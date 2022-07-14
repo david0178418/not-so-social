@@ -12,6 +12,7 @@ import {
 	DbPointTransaction,
 	DbUserActivity,
 	DbUserMeta,
+	DbPostTextGram,
 } from './db-schema';
 
 const uri = process.env.MONGODB_URI || '';
@@ -45,6 +46,7 @@ if (process.env.NODE_ENV === 'development') {
 
 /* eslint-disable @typescript-eslint/indent */
 type CollectionType<T> =
+	T extends DbCollections.Grams ? DbPostTextGram :
 	T extends DbCollections.Users ? DbUser :
 	T extends DbCollections.PostBookmarks ? DbBookmark :
 	T extends DbCollections.PointTransactions ? DbPointTransaction :

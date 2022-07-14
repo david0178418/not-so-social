@@ -2,7 +2,7 @@ import { Post } from '@common/types';
 import { BookmarkToggle } from './bookmark-toggle';
 import { formatCompactNumber, urlJoin } from '@common/utils';
 import { useIsLoggedIn } from '@common/hooks';
-import { writeToClipboard } from '@common/client/utils';
+import { writeToClipboard } from '@common/client/client-utils';
 import { Paths } from '@common/constants';
 import Link from 'next/link';
 import { DropdownMenu } from '@components/dropdown-menu';

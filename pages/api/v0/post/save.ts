@@ -6,9 +6,10 @@ import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import { ObjectId } from 'mongodb';
 import { ObjectIdValidation } from '@common/server/validations';
-import { DbPost } from '@common/server/db-schema';
+import { DbPost, DbPostTextGram } from '@common/server/db-schema';
 import { getServerSession } from '@common/server/auth-options';
 import { fetchUserBalance } from '@common/server/queries';
+import { grammit } from '@common/server/server-utils';
 import {
 	DbCollections,
 	MaxPostCost,
@@ -96,7 +97,14 @@ interface PostContent {
 }
 
 async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = false) {
-	const postCol = await getCollection(DbCollections.Posts);
+	const [
+		gramCol,
+		postCol,
+	] = await Promise.all([
+		getCollection(DbCollections.Grams),
+		getCollection(DbCollections.Posts),
+	]);
+
 	const now = nowISOString();
 	const {
 		parentId,
@@ -114,6 +122,11 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 		_id: newPostId,
 	};
 
+	const newPostGram: DbPostTextGram = {
+		postId: newPostId,
+		grams: grammit(`${newPostContent.title} ${newPostContent.body}`),
+	};
+
 	if(parentId) {
 		newPost.parentId = new ObjectId(parentId);
 	}
@@ -128,6 +141,7 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 
 	const calls: Promise<any>[] = [
 		postCol.insertOne(newPost),
+		gramCol.insertOne(newPostGram),
 		pointPostCol
 			.insertOne({
 				type: PointTransactionTypes.postBoost,

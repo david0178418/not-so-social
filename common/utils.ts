@@ -89,7 +89,6 @@ function isTruthy<T>(val: T | null | undefined): val is T {
 	return !!val;
 }
 
-
 export
 function unique<T>(arr: T[]) {
 	return Array.from(new Set(arr));

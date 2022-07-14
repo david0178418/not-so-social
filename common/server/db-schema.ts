@@ -15,6 +15,12 @@ type SharedPostProps = Pick<Post,
 >;
 
 export
+interface DbPostTextGram {
+	postId: ObjectId;
+	grams: string;
+}
+
+export
 interface DbPost extends SharedPostProps {
 	_id?: ObjectId;
 	ownerId: ObjectId;
@@ -46,6 +52,7 @@ export
 interface DbBookmark {
 	userId: ObjectId;
 	postId: ObjectId;
+	date: string;
 }
 
 export
