@@ -13,7 +13,7 @@ function grammit(rawText: string, gramSizeLimit = 3): string {
 		.filter(isNotStopWord)
 		.flatMap(word => word.split(''));
 
-	if(spl.length < 3) {
+	if(spl.length <= gramSizeLimit) {
 		return spl.join('');
 	}
 
