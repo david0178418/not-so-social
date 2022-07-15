@@ -1,7 +1,11 @@
 import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 import { getCollection } from '@common/server/mongodb';
-import { nowISOString } from '@common/utils';
+import {
+	isTruthy,
+	nowISOString,
+	unique,
+} from '@common/utils';
 import {
 	DbCollections,
 	PointTransactionTypes,
@@ -17,6 +21,7 @@ import {
 	postToBookmarkedPostFn,
 	postListsToIdList,
 	dbPointTransactionToPointTransaction,
+	rollupPostsToMapFn,
 } from '@common/server/transforms';
 
 export
@@ -172,4 +177,30 @@ async function fetchUserBalance(userId: ObjectId) {
 	const result = await col.findOne({ _id: userId });
 
 	return result?.pointBalance || 0;
+}
+
+export
+async function preparePostsForClient(results: DbPost[], userId: string) {
+	const posts = results.map(dbPostToPostFn(userId));
+
+	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
+	const postIds = posts.map(p => p._id) as string[];
+
+	const parentPosts = await fetchPosts(parentIds, userId);
+	const responsePosts = await fetchTopChildPosts(postIds, userId);
+	const allIds = postListsToIdList(posts, parentPosts, responsePosts);
+
+	const postToBookmarkedPost = postToBookmarkedPostFn(
+		await fetchBookmarksFromPostIds(userId, allIds)
+	);
+
+	return {
+		posts: posts.map(postToBookmarkedPost),
+		parentPostMap: parentPosts
+			.map(postToBookmarkedPost)
+			.reduce(rollupPostsToMapFn(), {}),
+		responsePostMap: responsePosts
+			.map(postToBookmarkedPost)
+			.reduce(rollupPostsToMapFn('parentId'), {}),
+	};
 }

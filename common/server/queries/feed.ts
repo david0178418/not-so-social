@@ -1,52 +1,16 @@
 import { getCollection } from '@common/server/mongodb';
-import { DbPointTransaction, DbPost } from '@common/server/db-schema';
 import { ObjectId } from 'mongodb';
-import { DbCollections } from '@common/constants';
-import {
-	isTruthy,
-	unique,
-} from '@common/utils';
-import {
-	dbPostToPostFn,
-	postToBookmarkedPostFn,
-	postListsToIdList,
-	rollupPostsToMapFn,
-} from '@common/server/transforms';
-import {
-	fetchBookmarksFromPostIds,
-	fetchPosts,
-	fetchTopChildPosts,
-} from '.';
+import { DbPointTransaction, DbPost } from '@common/server/db-schema';
+import { DbCollections, PageSize } from '@common/constants';
+import { preparePostsForClient } from '.';
 
 // TODO Is there a better way to do this in MongoDB?
 const DocPlaceholder = 'docTemp';
-const PageLimit = 3;
 
 export
 async function fetchFeed(type: keyof typeof Aggregations, userId: string, cutoffDate = '') {
 	const results = await Aggregations[type](cutoffDate || userId);
-	const posts = results.map(dbPostToPostFn(userId));
-
-	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
-	const postIds = posts.map(p => p._id) as string[];
-
-	const parentPosts = await fetchPosts(parentIds, userId);
-	const responsePosts = await fetchTopChildPosts(postIds, userId);
-	const allIds = postListsToIdList(posts, parentPosts, responsePosts);
-
-	const postToBookmarkedPost = postToBookmarkedPostFn(
-		await fetchBookmarksFromPostIds(userId, allIds)
-	);
-
-	return {
-		posts: posts.map(postToBookmarkedPost),
-		parentPostMap: parentPosts
-			.map(postToBookmarkedPost)
-			.reduce(rollupPostsToMapFn(), {}),
-		responsePostMap: responsePosts
-			.map(postToBookmarkedPost)
-			.reduce(rollupPostsToMapFn('parentId'), {}),
-	};
+	return preparePostsForClient(results, userId);
 }
 
 const Aggregations = {
@@ -109,7 +73,7 @@ async function getHotPosts() {
 		const postId = doc.postId.toString();
 
 		if(!pointRollup[postId]) {
-			if(Object.keys(pointRollup).length === PageLimit) {
+			if(Object.keys(pointRollup).length === PageSize) {
 				break;
 			}
 
