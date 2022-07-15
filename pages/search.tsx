@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { AsyncFnReturnType } from '@common/types';
 import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
@@ -7,6 +6,7 @@ import { getServerSession } from '@common/server/auth-options';
 import { fetchSearchFeed } from '@common/server/queries/search';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
+import { NextSeo } from 'next-seo';
 import {
 	AppName,
 	MaxSearchTermSize,
@@ -58,13 +58,21 @@ const SearchPage: NextPage<Props> = (props) => {
 		},
 	} = props;
 
+	const title = `${AppName} - Search Results`;
+	const description = `"${searchTerm}" Search Results - ${AppName}`;
+
 	return (
 		<>
-			<Head>
-				<title>{AppName} - Search Results</title>
-				<meta name="description" content={`${AppName} - Search Results for "${searchTerm}"`} />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
+			<NextSeo
+				title={title}
+				description={description}
+				openGraph={{
+					url: `https://www.bublupper.com${Paths.Search}?q=${searchTerm}`,
+					title: title,
+					description: description,
+					site_name: AppName,
+				}}
+			/>
 			<ScrollContent
 				header={
 					<Box sx={{

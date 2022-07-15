@@ -2,7 +2,6 @@ import type { GetServerSideProps, NextPage } from 'next';
 import type { AsyncFnReturnType } from '@common/types';
 import { ReactNode } from 'react';
 
-import Head from 'next/head';
 import { fetchFeed } from '@common/server/queries/feed';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
@@ -12,6 +11,7 @@ import { HomeSortTabs } from '@components/home-sort-tabs';
 import { subDays } from 'date-fns';
 import { Box } from '@mui/material';
 import { SearchForm } from '@components/search-form';
+import { NextSeo } from 'next-seo';
 
 interface Props {
 	children?: ReactNode;
@@ -61,11 +61,16 @@ const HomePage: NextPage<Props> = (props) => {
 
 	return (
 		<>
-			<Head>
-				<title>{AppName}</title>
-				<meta name="description" content={AppName} />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
+			<NextSeo
+				title={AppName}
+				description={AppName}
+				openGraph={{
+					url: 'https://www.bublupper.com/',
+					title: AppName,
+					description: AppName,
+					site_name: AppName,
+				}}
+			/>
 			<ScrollContent
 				header={
 					<Box sx={{
