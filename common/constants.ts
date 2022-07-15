@@ -36,14 +36,14 @@ const PageSize = 10;
 
 export
 enum Paths {
+	Bookmarks = '/bookmarks',
 	Home = '/',
 	HomeNew = '/new',
 	HomeTop = '/top',
 	Post = '/p',
-	Bookmarks = '/bookmarks',
-	UserBoosts = '/u/b',
-	UserPosts = '/u/p',
 	Profile = '/profile',
+	ProfileBoosts = '/profile/boosts',
+	ProfilePosts = '/profile/posts',
 	Search = '/search',
 	Settings = '/settings',
 }
