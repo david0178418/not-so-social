@@ -29,6 +29,9 @@ export
 const PasswordSaltLength = 10;
 
 export
+const MaxSearchTermSize = 100;
+
+export
 const PageSize = 10;
 
 export

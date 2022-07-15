@@ -2,16 +2,16 @@ import Head from 'next/head';
 import { fetchFeed } from '@common/server/queries/feed';
 import { AsyncFnReturnType } from '@common/types';
 import { FeedPost } from '@components/feed-post';
-import { SearchIcon } from '@components/icons';
-import { ScrollContent } from '@components/scroll-content';
 import { GetServerSideProps, NextPage } from 'next';
 import { getServerSession } from '@common/server/auth-options';
-import { AppName, Paths } from '@common/constants';
+import { Box } from '@mui/material';
+import { SearchForm } from '@components/search-form';
+import { ScrollContent } from '@components/scroll-content';
 import {
-	Box,
-	InputAdornment,
-	TextField,
-} from '@mui/material';
+	AppName,
+	MaxSearchTermSize,
+	Paths,
+} from '@common/constants';
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
@@ -26,12 +26,19 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 		};
 	}
 
-	const feed = await fetchFeed('bookmarks', session.user.id);
+	const rawTerm = ctx.query?.q || '';
+	const foo = Array.isArray(rawTerm) ?
+		rawTerm.join() :
+		rawTerm;
+	const searchTerm = foo.substring(0, MaxSearchTermSize);
+
+	const feed = await fetchFeed('bookmarks', session.user.id, searchTerm);
 
 	return {
 		props: {
 			session,
 			feed,
+			searchTerm,
 			// posts: userId ?
 			// 	await fetchUserBookmarkedPosts(userId) :
 			// 	[],
@@ -41,10 +48,12 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
 interface Props {
 	feed: AsyncFnReturnType<typeof fetchFeed>;
+	searchTerm: string;
 }
 
 const BookmarksPage: NextPage<Props> = (props) => {
 	const {
+		searchTerm,
 		feed: {
 			parentPostMap,
 			posts,
@@ -77,16 +86,10 @@ const BookmarksPage: NextPage<Props> = (props) => {
 							lg: 20,
 						},
 					}}>
-						<TextField
-							fullWidth
+						<SearchForm
+							searchPath={Paths.Bookmarks}
 							placeholder="Search Bookmarks"
-							InputProps={{
-								endAdornment: (
-									<InputAdornment position="end">
-										<SearchIcon />
-									</InputAdornment>
-								),
-							}}
+							value={searchTerm}
 						/>
 					</Box>
 				}

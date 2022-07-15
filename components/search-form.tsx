@@ -8,6 +8,7 @@ import { SearchIcon } from './icons';
 interface Props {
 	placeholder?: string;
 	value?: string;
+	searchPath?: string;
 }
 
 export
@@ -16,14 +17,21 @@ function SearchForm(props: Props) {
 	const {
 		placeholder = `Search ${AppName}`,
 		value: searchTerm = '',
+		searchPath = Paths.Search,
 	} = props;
 	const [searchQueary, setSearchQuery] =  useState(searchTerm);
 	const { push } = useRouter();
 
 	function handleSubmit() {
+		const queryParams: any = {};
+
+		if(searchQueary) {
+			queryParams.q = searchQueary;
+		}
+
 		push({
-			pathname: Paths.Search,
-			query: { q: searchQueary },
+			pathname: searchPath,
+			query: queryParams,
 		});
 	}
 

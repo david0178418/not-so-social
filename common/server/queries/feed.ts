@@ -3,13 +3,14 @@ import { ObjectId } from 'mongodb';
 import { DbPointTransaction, DbPost } from '@common/server/db-schema';
 import { DbCollections, PageSize } from '@common/constants';
 import { preparePostsForClient } from '.';
+import { grammit } from '../server-utils';
 
 // TODO Is there a better way to do this in MongoDB?
 const DocPlaceholder = 'docTemp';
 
 export
-async function fetchFeed(type: keyof typeof Aggregations, userId: string, cutoffDate = '') {
-	const results = await Aggregations[type](cutoffDate || userId);
+async function fetchFeed(type: keyof typeof Aggregations, userId: string, ...args: any[]) {
+	const results = await Aggregations[type](userId, ...args);
 	return preparePostsForClient(results, userId);
 }
 
@@ -35,10 +36,32 @@ async function getTopPosts() {
 	]).toArray();
 }
 
-async function getBookmarkedPosts(userId: string) {
-	const col = await getCollection(DbCollections.PostBookmarks);
+async function getBookmarkedPosts(userId: string, searchQuery?: string) {
+	const col = await (searchQuery ?
+		getCollection(DbCollections.Grams) :
+		getCollection(DbCollections.PostBookmarks));
+
+	const searchStages: any[] = [];
+
+	if(searchQuery) {
+		[
+			{ $match: { $text: { $search: grammit(searchQuery) } } },
+			{
+				$lookup: {
+					from: DbCollections.PostBookmarks,
+					localField: 'postId',
+					foreignField: 'postId',
+					as: DocPlaceholder,
+				},
+			},
+			{ $unwind: { path: `$${DocPlaceholder}` } },
+			{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
+			{ $sort: { score: { $meta: 'textScore' } } },
+		].forEach(x => searchStages.push(x));
+	}
 
 	return col.aggregate<DbPost>([
+		...searchStages,
 		{ $match: { userId: new ObjectId(userId) } },
 		{ $sort: { date: -1 } },
 		{
