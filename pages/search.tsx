@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { fetchFeed } from '@common/server/queries/feed';
 import { AsyncFnReturnType } from '@common/types';
 import { FeedPost } from '@components/feed-post';
 import { SearchIcon } from '@components/icons';
@@ -7,17 +6,44 @@ import { ScrollContent } from '@components/scroll-content';
 import { GetServerSideProps, NextPage } from 'next';
 import { getServerSession } from '@common/server/auth-options';
 import { AppName, Paths } from '@common/constants';
+import { fetchSearchFeed } from '@common/server/queries/search';
+import Joi from 'joi';
 import {
 	Box,
 	InputAdornment,
 	TextField,
 } from '@mui/material';
 
+
+interface Schema {
+	q: string;
+}
+
+const schema = Joi.object<Schema>({
+	q: Joi
+		.string()
+		.min(3)
+		.max(100)
+		.required(),
+});
+
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-	const session = await getServerSession(ctx.req, ctx.res);
+	try {
+		const { q: searchTerm } = await schema.validateAsync(ctx.query);
 
-	if(!session) {
+		const session = await getServerSession(ctx.req, ctx.res);
+		const userId = session?.user.id || '';
+		const feed = await fetchSearchFeed(searchTerm, userId);
+
+		return {
+			props: {
+				session,
+				searchTerm,
+				feed,
+			},
+		};
+	} catch {
 		return {
 			redirect: {
 				permanent: false,
@@ -25,26 +51,16 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 			},
 		};
 	}
-
-	const feed = await fetchFeed('bookmarks', session.user.id);
-
-	return {
-		props: {
-			session,
-			feed,
-			// posts: userId ?
-			// 	await fetchUserBookmarkedPosts(userId) :
-			// 	[],
-		},
-	};
 };
 
 interface Props {
-	feed: AsyncFnReturnType<typeof fetchFeed>;
+	searchTerm: string;
+	feed: AsyncFnReturnType<typeof fetchSearchFeed>;
 }
 
-const BookmarksPage: NextPage<Props> = (props) => {
+const SearchPage: NextPage<Props> = (props) => {
 	const {
+		searchTerm,
 		feed: {
 			parentPostMap,
 			posts,
@@ -55,8 +71,8 @@ const BookmarksPage: NextPage<Props> = (props) => {
 	return (
 		<>
 			<Head>
-				<title>{AppName}</title>
-				<meta name="description" content={`${AppName} - Bookmarks`} />
+				<title>{AppName} - Search Results</title>
+				<meta name="description" content={`${AppName} - Search Results for "${searchTerm}"`} />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent
@@ -79,7 +95,8 @@ const BookmarksPage: NextPage<Props> = (props) => {
 					}}>
 						<TextField
 							fullWidth
-							placeholder="Search Bookmarks"
+							placeholder={`Search ${AppName}`}
+							defaultValue={searchTerm}
 							InputProps={{
 								endAdornment: (
 									<InputAdornment position="end">
@@ -112,4 +129,4 @@ const BookmarksPage: NextPage<Props> = (props) => {
 	);
 };
 
-export default BookmarksPage;
+export default SearchPage;

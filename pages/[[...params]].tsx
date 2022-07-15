@@ -19,10 +19,8 @@ import {
 
 interface Props {
 	children?: ReactNode;
-	data: {
-		feedType: string;
-		feed: AsyncFnReturnType<typeof fetchFeed>;
-	};
+	feedType: string;
+	feed: AsyncFnReturnType<typeof fetchFeed>;
 }
 
 export
@@ -36,22 +34,18 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 	return {
 		props: {
 			session,
-			data: {
-				feedType,
-				feed: await fetchFeed(feedType, userId || '', subDays(new Date(), 7).toISOString()),
-			},
+			feedType,
+			feed: await fetchFeed(feedType, userId || '', subDays(new Date(), 7).toISOString()),
 		},
 	};
 };
 
 const HomePage: NextPage<Props> = (props) => {
 	const {
-		data: {
-			feed: {
-				parentPostMap,
-				posts,
-				responsePostMap,
-			},
+		feed: {
+			parentPostMap,
+			posts,
+			responsePostMap,
 		},
 	} = props;
 
