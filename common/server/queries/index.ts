@@ -96,7 +96,9 @@ async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedP
 		const allIds = postListsToIdList([post, parentPost], responses);
 
 		const postToBookmarkedPost = postToBookmarkedPostFn(
-			await fetchBookmarksFromPostIds(userId, allIds)
+			userId ?
+				await fetchBookmarksFromPostIds(userId, allIds) :
+				[]
 		);
 
 		return {
@@ -191,7 +193,9 @@ async function preparePostsForClient(results: DbPost[], userId: string) {
 	const allIds = postListsToIdList(posts, parentPosts, responsePosts);
 
 	const postToBookmarkedPost = postToBookmarkedPostFn(
-		await fetchBookmarksFromPostIds(userId, allIds)
+		userId ?
+			await fetchBookmarksFromPostIds(userId, allIds) :
+			[]
 	);
 
 	return {
