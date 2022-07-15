@@ -28,6 +28,8 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 
 	const { params = ['hot'] } = ctx.params;
 
+	console.log('params', params);
+
 	if(!ValidFeedTypes.includes(params[0])) {
 		return {
 			redirect: {
