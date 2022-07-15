@@ -7,9 +7,13 @@ import { BackIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
 import { getServerSession } from '@common/server/auth-options';
-import { AppName, UnicodeChars } from '@common/constants';
 import { fetchPost, fetchPostTransactions } from '@common/server/queries';
 import { formatDate } from '@common/utils';
+import {
+	AppName,
+	Paths,
+	UnicodeChars,
+} from '@common/constants';
 import {
 	Box,
 	IconButton,
@@ -20,10 +24,8 @@ import {
 } from '@mui/material';
 
 interface Props {
-	data: {
-		post: AsyncFnReturnType<typeof fetchPost>;
-		transactions: AsyncFnReturnType<typeof fetchPostTransactions>;
-	};
+	post: AsyncFnReturnType<typeof fetchPost>;
+	transactions: AsyncFnReturnType<typeof fetchPostTransactions>;
 }
 
 interface Params extends ParsedUrlQuery {
@@ -47,22 +49,18 @@ const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 	return {
 		props: {
 			session,
-			data: {
-				post,
-				transactions,
-			},
+			post,
+			transactions,
 		},
 	};
 };
 
 const PostPointsPage: NextPage<Props> = (props) => {
-	const routeBack = useRouteBackDefault();
 	const {
-		data: {
-			post,
-			transactions,
-		},
+		post,
+		transactions,
 	} = props;
+	const routeBack = useRouteBackDefault(`${Paths.Post}/${post?._id}`);
 
 	return (
 		<>
