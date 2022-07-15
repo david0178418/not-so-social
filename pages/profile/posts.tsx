@@ -21,7 +21,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 		return {
 			redirect: {
 				permanent: false,
-				destination: Paths.Bookmarks,
+				destination: Paths.ProfilePosts,
 			},
 		};
 	}
@@ -32,7 +32,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 		rawTerm;
 	const searchTerm = foo.substring(0, MaxSearchTermSize);
 
-	const feed = await fetchFeed('bookmarks', session.user.id, searchTerm);
+	const feed = await fetchFeed('myPosts', session.user.id, searchTerm);
 
 	return {
 		props: {
@@ -51,7 +51,7 @@ interface Props {
 	searchTerm: string;
 }
 
-const BookmarksPage: NextPage<Props> = (props) => {
+const ProfilePostsPage: NextPage<Props> = (props) => {
 	const {
 		searchTerm,
 		feed: {
@@ -65,7 +65,7 @@ const BookmarksPage: NextPage<Props> = (props) => {
 		<>
 			<Head>
 				<title>{AppName}</title>
-				<meta name="description" content={`${AppName} - Bookmarks`} />
+				<meta name="description" content={`${AppName} - My Posts`} />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent
@@ -87,8 +87,8 @@ const BookmarksPage: NextPage<Props> = (props) => {
 						},
 					}}>
 						<SearchForm
-							searchPath={Paths.Bookmarks}
-							placeholder="Search Bookmarks"
+							searchPath={Paths.ProfilePosts}
+							placeholder="Search My Posts"
 							value={searchTerm}
 						/>
 					</Box>
@@ -123,4 +123,4 @@ const BookmarksPage: NextPage<Props> = (props) => {
 	);
 };
 
-export default BookmarksPage;
+export default ProfilePostsPage;

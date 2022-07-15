@@ -18,6 +18,7 @@ const Aggregations = {
 	new: getNewPosts,
 	top: getTopPosts,
 	bookmarks: getBookmarkedPosts,
+	myPosts: getMyPosts,
 	hot: getHotPosts,
 };
 
@@ -36,6 +37,7 @@ async function getTopPosts() {
 	]).toArray();
 }
 
+// TODO Clean this up
 async function getBookmarkedPosts(userId: string, searchQuery?: string) {
 	const col = await (searchQuery ?
 		getCollection(DbCollections.Grams) :
@@ -58,12 +60,14 @@ async function getBookmarkedPosts(userId: string, searchQuery?: string) {
 			{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 			{ $sort: { score: { $meta: 'textScore' } } },
 		].forEach(x => searchStages.push(x));
+	} else {
+		searchStages.push({ $sort: { date: -1 } });
+
 	}
 
 	return col.aggregate<DbPost>([
 		...searchStages,
 		{ $match: { userId: new ObjectId(userId) } },
-		{ $sort: { date: -1 } },
 		{
 			$lookup: {
 				from: DbCollections.Posts,
@@ -74,6 +78,39 @@ async function getBookmarkedPosts(userId: string, searchQuery?: string) {
 		},
 		{ $unwind: { path: `$${DocPlaceholder}` } },
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
+	]).toArray();
+}
+
+// TODO Clean this up
+async function getMyPosts(userId: string, searchQuery?: string) {
+	const col = await (searchQuery ?
+		getCollection(DbCollections.Grams) :
+		getCollection(DbCollections.Posts));
+
+	const searchStages: any[] = [];
+
+	if(searchQuery) {
+		[
+			{ $match: { $text: { $search: grammit(searchQuery) } } },
+			{
+				$lookup: {
+					from: DbCollections.Posts,
+					localField: 'postId',
+					foreignField: '_id',
+					as: DocPlaceholder,
+				},
+			},
+			{ $unwind: { path: `$${DocPlaceholder}` } },
+			{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
+			{ $sort: { score: { $meta: 'textScore' } } },
+		].forEach(x => searchStages.push(x));
+	} else {
+		searchStages.push({ $sort: { date: -1 } });
+	}
+
+	return col.aggregate<DbPost>([
+		...searchStages,
+		{ $match: { ownerId: new ObjectId(userId) } },
 	]).toArray();
 }
 
