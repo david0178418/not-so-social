@@ -1,36 +1,24 @@
 import Head from 'next/head';
 import { AsyncFnReturnType } from '@common/types';
 import { FeedPost } from '@components/feed-post';
-import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { GetServerSideProps, NextPage } from 'next';
 import { getServerSession } from '@common/server/auth-options';
 import { AppName, Paths } from '@common/constants';
 import { fetchSearchFeed } from '@common/server/queries/search';
-import Joi from 'joi';
-import {
-	Box,
-	InputAdornment,
-	TextField,
-} from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { SearchForm } from '@components/search-form';
 
-
-interface Schema {
-	q: string;
-}
-
-const schema = Joi.object<Schema>({
-	q: Joi
-		.string()
-		.min(3)
-		.max(100)
-		.required(),
-});
+const MaxSearchTermSize = 100;
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	try {
-		const { q: searchTerm } = await schema.validateAsync(ctx.query);
+		const rawTerm = ctx.query?.q || '';
+		const foo = Array.isArray(rawTerm) ?
+			rawTerm.join() :
+			rawTerm;
+		const searchTerm = foo.substring(0, MaxSearchTermSize);
 
 		const session = await getServerSession(ctx.req, ctx.res);
 		const userId = session?.user.id || '';
@@ -93,21 +81,19 @@ const SearchPage: NextPage<Props> = (props) => {
 							lg: 20,
 						},
 					}}>
-						<TextField
-							fullWidth
+						<SearchForm
 							placeholder={`Search ${AppName}`}
-							defaultValue={searchTerm}
-							InputProps={{
-								endAdornment: (
-									<InputAdornment position="end">
-										<SearchIcon />
-									</InputAdornment>
-								),
-							}}
+							value={searchTerm}
 						/>
 					</Box>
 				}
 			>
+				<Typography>
+					{posts.length ?
+						`Search Results for "${searchTerm}"` :
+						`No Results for "${searchTerm}"`
+					}
+				</Typography>
 				{posts.map(p => (
 					<FeedPost
 						key={p._id}

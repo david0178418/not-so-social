@@ -41,6 +41,7 @@ enum Paths {
 	UserBoosts = '/u/b',
 	UserPosts = '/u/p',
 	Profile = '/profile',
+	Search = '/search',
 	Settings = '/settings',
 }
 
