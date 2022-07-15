@@ -5,6 +5,9 @@ export
 const MongoDbName = 'pinboard';
 
 export
+const BaseUrl = 'https://www.bublupper.com';
+
+export
 const MinPostCost = 10;
 
 export

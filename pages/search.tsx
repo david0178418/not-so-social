@@ -9,6 +9,7 @@ import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
 import {
 	AppName,
+	BaseUrl,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
@@ -67,7 +68,7 @@ const SearchPage: NextPage<Props> = (props) => {
 				title={title}
 				description={description}
 				openGraph={{
-					url: `https://www.bublupper.com${Paths.Search}?q=${searchTerm}`,
+					url: `${BaseUrl}${Paths.Search}?q=${searchTerm}`,
 					title: title,
 					description: description,
 					site_name: AppName,

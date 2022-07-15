@@ -6,12 +6,16 @@ import { fetchFeed } from '@common/server/queries/feed';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
 import { getServerSession } from '@common/server/auth-options';
-import { AppName, Paths } from '@common/constants';
 import { HomeSortTabs } from '@components/home-sort-tabs';
 import { subDays } from 'date-fns';
 import { Box } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
+import {
+	AppName,
+	BaseUrl,
+	Paths,
+} from '@common/constants';
 
 interface Props {
 	children?: ReactNode;
@@ -65,7 +69,7 @@ const HomePage: NextPage<Props> = (props) => {
 				title={AppName}
 				description={AppName}
 				openGraph={{
-					url: 'https://www.bublupper.com/',
+					url: BaseUrl,
 					title: AppName,
 					description: AppName,
 					site_name: AppName,

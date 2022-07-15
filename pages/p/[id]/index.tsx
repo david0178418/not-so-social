@@ -9,10 +9,13 @@ import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
 import { getServerSession } from '@common/server/auth-options';
-import {
-	AppName, Paths, UnicodeChars,
-} from '@common/constants';
 import { NextSeo } from 'next-seo';
+import {
+	AppName,
+	BaseUrl,
+	Paths,
+	UnicodeChars,
+} from '@common/constants';
 import {
 	Box,
 	IconButton,
@@ -65,7 +68,7 @@ const PostPage: NextPage<Props> = (props) => {
 				title={title}
 				description={description}
 				openGraph={{
-					url: `https://bublupper.com${Paths.Post}/${post?._id}`,
+					url: `${BaseUrl}${Paths.Post}/${post?._id}`,
 					title,
 					description,
 					site_name: AppName,
