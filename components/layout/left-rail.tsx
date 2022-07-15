@@ -17,6 +17,8 @@ import {
 	LoginIcon,
 	ProfileIcon,
 	ProfileActiveIcon,
+	PostIcon,
+	PostActiveIcon,
 } from '@components/icons';
 import {
 	Fab,
@@ -120,6 +122,23 @@ function LeftRail() {
 				)}
 				{!!user && (
 					<>
+						<ListItem disablePadding>
+							<Link
+								shallow
+								passHref
+								href={Paths.ProfilePosts}
+							>
+								<ListItemButton>
+									<RailButtonContent label="My Posts">
+										{
+											Paths.ProfilePosts === asPath ?
+												<PostActiveIcon /> :
+												<PostIcon />
+										}
+									</RailButtonContent>
+								</ListItemButton>
+							</Link>
+						</ListItem>
 						<ListItem disablePadding>
 							<Link
 								shallow
