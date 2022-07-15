@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
 import {
 	AppName,
+	HomePaths,
 	ModalActions,
 	Paths,
 } from '@common/constants';
@@ -85,7 +86,7 @@ function LeftRail() {
 						<ListItemButton>
 							<RailButtonContent label="Home">
 								{
-									['/', '/top', '/new'].includes(asPath) ?
+									HomePaths.includes(asPath as any) ?
 										<HomeActiveIcon /> :
 										<HomeIcon />
 								}

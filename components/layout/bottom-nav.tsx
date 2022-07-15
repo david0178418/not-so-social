@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import { ModalActions, Paths } from '@common/constants';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import {
+	HomePaths,
+	ModalActions,
+	Paths,
+} from '@common/constants';
 import {
 	BottomNavigation,
 	BottomNavigationAction,
@@ -71,7 +75,7 @@ function BottomNav() {
 					<BottomNavigationAction
 						label="Home"
 						icon={
-							['/', '/top', '/new'].includes(asPath) ?
+							HomePaths.includes(asPath as any) ?
 								<HomeActiveIcon /> :
 								<HomeIcon />
 						}

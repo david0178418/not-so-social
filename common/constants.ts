@@ -49,6 +49,20 @@ enum Paths {
 }
 
 export
+const HomePaths = [
+	Paths.Home,
+	Paths.HomeTop,
+	Paths.HomeNew,
+];
+
+export
+const ProfilePaths = [
+	Paths.Profile,
+	Paths.ProfileBoosts,
+	Paths.ProfilePosts,
+];
+
+export
 const IS_SSR = typeof window === 'undefined';
 
 export
