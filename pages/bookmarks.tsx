@@ -6,12 +6,12 @@ import { SearchIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { GetServerSideProps, NextPage } from 'next';
 import { getServerSession } from '@common/server/auth-options';
+import { AppName, Paths } from '@common/constants';
 import {
 	Box,
 	InputAdornment,
 	TextField,
 } from '@mui/material';
-import { AppName, Paths } from '@common/constants';
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
