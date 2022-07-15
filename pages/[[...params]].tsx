@@ -7,7 +7,7 @@ import { fetchFeed } from '@common/server/queries/feed';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
 import { getServerSession } from '@common/server/auth-options';
-import { AppName, Paths } from '@common/constants';
+import { AppName } from '@common/constants';
 import { HomeSortTabs } from '@components/home-sort-tabs';
 import { subDays } from 'date-fns';
 import { Box } from '@mui/material';
@@ -27,17 +27,7 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 	const userId = session?.user.id || '';
 
 	const { params = ['hot'] } = ctx.params;
-
-	if(!ValidFeedTypes.includes(params[0])) {
-		return {
-			redirect: {
-				permanent: false,
-				destination: Paths.Home,
-			},
-		};
-	}
-
-	const feedType = params[0];
+	const feedType = ValidFeedTypes.includes(params[0]) ? params[0] : 'hot';
 
 	return {
 		props: {
