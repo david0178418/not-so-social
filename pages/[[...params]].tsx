@@ -28,9 +28,11 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 
 	const { params = ['hot'] } = ctx.params;
 
-	console.log('params', params);
+	// Compensate for some weird vercel behavior where "index" is being
+	// passed as the path parameter rather than nothing, as expected.
+	const feedType = (params[0] === 'index') ? 'hot' : params[0];
 
-	if(!ValidFeedTypes.includes(params[0])) {
+	if(!ValidFeedTypes.includes(feedType)) {
 		return {
 			redirect: {
 				permanent: false,
@@ -38,8 +40,6 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 			},
 		};
 	}
-
-	const feedType = params[0];
 
 	return {
 		props: {
