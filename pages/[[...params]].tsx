@@ -19,13 +19,15 @@ interface Props {
 	feed: AsyncFnReturnType<typeof fetchFeed>;
 }
 
+const ValidFeedTypes = ['hot', 'new', 'top'];
+
 export
 const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 	const session = await getServerSession(ctx.req, ctx.res);
 	const userId = session?.user.id || '';
 
 	const { params = ['hot'] } = ctx.params;
-	const feedType = params[0];
+	const feedType = ValidFeedTypes.includes(params[0]) ? params[0] : 'hot';
 
 	return {
 		props: {
