@@ -5,10 +5,10 @@ import { PostActions } from './feed-post-actions';
 import { FeedPostResponseForm } from './feed-post-response-form';
 import { useState } from 'react';
 import { useIsLoggedIn } from '@common/hooks';
+import { ParsedContentServer } from '@components/parsed-content.server';
 import {
 	getTimeSinceDate,
 	localizedDateFormat,
-	parseContentString,
 	urlJoin,
 } from '@common/utils';
 import {
@@ -162,8 +162,11 @@ function FeedPost(props: Props) {
 						variant="body1"
 						sx={{ mb: 1.5 }}
 						style={{ overflowWrap: 'break-word' }}
-						dangerouslySetInnerHTML={{ __html: parseContentString(post.body) }}
-					/>
+					>
+						<ParsedContentServer>
+							{post.body}
+						</ParsedContentServer>
+					</Typography>
 					<Grid container columns={4} alignItems="flex-end">
 						<PostActions
 							post={post}
