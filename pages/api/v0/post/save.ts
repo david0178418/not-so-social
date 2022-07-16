@@ -12,8 +12,12 @@ import { fetchUserBalance } from '@common/server/queries';
 import { grammit } from '@common/server/server-utils';
 import {
 	DbCollections,
+	MaxPostBodyLength,
 	MaxPostCost,
+	MaxPostTitleLength,
+	MinPostBodyLength,
 	MinPostCost,
+	MinPostTitleLength,
 	NotLoggedInErrMsg,
 	OwnPostRatio,
 	PointTransactionTypes,
@@ -30,13 +34,13 @@ interface Schema {
 const schema = Joi.object<Schema>({
 	body: Joi
 		.string()
-		.min(6)
-		.max(2000)
+		.min(MinPostBodyLength)
+		.max(MaxPostBodyLength)
 		.required(),
 	title: Joi
 		.string()
-		.min(3)
-		.max(150)
+		.min(MinPostTitleLength)
+		.max(MaxPostTitleLength)
 		.required(),
 	points: Joi
 		.number()
