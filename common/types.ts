@@ -1,3 +1,4 @@
+import { getLinkPreview } from 'link-preview-js';
 import type { ReactNode } from 'react';
 import { UserRoles } from './constants';
 import { DbPointTransaction } from './server/db-schema';
@@ -55,6 +56,9 @@ type AsyncFnReturnType<T extends (...args: any[]) => Promise<any>> = Awaited<Ret
 
 export
 type Nullable<T> = T | null;
+
+export
+type LinkPreviewData = AsyncFnReturnType<typeof getLinkPreview>;
 
 interface User {
 	id: string;
