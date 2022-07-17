@@ -117,15 +117,10 @@ function urlJoin (...args: Array<string | undefined>) {
 }
 
 export
-function objectToArgs(rawArgs: any) {
-	if(typeof rawArgs === 'string' || typeof rawArgs === 'number') {
-		return rawArgs;
+function objectToArgs(args: any) {
+	if(typeof args === 'string' || typeof args === 'number') {
+		return args;
 	}
-
-	const args = {
-		...rawArgs,
-		src: 'client-outreach',
-	};
 
 	return Object
 		.keys(args)

@@ -1,18 +1,21 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import {
+	useEffect, useRef, useState,
+} from 'react';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
-import { useIsLoggedOut } from '@common/hooks';
-import { postSave } from '@common/client/api-calls';
+import { useDebounce, useIsLoggedOut } from '@common/hooks';
+import { getLinkPreviewsFromContent, postSave } from '@common/client/api-calls';
 import { ConfirmButton } from '@components/common/buttons/confirm.button';
 import { CancelButton } from '@components/common/buttons/cancel.button';
-import { formatCompactNumber } from '@common/utils';
+import { exec, formatCompactNumber } from '@common/utils';
 import { InfoIconButton } from '@components/common/info-icon-button';
 import { LinkPreviews } from '@components/link-previews';
 import { CloseIcon } from '@components/icons';
 import { LinkPreviewData } from '@common/types';
 import {
+	MinPostBodyLength,
 	MinPostCost,
 	ModalActions,
 	OwnPostRatio,
@@ -42,10 +45,12 @@ function CreatePostModal() {
 	const router = useRouter();
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
+	const debouncedBody = useDebounce(body, 1500);
 	const [points, setPoints] = useState(MinPostCost);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-	const [linkPreviews] = useState<LinkPreviewData[]>([]);
+	const [linkPreviews, setLinkPreviews] = useState<LinkPreviewData[]>([]);
+	const abortControllerRef = useRef<AbortController | null>(null);
 	const {
 		a: action,
 		...newQuery
@@ -66,6 +71,40 @@ function CreatePostModal() {
 		}
 
 	}, [actionIsCreatePost, isLoggedOut]);
+
+	// TODO Clean this mess up
+	useEffect(() => {
+		if(debouncedBody.length < MinPostBodyLength) {
+			return;
+		}
+
+		exec(async () => {
+			const controller = new AbortController();
+			abortControllerRef.current = controller;
+			const result = await getLinkPreviewsFromContent(debouncedBody, controller.signal);
+
+			if(result?.ok && result.data?.previews.length) {
+				setLinkPreviews(result.data.previews);
+			} else {
+				setLinkPreviews([]);
+			}
+
+			if(abortControllerRef.current === controller) {
+				abortControllerRef.current = null;
+			}
+		});
+	}, [debouncedBody]);
+
+	useEffect(() => {
+		if(!abortControllerRef.current) {
+			return;
+		}
+
+		abortControllerRef.current.abort();
+
+		abortControllerRef.current = null;
+	}, [body]);
+	// END Clean this mess up
 
 	async function handleSave() {
 		try {

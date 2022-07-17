@@ -175,7 +175,6 @@ function LeftRail() {
 						</ListItem>
 						<Link
 							shallow
-							passHref
 							href={{
 								pathname,
 								query: {
@@ -208,7 +207,7 @@ function LeftRail() {
 									}}
 								>
 									<CreateIcon sx={{ mr: 1 }} />
-									Create Post
+										Create Post
 								</Fab>
 							</a>
 						</Link>

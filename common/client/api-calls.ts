@@ -1,4 +1,4 @@
-import type { ApiResponse } from '../types';
+import type { ApiResponse, LinkPreviewData } from '../types';
 
 import { signIn, signOut } from 'next-auth/react';
 import { get, post } from '@common/client/client-utils';
@@ -36,6 +36,15 @@ function updatePassword(password: string) {
 export
 async function logout() {
 	await signOut();
+}
+
+interface Foo {
+	previews: LinkPreviewData[];
+}
+
+export
+async function getLinkPreviewsFromContent(content: string, signal?: AbortSignal) {
+	return apiGet<ApiResponse<Foo>>('/link-previews-from-content', { content }, signal);
 }
 
 interface PostSaveArgs {
@@ -77,6 +86,6 @@ function apiPost<T = any>(path: string, requestBody?: any) {
 	return post<T>(urlJoin(API_URL, path), requestBody);
 }
 
-function apiGet(path: string, params?: any) {
-	return get(urlJoin(API_URL, path), params);
+function apiGet<T = any>(path: string, params?: any, signal?: AbortSignal) {
+	return get<T>(urlJoin(API_URL, path), params, signal);
 }

@@ -3,10 +3,13 @@ import { objectToArgs } from '@common/utils';
 import { Key } from 'ts-key-enum';
 
 export
-async function get<T = any>(path: string, params?: any): Promise<T | null> {
+async function get<T = any>(path: string, params?: any, signal?: AbortSignal): Promise<T | null> {
 	const paramString = params ? `?${objectToArgs(params)}` : '';
 
-	const response = await fetch(`${path}${paramString}`, { ...BaseReq });
+	const response = await fetch(`${path}${paramString}`, {
+		...BaseReq,
+		signal,
+	});
 
 	if(!response.ok) {
 		throw await response.json();
