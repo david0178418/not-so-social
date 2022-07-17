@@ -12,17 +12,16 @@ interface Post {
 	isOwner: boolean;
 	lastUpdated: string;
 	parentId?: string;
-	totalPoints: number;
 	points?: number;
 	title: string;
+	totalPoints: number;
 }
 
-
 type SharedPointTransactionProps = Pick<DbPointTransaction,
-'type' |
-'spentPoints' |
 'appliedPoints' |
-'date'
+'date' |
+'spentPoints' |
+'type'
 >;
 
 export
