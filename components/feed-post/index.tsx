@@ -18,6 +18,7 @@ import {
 	Tooltip,
 	Typography,
 } from '@mui/material';
+import { LinkPreviews } from '@components/link-previews';
 
 interface Props {
 	child?: boolean;
@@ -167,6 +168,9 @@ function FeedPost(props: Props) {
 							{post.body}
 						</ParsedContentServer>
 					</Typography>
+					{!!post.linkPreviews?.length && (
+						<LinkPreviews linkPreviews={post.linkPreviews} />
+					)}
 					<Grid container columns={4} alignItems="flex-end">
 						<PostActions
 							post={post}
