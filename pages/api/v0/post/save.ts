@@ -1,16 +1,15 @@
-import type { ValidationError } from 'joi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import Joi from 'joi';
 import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import { ObjectId } from 'mongodb';
-import { ObjectIdValidation } from '@common/server/validations';
 import { DbPost, DbPostTextGram } from '@common/server/db-schema';
 import { getServerSession } from '@common/server/auth-options';
 import { fetchUserBalance } from '@common/server/queries';
 import { grammit } from '@common/server/server-utils';
-import { LinkPreviewData, VideoLinkPreviewData } from '@common/types';
+import { LinkPreviewData } from '@common/types';
+import { z, ZodType } from 'zod';
+import { linkPreviewSchema } from '@common/server/validations';
 import {
 	DbCollections,
 	MaxPostBodyLength,
@@ -34,93 +33,27 @@ interface Schema {
 }
 
 // TODO Switch to the typescript-specific validation library
-const schema = Joi.object<Schema>({
-	body: Joi
+const schema: ZodType<Schema> = z.object({
+	body: z
 		.string()
 		.min(MinPostBodyLength)
-		.max(MaxPostBodyLength)
-		.required(),
-	title: Joi
+		.max(MaxPostBodyLength),
+	title: z
 		.string()
 		.min(MinPostTitleLength)
-		.max(MaxPostTitleLength)
-		.required(),
-	points: Joi
+		.max(MaxPostTitleLength),
+	points: z
 		.number()
-		.min(MinPostCost)
-		.max(MaxPostCost)
-		.required()
-		.messages({ 'number.min': 'Must spend at least {#limit} points' }),
-	linkPreviews: Joi
-		.array()
-		.items(
-			Joi.object<LinkPreviewData>({
-				url: Joi
-					.string()
-					.max(MaxPostBodyLength),
-				title: Joi
-					.string()
-					.max(MaxPostBodyLength),
-				siteName: Joi
-					.string()
-					.max(100)
-					.optional(),
-				description: Joi
-					.string()
-					.max(1000)
-					.optional(),
-				mediaType: Joi
-					.string()
-					.max(50)
-					.optional(),
-				contentType: Joi
-					.string()
-					.max(50)
-					.optional(),
-				images: Joi
-					.array()
-					.items(
-						Joi
-							.string()
-							.max(300)
-					),
-				videos: Joi
-					.array()
-					.items(
-						Joi.object<VideoLinkPreviewData>({
-							url: Joi
-								.string()
-								.max(300)
-								.optional(),
-							secureUrl: Joi
-								.string()
-								.max(500)
-								.optional(),
-							type: Joi
-								.string()
-								.max(100)
-								.optional(),
-							height: Joi
-								.string()
-								.max(4)
-								.optional(),
-							width: Joi
-								.string()
-								.max(4)
-								.optional(),
-						})
-					),
-				favicons: Joi
-					.array()
-					.items(
-						Joi
-							.string()
-							.max(300)
-					),
-			}),
-		)
+		.min(MinPostCost, { message: `Must spend at least ${MinPostCost} points` })
+		.max(MaxPostCost),
+	linkPreviews: z
+		.array(linkPreviewSchema)
 		.optional(),
-	parentId: ObjectIdValidation.optional(),
+	parentId: z
+		.string()
+		.trim()
+		.length(24)
+		.optional(),
 });
 
 export default
@@ -131,38 +64,38 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 		return res.status(401).send(NotLoggedInErrMsg);
 	}
 
-	try {
-		const postContent = await schema.validateAsync(req.body);
-		const ownerId = new ObjectId(user.id);
-		const balance = await fetchUserBalance(ownerId);
-		const isAdmin = user.role === UserRoles.Admin;
+	const result = await schema.safeParseAsync(req.body);
 
-		if(
-			!isAdmin &&
-			postContent.points > balance
-		) {
-			return res.send({
-				ok: false,
-				errors: [
-					`Not enough points. Current balance: ${balance}`,
-				],
-			});
-		}
-
-		res.send({
-			ok: true,
-			data: { id: await createPost(postContent, ownerId, isAdmin) },
-		});
-	} catch(error: any) {
+	if(!result.success) {
 		return res
 			.status(400)
 			.send({
 				ok: false,
-				errors: (error as ValidationError)
-					.details
-					.map((d: any) => d.message),
+				errors: result.error.errors.map(e => e.message),
 			});
 	}
+
+	const postContent = result.data;
+	const ownerId = new ObjectId(user.id);
+	const balance = await fetchUserBalance(ownerId);
+	const isAdmin = user.role === UserRoles.Admin;
+
+	if(
+		!isAdmin &&
+		postContent.points > balance
+	) {
+		return res.send({
+			ok: false,
+			errors: [
+				`Not enough points. Current balance: ${balance}`,
+			],
+		});
+	}
+
+	res.send({
+		ok: true,
+		data: { id: await createPost(postContent, ownerId, isAdmin) },
+	});
 }
 
 interface PostContent {

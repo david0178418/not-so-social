@@ -62,7 +62,7 @@ interface LinkPreviewData {
 	title: string;
 	siteName?: string;
 	description?: string;
-	mediaType: string;
+	mediaType?: string;
 	contentType?: string;
 	images: string[];
 	videos: VideoLinkPreviewData[];
