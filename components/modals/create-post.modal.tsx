@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { useIsLoggedOut } from '@common/hooks';
-import { postSave } from '@common/actions';
+import { postSave } from '@common/client/api-calls';
 import { ConfirmButton } from '@components/common/buttons/confirm.button';
 import { CancelButton } from '@components/common/buttons/cancel.button';
 import { formatCompactNumber } from '@common/utils';

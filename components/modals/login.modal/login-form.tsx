@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Key } from 'ts-key-enum';
-import { login } from '@common/actions';
+import { login } from '@common/client/api-calls';
 import { useSetAtom } from 'jotai';
 import { pushToastMsgAtom } from '@common/atoms';
 import Link from 'next/link';

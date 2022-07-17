@@ -1,9 +1,9 @@
-import type { ApiResponse } from './types';
+import type { ApiResponse } from '../types';
 
 import { signIn, signOut } from 'next-auth/react';
 import { get, post } from '@common/client/client-utils';
-import { urlJoin } from './utils';
-import { API_URL } from './constants';
+import { urlJoin } from '../utils';
+import { API_URL } from '../constants';
 
 export
 async function login(username: string, password: string) {

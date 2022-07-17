@@ -3,7 +3,7 @@ import { CancelButton } from '@components/common/buttons/cancel.button';
 import { ConfirmButton } from '@components/common/buttons/confirm.button';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
-import { postSave } from '@common/actions';
+import { postSave } from '@common/client/api-calls';
 import { useRefreshPage } from '@common/hooks';
 import {
 	Box,

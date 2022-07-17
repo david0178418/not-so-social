@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Button, Tooltip } from '@mui/material';
 import { Post } from '@common/types';
-import { bookmarkPost, unbookmarkPost } from '@common/actions';
+import { bookmarkPost, unbookmarkPost } from '@common/client/api-calls';
 import { useState } from 'react';
 import { ModalActions } from '@common/constants';
 import { useRouter } from 'next/router';

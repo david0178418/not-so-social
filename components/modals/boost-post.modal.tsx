@@ -11,7 +11,7 @@ import { useIsAdmin, useRefreshPage } from '@common/hooks';
 import { useAtom, useSetAtom } from 'jotai';
 import { OwnPostRatio } from '@common/constants';
 import { BoostIcon } from '@components/icons';
-import { getBalance, postBoost } from '@common/actions';
+import { getBalance, postBoost } from '@common/client/api-calls';
 import { exec } from '@common/utils';
 import {
 	boostPostAtom,
