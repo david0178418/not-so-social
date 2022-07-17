@@ -1,8 +1,5 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import {
-	useEffect, useRef, useState,
-} from 'react';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { useDebounce, useIsLoggedOut } from '@common/hooks';
@@ -14,6 +11,11 @@ import { InfoIconButton } from '@components/common/info-icon-button';
 import { LinkPreviews } from '@components/link-previews';
 import { CloseIcon } from '@components/icons';
 import { LinkPreviewData } from '@common/types';
+import {
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import {
 	MinPostBodyLength,
 	MinPostCost,
