@@ -58,7 +58,6 @@ function postToBookmarkedPostFn(bookmarkedIds: string[]) {
 }
 
 
-
 export
 function postListsToIdList(...postLists: Nullable<Post>[][]): string[] {
 	return unique(

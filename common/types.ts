@@ -14,7 +14,7 @@ interface Post {
 	points?: number;
 	title: string;
 	totalPoints: number;
-	linkPreviews: LinkPreviewData[];
+	linkPreviews?: LinkPreviewData[];
 }
 
 type SharedPointTransactionProps = Pick<DbPointTransaction,
