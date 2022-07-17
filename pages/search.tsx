@@ -3,13 +3,14 @@ import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
 import { GetServerSideProps, NextPage } from 'next';
 import { getServerSession } from '@common/server/auth-options';
-import { fetchSearchFeed } from '@common/server/queries/search';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
+import { fetchFeed } from '@common/server/queries/feed';
 import {
 	AppName,
 	BaseUrl,
+	FeedTypes,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
@@ -33,7 +34,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
 	const session = await getServerSession(ctx.req, ctx.res);
 	const userId = session?.user.id || '';
-	const feed = await fetchSearchFeed(searchTerm, userId);
+	const feed = await fetchFeed(FeedTypes.Search, userId, searchTerm);
 
 	return {
 		props: {
@@ -46,7 +47,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
 interface Props {
 	searchTerm: string;
-	feed: AsyncFnReturnType<typeof fetchSearchFeed>;
+	feed: AsyncFnReturnType<typeof fetchFeed>;
 }
 
 const SearchPage: NextPage<Props> = (props) => {

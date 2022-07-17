@@ -157,6 +157,16 @@ enum PointTransactionTypes {
 }
 
 export
+enum FeedTypes {
+	Bookmarks = 'bookmarks',
+	Hot = 'hot',
+	MyPosts = 'my-posts',
+	New = 'new',
+	Search = 'search',
+	Top = 'top',
+}
+
+export
 enum UserRoles {
 	Admin = 'admin',
 	User = 'user'

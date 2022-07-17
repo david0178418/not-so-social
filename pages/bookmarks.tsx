@@ -9,6 +9,7 @@ import { SearchForm } from '@components/search-form';
 import { ScrollContent } from '@components/scroll-content';
 import {
 	AppName,
+	FeedTypes,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
@@ -32,7 +33,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 		rawTerm;
 	const searchTerm = foo.substring(0, MaxSearchTermSize);
 
-	const feed = await fetchFeed('bookmarks', session.user.id, searchTerm);
+	const feed = await fetchFeed(FeedTypes.Bookmarks, session.user.id, searchTerm);
 
 	return {
 		props: {

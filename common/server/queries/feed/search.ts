@@ -2,14 +2,17 @@ import { getCollection } from '@common/server/mongodb';
 import { DbPost } from '@common/server/db-schema';
 import { DbCollections, PageSize } from '@common/constants';
 import { grammit } from '@common/server/server-utils';
-import { preparePostsForClient } from '.';
 
 const DocPlaceholder = 'docTemp';
 
 export
-async function fetchSearchFeed(query: string, userId: string) {
+async function fetchSearchFeed(userId: string, query = '') {
+	if(!query) {
+		return [];
+	}
+
 	const col = await getCollection(DbCollections.Grams);
-	const results = await col.aggregate<DbPost>([
+	return col.aggregate<DbPost>([
 		{ $match: { $text: { $search: grammit(query) } } },
 		{ $sort: { score: { $meta: 'textScore' } } },
 		{ $limit: PageSize },
@@ -24,6 +27,4 @@ async function fetchSearchFeed(query: string, userId: string) {
 		{ $unwind: { path: `$${DocPlaceholder}` } },
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 	]).toArray();
-
-	return preparePostsForClient(results, userId);
 }
