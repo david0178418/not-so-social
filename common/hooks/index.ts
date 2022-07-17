@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { UserRoles } from './constants';
+import { UserRoles } from '@common/constants';
 
 export
 function useIsLoggedIn() {
