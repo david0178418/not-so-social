@@ -32,7 +32,6 @@ interface Schema {
 	linkPreviews?: LinkPreviewData[];
 }
 
-// TODO Switch to the typescript-specific validation library
 const schema: ZodType<Schema> = z.object({
 	body: z
 		.string()
