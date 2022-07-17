@@ -110,6 +110,7 @@ function PostActions(props: Props) {
 				sx={{ textAlign: 'center' }}
 			>
 				<DropdownMenu>
+					{/* TODO
 					{post.isOwner && (
 						[
 							<Link
@@ -121,7 +122,7 @@ function PostActions(props: Props) {
 								<MenuItem>Edit</MenuItem>
 							</Link>,
 						]
-					)}
+					)} */}
 					<Link
 						passHref
 						shallow
