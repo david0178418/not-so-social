@@ -51,16 +51,28 @@ function BottomNav() {
 			}}
 		>
 			{!!user && (
-				<Fab
-					color="primary"
-					sx={{
-						position: 'absolute',
-						top: -64,
-						right: 16,
+				<Link
+					shallow
+					passHref
+					href={{
+						pathname,
+						query: {
+							a: ModalActions.CreatePost,
+							...query,
+						},
 					}}
 				>
-					<CreateIcon/>
-				</Fab>
+					<Fab
+						color="primary"
+						sx={{
+							position: 'absolute',
+							top: -64,
+							right: 16,
+						}}
+					>
+						<CreateIcon/>
+					</Fab>
+				</Link>
 			)}
 			<BottomNavigation
 				showLabels
