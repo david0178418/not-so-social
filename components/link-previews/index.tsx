@@ -36,7 +36,7 @@ function LinkPreviews(props: Props) {
 
 	return (
 		<div>
-			{!!linkPreviews.length && (
+			{(linkPreviews.length > 1) && (
 				<ButtonGroup
 					disableElevation
 					sx={{ alignItems: 'center' }}
@@ -53,6 +53,7 @@ function LinkPreviews(props: Props) {
 				</ButtonGroup>
 			)}
 			<LinkPreview
+				key={activePreview.url}
 				linkPreview={activePreview}
 			/>
 		</div>
