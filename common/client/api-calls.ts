@@ -52,6 +52,7 @@ interface PostSaveArgs {
 	body: string;
 	points: number;
 	parentId?: string;
+	linkPreviews?: LinkPreviewData[];
 }
 
 export

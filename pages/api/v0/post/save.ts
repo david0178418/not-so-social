@@ -10,6 +10,7 @@ import { DbPost, DbPostTextGram } from '@common/server/db-schema';
 import { getServerSession } from '@common/server/auth-options';
 import { fetchUserBalance } from '@common/server/queries';
 import { grammit } from '@common/server/server-utils';
+import { LinkPreviewData, VideoLinkPreviewData } from '@common/types';
 import {
 	DbCollections,
 	MaxPostBodyLength,
@@ -29,8 +30,10 @@ interface Schema {
 	title: string;
 	points: number;
 	parentId?: string;
+	linkPreviews?: LinkPreviewData[];
 }
 
+// TODO Switch to the typescript-specific validation library
 const schema = Joi.object<Schema>({
 	body: Joi
 		.string()
@@ -48,6 +51,75 @@ const schema = Joi.object<Schema>({
 		.max(MaxPostCost)
 		.required()
 		.messages({ 'number.min': 'Must spend at least {#limit} points' }),
+	linkPreviews: Joi
+		.array()
+		.items(
+			Joi.object<LinkPreviewData>({
+				url: Joi
+					.string()
+					.max(MaxPostBodyLength),
+				title: Joi
+					.string()
+					.max(MaxPostBodyLength),
+				siteName: Joi
+					.string()
+					.max(100)
+					.optional(),
+				description: Joi
+					.string()
+					.max(1000)
+					.optional(),
+				mediaType: Joi
+					.string()
+					.max(50)
+					.optional(),
+				contentType: Joi
+					.string()
+					.max(50)
+					.optional(),
+				images: Joi
+					.array()
+					.items(
+						Joi
+							.string()
+							.max(300)
+					),
+				videos: Joi
+					.array()
+					.items(
+						Joi.object<VideoLinkPreviewData>({
+							url: Joi
+								.string()
+								.max(300)
+								.optional(),
+							secureUrl: Joi
+								.string()
+								.max(500)
+								.optional(),
+							type: Joi
+								.string()
+								.max(100)
+								.optional(),
+							height: Joi
+								.string()
+								.max(4)
+								.optional(),
+							width: Joi
+								.string()
+								.max(4)
+								.optional(),
+						})
+					),
+				favicons: Joi
+					.array()
+					.items(
+						Joi
+							.string()
+							.max(300)
+					),
+			}),
+		)
+		.optional(),
 	parentId: ObjectIdValidation.optional(),
 });
 

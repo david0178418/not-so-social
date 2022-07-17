@@ -45,7 +45,7 @@ function CreatePostModal() {
 	const router = useRouter();
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
-	const debouncedBody = useDebounce(body, 1500);
+	const debouncedBody = useDebounce(body, 750);
 	const [points, setPoints] = useState(MinPostCost);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -75,6 +75,7 @@ function CreatePostModal() {
 	// TODO Clean this mess up
 	useEffect(() => {
 		if(debouncedBody.length < MinPostBodyLength) {
+			setLinkPreviews([]);
 			return;
 		}
 
@@ -113,6 +114,7 @@ function CreatePostModal() {
 				title,
 				body,
 				points,
+				linkPreviews,
 			}));
 			close();
 		} catch(e: any) {

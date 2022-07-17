@@ -45,13 +45,20 @@ export default async function handler(
 
 	for(const url of urls) {
 		try {
-			previews.push(
-				await getLinkPreview(url, {
-					resolveDNSHost,
-					followRedirects: 'manual',
-					handleRedirects,
-				})
-			);
+			const response = await getLinkPreview(url, {
+				resolveDNSHost,
+				followRedirects: 'manual',
+				handleRedirects,
+			});
+
+			// @ts-ignore
+			if(!(response?.title || response?.description)) {
+				return;
+			}
+
+			// TODO Clean up the type mess from getLinkPreview
+			// w/ either PR or potentially another tool
+			previews.push(response as LinkPreviewData);
 		} catch(e) {
 			console.error(e);
 		}

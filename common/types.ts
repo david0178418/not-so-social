@@ -69,6 +69,7 @@ interface LinkPreviewData {
 	favicons: string[];
 }
 
+export
 interface VideoLinkPreviewData {
 	url?: string;
 	secureUrl?: string | null;
