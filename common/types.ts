@@ -1,4 +1,3 @@
-import { getLinkPreview } from 'link-preview-js';
 import type { ReactNode } from 'react';
 import { UserRoles } from './constants';
 import { DbPointTransaction } from './server/db-schema';
@@ -15,6 +14,7 @@ interface Post {
 	points?: number;
 	title: string;
 	totalPoints: number;
+	linkPreviews: LinkPreviewData[];
 }
 
 type SharedPointTransactionProps = Pick<DbPointTransaction,
@@ -57,7 +57,25 @@ export
 type Nullable<T> = T | null;
 
 export
-type LinkPreviewData = AsyncFnReturnType<typeof getLinkPreview>;
+interface LinkPreviewData {
+	url: string;
+	title: string;
+	siteName?: string;
+	description?: string;
+	mediaType: string;
+	contentType?: string;
+	images: string[];
+	videos: VideoLinkPreviewData[];
+	favicons: string[];
+}
+
+interface VideoLinkPreviewData {
+	url?: string;
+	secureUrl?: string | null;
+	type?: string | null;
+	width?: string;
+	height?: string;
+}
 
 interface User {
 	id: string;

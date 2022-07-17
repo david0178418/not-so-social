@@ -1,3 +1,5 @@
+export { default as ArrowLeftIcon } from '@mui/icons-material/ChevronLeft';
+export { default as ArrowRightIcon } from '@mui/icons-material/ChevronRight';
 export { default as BackIcon } from '@mui/icons-material/ArrowBack';
 export { default as BookmarkActiveIcon } from '@mui/icons-material/Bookmark';
 export { default as BookmarkIcon } from '@mui/icons-material/BookmarkBorderOutlined';
