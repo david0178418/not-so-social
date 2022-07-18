@@ -11,27 +11,10 @@ import {
 	fetchBookmarksFromPostIds,
 	fetchPosts,
 	fetchTopChildPosts,
-} from '..';
-
-// import { fetchSearchFeed } from './search';
-// import { FeedTypes } from '@common/constants';
-// import { fetchBookmarkedPosts } from './bookmarks';
-// import { fetchHotPosts } from './hot';
-// import { fetchMyPosts } from './my-posts';
-// import { fetchNewPosts } from './new';
-// import { fetchTopPosts } from './top';
-
-// const Aggregations = {
-// 	[FeedTypes.Bookmarks]: fetchBookmarkedPosts,
-// 	[FeedTypes.Hot]: fetchHotPosts,
-// 	[FeedTypes.MyPosts]: fetchMyPosts,
-// 	[FeedTypes.New]: fetchNewPosts,
-// 	[FeedTypes.Search]: fetchSearchFeed,
-// 	[FeedTypes.Top]: fetchTopPosts,
-// };
+} from '.';
 
 export
-async function preparePostsForClient(results: DbPost[], userId?: string) {
+async function fetchRelatedPosts(results: DbPost[], userId?: string) {
 	const posts = results.map(dbPostToPostFn(userId));
 
 	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));

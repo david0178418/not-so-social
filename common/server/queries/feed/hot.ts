@@ -1,11 +1,11 @@
 import { getCollection } from '@common/server/mongodb';
 import { ObjectId } from 'mongodb';
 import { DbPointTransaction, DbPost } from '@common/server/db-schema';
+import { fetchRelatedPosts } from '..';
 import {
 	DbCollections,
 	PageSize,
 } from '@common/constants';
-import { preparePostsForClient } from '.';
 
 export
 async function fetchHotPosts(userId?: string) {
@@ -45,5 +45,5 @@ async function fetchHotPosts(userId?: string) {
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
 		.toArray();
 
-	return preparePostsForClient(results, userId);
+	return fetchRelatedPosts(results, userId);
 }

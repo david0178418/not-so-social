@@ -2,7 +2,7 @@ import { getCollection } from '@common/server/mongodb';
 import { DbPost } from '@common/server/db-schema';
 import { DbCollections, PageSize } from '@common/constants';
 import { grammit } from '@common/server/server-utils';
-import { preparePostsForClient } from '.';
+import { fetchRelatedPosts } from '..';
 
 const DocPlaceholder = 'docTemp';
 
@@ -34,5 +34,5 @@ async function fetchSearchFeed(userId: string, query = '') {
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 	]).toArray();
 
-	return preparePostsForClient(results);
+	return fetchRelatedPosts(results);
 }

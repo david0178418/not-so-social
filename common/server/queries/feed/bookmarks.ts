@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { DbPost } from '@common/server/db-schema';
 import { grammit } from '@common/server/server-utils';
 import { DbCollections } from '@common/constants';
-import { preparePostsForClient } from '.';
+import { fetchRelatedPosts } from '..';
 
 // TODO Is there a better way to do this in MongoDB?
 const DocPlaceholder = 'docTemp';
@@ -51,5 +51,5 @@ async function fetchBookmarkedPosts(userId: string, searchQuery?: string) {
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 	]).toArray();
 
-	return preparePostsForClient(results, userId);
+	return fetchRelatedPosts(results, userId);
 }

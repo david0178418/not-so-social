@@ -19,6 +19,7 @@ import {
 	dbPointTransactionToPointTransaction,
 } from '@common/server/transforms';
 
+export { fetchRelatedPosts } from './fetch-related-posts';
 export { fetchBookmarkedPosts } from './feed/bookmarks';
 export { fetchHotPosts } from './feed/hot';
 export { fetchMyPosts } from './feed/my-posts';

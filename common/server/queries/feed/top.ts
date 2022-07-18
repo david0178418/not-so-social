@@ -1,7 +1,7 @@
 import { getCollection } from '@common/server/mongodb';
 import { DbPost } from '@common/server/db-schema';
 import { DbCollections } from '@common/constants';
-import { preparePostsForClient } from '.';
+import { fetchRelatedPosts } from '..';
 
 export
 async function fetchTopPosts(userId?: string) {
@@ -12,5 +12,5 @@ async function fetchTopPosts(userId?: string) {
 		// { $match: { created: { $gt: cutoffDate } } },
 	]).toArray();
 
-	return preparePostsForClient(results, userId);
+	return fetchRelatedPosts(results, userId);
 }

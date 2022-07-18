@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { DbPost } from '@common/server/db-schema';
 import { grammit } from '@common/server/server-utils';
 import { DbCollections } from '@common/constants';
-import { preparePostsForClient } from '.';
+import { fetchRelatedPosts } from '..';
 
 // TODO Is there a better way to do this in MongoDB?
 const DocPlaceholder = 'docTemp';
@@ -41,5 +41,5 @@ async function fetchMyPosts(userId: string, searchQuery?: string) {
 		{ $match: { ownerId: new ObjectId(userId) } },
 	]).toArray();
 
-	return preparePostsForClient(results);
+	return fetchRelatedPosts(results);
 }
