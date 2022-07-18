@@ -1,40 +1,62 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import type { AsyncFnReturnType } from '@common/types';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
-import { fetchFeed } from '@common/server/queries/feed';
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
 import { getServerSession } from '@common/server/auth-options';
 import { HomeSortTabs } from '@components/home-sort-tabs';
-import { subDays } from 'date-fns';
-import { Box } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
+import { useInView } from 'react-cool-inview';
+import {
+	Box,
+	Button,
+	CircularProgress,
+} from '@mui/material';
 import {
 	AppName,
 	BaseUrl,
+	FeedTypes,
 	Paths,
 } from '@common/constants';
+import {
+	fetchHotPosts,
+	fetchNewPosts,
+	fetchTopPosts,
+} from '@common/server/queries';
+
+type Foo = FeedTypes.Hot | FeedTypes.New | FeedTypes.Top;
+type Bar = typeof fetchHotPosts | typeof fetchNewPosts | typeof fetchTopPosts;
 
 interface Props {
 	children?: ReactNode;
 	feedType: string;
-	feed: AsyncFnReturnType<typeof fetchFeed>;
+	feed: AsyncFnReturnType<Bar>;
 }
 
-const ValidFeedTypes = ['hot', 'new', 'top'];
+const ValidFeedTypes = [
+	FeedTypes.Hot,
+	FeedTypes.New,
+	FeedTypes.Top,
+];
+
+const FeedQueries = {
+	[FeedTypes.Hot]: fetchHotPosts,
+	[FeedTypes.New]: fetchNewPosts,
+	[FeedTypes.Top]: fetchTopPosts,
+};
 
 export
 const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 	const session = await getServerSession(ctx.req, ctx.res);
 	const userId = session?.user.id || '';
 
-	const { params = ['hot'] } = ctx.params;
+	const { params = [FeedTypes.Hot] } = ctx.params;
 
 	// Compensate for some weird vercel behavior where "index" is being
 	// passed as the path parameter rather than nothing, as expected.
-	const feedType = (params[0] === 'index') ? 'hot' : params[0];
+	const feedType: Foo = (params[0] === 'index') ? FeedTypes.Hot : params[0];
 
 	if(!ValidFeedTypes.includes(feedType)) {
 		return {
@@ -49,12 +71,14 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 		props: {
 			session,
 			feedType,
-			feed: await fetchFeed(feedType, userId || '', subDays(new Date(), 7).toISOString()),
+			feed: await FeedQueries[feedType](userId),
 		},
 	};
 };
 
 const HomePage: NextPage<Props> = (props) => {
+	const [isLoading, setIsLoading] = useState(true);
+	const { observe } = useInView({ onEnter: loadMore });
 	const {
 		feed: {
 			parentPostMap,
@@ -62,6 +86,11 @@ const HomePage: NextPage<Props> = (props) => {
 			responsePostMap,
 		},
 	} = props;
+
+	async function loadMore() {
+		setIsLoading(true);
+		setIsLoading(false);
+	}
 
 	return (
 		<>
@@ -114,6 +143,23 @@ const HomePage: NextPage<Props> = (props) => {
 						}
 					/>
 				))}
+				<Box paddingTop={5} paddingBottom={8}>
+					<Button
+						fullWidth
+						ref={observe}
+						disabled={isLoading}
+						endIcon={
+							isLoading ?
+								<CircularProgress color="inherit" /> :
+								null
+						}
+					>
+						{isLoading ?
+							'Loading' :
+							'Load More'
+						}
+					</Button>
+				</Box>
 			</ScrollContent>
 		</>
 	);

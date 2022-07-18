@@ -10,7 +10,7 @@ import type {
 import { PasswordSaltLength } from '@common/constants';
 
 export
-function dbPostToPostFn(userId: string) {
+function dbPostToPostFn(userId?: string) {
 	return (post: DbPost): Post => {
 		const {
 			ownerId,

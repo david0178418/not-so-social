@@ -5,9 +5,10 @@ import {
 	DbCollections,
 	PageSize,
 } from '@common/constants';
+import { preparePostsForClient } from '.';
 
 export
-async function fetchHotPosts() {
+async function fetchHotPosts(userId?: string) {
 	const txnCol = await getCollection(DbCollections.PointTransactions);
 
 	const txnAgg = await txnCol.aggregate<DbPointTransaction>([
@@ -40,7 +41,9 @@ async function fetchHotPosts() {
 
 	const col = await getCollection(DbCollections.Posts);
 
-	return col
+	const results = await  col
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
 		.toArray();
+
+	return preparePostsForClient(results, userId);
 }

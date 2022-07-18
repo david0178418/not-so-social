@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 import { DbPost } from '@common/server/db-schema';
 import { grammit } from '@common/server/server-utils';
 import { DbCollections } from '@common/constants';
+import { preparePostsForClient } from '.';
 
 // TODO Is there a better way to do this in MongoDB?
 const DocPlaceholder = 'docTemp';
@@ -35,7 +36,7 @@ async function fetchBookmarkedPosts(userId: string, searchQuery?: string) {
 		searchStages.push({ $sort: { date: -1 } });
 	}
 
-	return col.aggregate<DbPost>([
+	const results = await col.aggregate<DbPost>([
 		...searchStages,
 		{ $match: { userId: new ObjectId(userId) } },
 		{
@@ -49,4 +50,6 @@ async function fetchBookmarkedPosts(userId: string, searchQuery?: string) {
 		{ $unwind: { path: `$${DocPlaceholder}` } },
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 	]).toArray();
+
+	return preparePostsForClient(results, userId);
 }

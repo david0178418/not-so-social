@@ -1,12 +1,5 @@
 import type { DbPost } from '@common/server/db-schema';
 
-import { fetchSearchFeed } from './search';
-import { FeedTypes } from '@common/constants';
-import { fetchBookmarkedPosts } from './bookmarks';
-import { fetchHotPosts } from './hot';
-import { fetchMyPosts } from './my-posts';
-import { fetchNewPosts } from './new';
-import { fetchTopPosts } from './top';
 import { isTruthy, unique } from '@common/utils';
 import {
 	dbPostToPostFn,
@@ -20,22 +13,25 @@ import {
 	fetchTopChildPosts,
 } from '..';
 
-const Aggregations = {
-	[FeedTypes.Bookmarks]: fetchBookmarkedPosts,
-	[FeedTypes.Hot]: fetchHotPosts,
-	[FeedTypes.MyPosts]: fetchMyPosts,
-	[FeedTypes.New]: fetchNewPosts,
-	[FeedTypes.Search]: fetchSearchFeed,
-	[FeedTypes.Top]: fetchTopPosts,
-};
+// import { fetchSearchFeed } from './search';
+// import { FeedTypes } from '@common/constants';
+// import { fetchBookmarkedPosts } from './bookmarks';
+// import { fetchHotPosts } from './hot';
+// import { fetchMyPosts } from './my-posts';
+// import { fetchNewPosts } from './new';
+// import { fetchTopPosts } from './top';
+
+// const Aggregations = {
+// 	[FeedTypes.Bookmarks]: fetchBookmarkedPosts,
+// 	[FeedTypes.Hot]: fetchHotPosts,
+// 	[FeedTypes.MyPosts]: fetchMyPosts,
+// 	[FeedTypes.New]: fetchNewPosts,
+// 	[FeedTypes.Search]: fetchSearchFeed,
+// 	[FeedTypes.Top]: fetchTopPosts,
+// };
 
 export
-async function fetchFeed(type: keyof typeof Aggregations, userId: string, ...args: any[]) {
-	const results = await Aggregations[type](userId, ...args);
-	return preparePostsForClient(results, userId);
-}
-
-async function preparePostsForClient(results: DbPost[], userId: string) {
+async function preparePostsForClient(results: DbPost[], userId?: string) {
 	const posts = results.map(dbPostToPostFn(userId));
 
 	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));

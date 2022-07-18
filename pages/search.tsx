@@ -6,11 +6,10 @@ import { getServerSession } from '@common/server/auth-options';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
-import { fetchFeed } from '@common/server/queries/feed';
+import { fetchSearchFeed } from '@common/server/queries/feed/search';
 import {
 	AppName,
 	BaseUrl,
-	FeedTypes,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
@@ -33,8 +32,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	}
 
 	const session = await getServerSession(ctx.req, ctx.res);
-	const userId = session?.user.id || '';
-	const feed = await fetchFeed(FeedTypes.Search, userId, searchTerm);
+	const feed = await fetchSearchFeed(session?.user.id, searchTerm);
 
 	return {
 		props: {
@@ -47,7 +45,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
 interface Props {
 	searchTerm: string;
-	feed: AsyncFnReturnType<typeof fetchFeed>;
+	feed: AsyncFnReturnType<typeof fetchSearchFeed>;
 }
 
 const SearchPage: NextPage<Props> = (props) => {

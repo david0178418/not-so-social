@@ -19,6 +19,12 @@ import {
 	dbPointTransactionToPointTransaction,
 } from '@common/server/transforms';
 
+export { fetchBookmarkedPosts } from './feed/bookmarks';
+export { fetchHotPosts } from './feed/hot';
+export { fetchMyPosts } from './feed/my-posts';
+export { fetchNewPosts } from './feed/new';
+export { fetchTopPosts } from './feed/top';
+
 export
 async function fetchPost(postId: string, userId = ''): Promise<Post | null> {
 	const posts = await fetchPosts([postId], userId);
@@ -36,7 +42,7 @@ async function fetchPosts(postIds: string[], userId = ''): Promise<Post[]> {
 }
 
 export
-async function fetchTopChildPosts(postIds: string[], userId: string): Promise<Post[]> {
+async function fetchTopChildPosts(postIds: string[], userId?: string): Promise<Post[]> {
 	const col = await getCollection(DbCollections.Posts);
 	const postObjectIds = postIds.map(i => new ObjectId(i));
 	const results = await col.aggregate<DbPost>([

@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { fetchFeed } from '@common/server/queries/feed';
 import { AsyncFnReturnType } from '@common/types';
 import { FeedPost } from '@components/feed-post';
 import { GetServerSideProps, NextPage } from 'next';
@@ -9,10 +8,10 @@ import { SearchForm } from '@components/search-form';
 import { ScrollContent } from '@components/scroll-content';
 import {
 	AppName,
-	FeedTypes,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
+import { fetchBookmarkedPosts } from '@common/server/queries';
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
@@ -33,7 +32,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 		rawTerm;
 	const searchTerm = foo.substring(0, MaxSearchTermSize);
 
-	const feed = await fetchFeed(FeedTypes.Bookmarks, session.user.id, searchTerm);
+	const feed = await fetchBookmarkedPosts(session.user.id, searchTerm);
 
 	return {
 		props: {
@@ -48,7 +47,7 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 };
 
 interface Props {
-	feed: AsyncFnReturnType<typeof fetchFeed>;
+	feed: AsyncFnReturnType<typeof fetchBookmarkedPosts>;
 	searchTerm: string;
 }
 
