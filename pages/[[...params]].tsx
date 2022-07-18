@@ -21,11 +21,13 @@ import {
 	Paths,
 } from '@common/constants';
 import {
+	FeedTypeQueryMap,
 	fetchHotPosts,
 	fetchNewPosts,
 	fetchTopPosts,
 } from '@common/server/queries';
 
+// TODO Clean all this up
 type Foo = FeedTypes.Hot | FeedTypes.New | FeedTypes.Top;
 type Bar = typeof fetchHotPosts | typeof fetchNewPosts | typeof fetchTopPosts;
 
@@ -40,12 +42,6 @@ const ValidFeedTypes = [
 	FeedTypes.New,
 	FeedTypes.Top,
 ];
-
-const FeedQueries = {
-	[FeedTypes.Hot]: fetchHotPosts,
-	[FeedTypes.New]: fetchNewPosts,
-	[FeedTypes.Top]: fetchTopPosts,
-};
 
 export
 const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
@@ -71,7 +67,7 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 		props: {
 			session,
 			feedType,
-			feed: await FeedQueries[feedType](userId),
+			feed: await FeedTypeQueryMap[feedType](userId),
 		},
 	};
 };

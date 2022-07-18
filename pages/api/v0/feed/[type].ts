@@ -23,8 +23,6 @@ export default async function handler(
 ) {
 	const result = await schema.safeParseAsync(req.query);
 
-
-
 	if(!result.success) {
 		return res
 			.status(400)
@@ -33,6 +31,9 @@ export default async function handler(
 				errors: result.error.errors.map(e => e.message),
 			});
 	}
+
+
+
 
 	res.status(200).json({
 		ok: true,

@@ -7,7 +7,7 @@ import { fetchRelatedPosts } from '..';
 const DocPlaceholder = 'docTemp';
 
 export
-async function fetchSearchFeed(userId: string, query = '') {
+async function fetchSearchFeed(userId?: string, query?: string) {
 	if(!query) {
 		return {
 			posts: [],
@@ -34,5 +34,5 @@ async function fetchSearchFeed(userId: string, query = '') {
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 	]).toArray();
 
-	return fetchRelatedPosts(results);
+	return fetchRelatedPosts(results, userId);
 }

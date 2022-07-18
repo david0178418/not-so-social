@@ -6,7 +6,7 @@ import { getServerSession } from '@common/server/auth-options';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
-import { fetchSearchFeed } from '@common/server/queries/feed/search';
+import { fetchSearchFeed } from '@common/server/queries';
 import {
 	AppName,
 	BaseUrl,

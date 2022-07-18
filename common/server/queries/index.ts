@@ -4,6 +4,7 @@ import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
 import {
 	DbCollections,
+	FeedTypes,
 	PointTransactionTypes,
 	UserActivityTypes,
 } from '@common/constants';
@@ -18,13 +19,32 @@ import {
 	postListsToIdList,
 	dbPointTransactionToPointTransaction,
 } from '@common/server/transforms';
+import {
+	fetchBookmarkedPosts,
+	fetchHotPosts,
+	fetchMyPosts,
+	fetchNewPosts,
+	fetchSearchFeed,
+	fetchTopPosts,
+} from '@common/server/queries';
 
 export { fetchRelatedPosts } from './fetch-related-posts';
 export { fetchBookmarkedPosts } from './feed/bookmarks';
 export { fetchHotPosts } from './feed/hot';
 export { fetchMyPosts } from './feed/my-posts';
 export { fetchNewPosts } from './feed/new';
+export { fetchSearchFeed } from './feed/search';
 export { fetchTopPosts } from './feed/top';
+
+export
+const FeedTypeQueryMap = {
+	[FeedTypes.Bookmarks]: fetchBookmarkedPosts,
+	[FeedTypes.Hot]: fetchHotPosts,
+	[FeedTypes.MyPosts]: fetchMyPosts,
+	[FeedTypes.New]: fetchNewPosts,
+	[FeedTypes.Search]: fetchSearchFeed,
+	[FeedTypes.Top]: fetchTopPosts,
+};
 
 export
 async function fetchPost(postId: string, userId = ''): Promise<Post | null> {
