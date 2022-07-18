@@ -2,13 +2,19 @@ import { getCollection } from '@common/server/mongodb';
 import { ObjectId } from 'mongodb';
 import { DbPointTransaction, DbPost } from '@common/server/db-schema';
 import { fetchRelatedPosts } from '..';
+import { Feed } from '@common/types';
 import {
 	DbCollections,
 	PageSize,
 } from '@common/constants';
 
+interface Params {
+	userId?: string;
+}
+
 export
-async function fetchHotPosts(userId?: string) {
+async function fetchHotPosts(params: Params): Promise<Feed> {
+	const { userId } = params;
 	const txnCol = await getCollection(DbCollections.PointTransactions);
 
 	const txnAgg = await txnCol.aggregate<DbPointTransaction>([

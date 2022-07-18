@@ -32,7 +32,10 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 		rawTerm;
 	const searchTerm = foo.substring(0, MaxSearchTermSize);
 
-	const feed = await fetchMyPosts(session.user.id, searchTerm);
+	const feed = await fetchMyPosts({
+		userId: session.user.id,
+		searchQuery: searchTerm,
+	});
 
 	return {
 		props: {

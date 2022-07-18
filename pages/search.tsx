@@ -32,7 +32,10 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 	}
 
 	const session = await getServerSession(ctx.req, ctx.res);
-	const feed = await fetchSearchFeed(session?.user.id, searchTerm);
+	const feed = await fetchSearchFeed({
+		userId: session?.user.id,
+		searchTerm,
+	});
 
 	return {
 		props: {

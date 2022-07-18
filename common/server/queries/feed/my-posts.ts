@@ -4,13 +4,32 @@ import { DbPost } from '@common/server/db-schema';
 import { grammit } from '@common/server/server-utils';
 import { DbCollections } from '@common/constants';
 import { fetchRelatedPosts } from '..';
+import { Feed } from '@common/types';
 
 // TODO Is there a better way to do this in MongoDB?
 const DocPlaceholder = 'docTemp';
 
+interface Params {
+	userId?: string;
+	searchQuery?: string;
+}
+
 export
 // TODO Clean this up
-async function fetchMyPosts(userId: string, searchQuery?: string) {
+async function fetchMyPosts(params: Params): Promise<Feed> {
+	const {
+		userId,
+		searchQuery,
+	} = params;
+
+	if(!userId) {
+		return {
+			posts: [],
+			parentPostMap: {},
+			responsePostMap: {},
+		};
+	}
+
 	const col = await (searchQuery ?
 		getCollection(DbCollections.Grams) :
 		getCollection(DbCollections.Posts));

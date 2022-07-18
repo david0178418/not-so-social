@@ -68,7 +68,7 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 		props: {
 			session,
 			feedType,
-			feed: await FeedTypeQueryMap[feedType](userId),
+			feed: await FeedTypeQueryMap[feedType]({ userId }),
 		},
 	};
 };

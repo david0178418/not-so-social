@@ -6,12 +6,12 @@ import { getServerSession } from '@common/server/auth-options';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { ScrollContent } from '@components/scroll-content';
+import { fetchBookmarkedPosts } from '@common/server/queries';
 import {
 	AppName,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
-import { fetchBookmarkedPosts } from '@common/server/queries';
 
 export
 const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
@@ -32,7 +32,10 @@ const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 		rawTerm;
 	const searchTerm = foo.substring(0, MaxSearchTermSize);
 
-	const feed = await fetchBookmarkedPosts(session.user.id, searchTerm);
+	const feed = await fetchBookmarkedPosts({
+		userId: session.user.id,
+		searchTerm,
+	});
 
 	return {
 		props: {

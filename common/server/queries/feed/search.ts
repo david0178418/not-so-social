@@ -3,12 +3,23 @@ import { DbPost } from '@common/server/db-schema';
 import { DbCollections, PageSize } from '@common/constants';
 import { grammit } from '@common/server/server-utils';
 import { fetchRelatedPosts } from '..';
+import { Feed } from '@common/types';
 
 const DocPlaceholder = 'docTemp';
 
+interface Params {
+	userId?: string;
+	searchTerm?: string;
+}
+
 export
-async function fetchSearchFeed(userId?: string, query?: string) {
-	if(!query) {
+async function fetchSearchFeed(params: Params): Promise<Feed> {
+	const {
+		userId,
+		searchTerm,
+	} = params;
+
+	if(!searchTerm) {
 		return {
 			posts: [],
 			parentPostMap: {},
@@ -19,7 +30,7 @@ async function fetchSearchFeed(userId?: string, query?: string) {
 	const col = await getCollection(DbCollections.Grams);
 
 	const results = await col.aggregate<DbPost>([
-		{ $match: { $text: { $search: grammit(query) } } },
+		{ $match: { $text: { $search: grammit(searchTerm) } } },
 		{ $sort: { score: { $meta: 'textScore' } } },
 		{ $limit: PageSize },
 		{

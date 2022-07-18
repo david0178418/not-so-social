@@ -45,13 +45,10 @@ export default async function handler(
 		responsePostMap: {},
 	};
 
-	if(FeedTypes.Bookmarks === type || FeedTypes.MyPosts === type) {
-		if(userId) {
-			feed = await FeedTypeQueryMap[type](userId);
-		}
-	} else {
-		feed = await FeedTypeQueryMap[type](userId);
-	}
+	feed = await FeedTypeQueryMap[type]({
+		userId,
+		searchTerm: '',
+	});
 
 	res.status(200).json({
 		ok: true,

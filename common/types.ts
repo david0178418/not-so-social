@@ -54,6 +54,14 @@ export
 type AsyncFnReturnType<T extends (...args: any[]) => Promise<any>> = Awaited<ReturnType<T>>;
 
 export
+// TODO break this up?
+interface Feed {
+	posts: Post[];
+	parentPostMap: PostIdMap;
+	responsePostMap: PostIdMap,
+}
+
+export
 type Nullable<T> = T | null;
 
 export
