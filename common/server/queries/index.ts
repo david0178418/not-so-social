@@ -1,4 +1,4 @@
-import { Post } from '@common/types';
+import { Feed, Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
@@ -36,8 +36,15 @@ export { fetchNewPosts } from './feed/new';
 export { fetchSearchFeed } from './feed/search';
 export { fetchTopPosts } from './feed/top';
 
+interface CommonFeedParams {
+	userId?: string;
+	searchTerm?: string;
+}
+
+type FeedQuery = <T extends CommonFeedParams>(args: T) => Promise<Feed>;
+
 export
-const FeedTypeQueryMap = {
+const FeedTypeQueryMap: Record<FeedTypes, FeedQuery> = {
 	[FeedTypes.Bookmarks]: fetchBookmarkedPosts,
 	[FeedTypes.Hot]: fetchHotPosts,
 	[FeedTypes.MyPosts]: fetchMyPosts,
