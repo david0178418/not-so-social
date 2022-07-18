@@ -26,6 +26,7 @@ import {
 	fetchNewPosts,
 	fetchTopPosts,
 } from '@common/server/queries';
+import { getFeed } from '@common/client/api-calls';
 
 // TODO Clean all this up
 type Foo = FeedTypes.Hot | FeedTypes.New | FeedTypes.Top;
@@ -73,18 +74,37 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 };
 
 const HomePage: NextPage<Props> = (props) => {
+	const { feed: initialFeed } = props;
+	const [feed, setFeed] = useState<typeof initialFeed>(initialFeed);
 	const [isLoading, setIsLoading] = useState(true);
 	const { observe } = useInView({ onEnter: loadMore });
 	const {
-		feed: {
-			parentPostMap,
-			posts,
-			responsePostMap,
-		},
-	} = props;
+		parentPostMap,
+		posts,
+		responsePostMap,
+	} = feed;
 
 	async function loadMore() {
 		setIsLoading(true);
+		const { data }: any = await getFeed(FeedTypes.New);
+
+		if(data?.feed) {
+			setFeed({
+				posts: [
+					...feed.posts,
+					...data.feed.posts,
+				],
+				parentPostMap: {
+					...feed.parentPostMap,
+					...data.feed.parentPostMap,
+				},
+				responsePostMap: {
+					...feed.responsePostMap,
+					...data.feed.responsePostMap,
+				},
+			});
+		}
+
 		setIsLoading(false);
 	}
 
@@ -123,9 +143,9 @@ const HomePage: NextPage<Props> = (props) => {
 				}
 			>
 				<HomeSortTabs />
-				{posts.map(p => (
+				{posts.map((p, i) => (
 					<FeedPost
-						key={p._id}
+						key={`${p._id}+${i}`}
 						post={p}
 						parentPosts={
 							(p.parentId && parentPostMap[p.parentId]) ?

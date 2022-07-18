@@ -4,16 +4,18 @@ import type { ZodType } from 'zod';
 
 import { FeedTypes } from '@common/constants';
 import { z } from 'zod';
+import { getServerSession } from '@common/server/auth-options';
+import { FeedTypeQueryMap } from '@common/server/queries';
 
 interface Schema {
-	bar: string;
-	foo: string;
+	bar?: string;
+	foo?: string;
 	type: FeedTypes;
 }
 
 const schema: ZodType<Schema> = z.object({
-	foo: z.string(),
-	bar: z.string(),
+	foo: z.string().optional(),
+	bar: z.string().optional(),
 	type: z.nativeEnum(FeedTypes),
 });
 
@@ -32,11 +34,27 @@ export default async function handler(
 			});
 	}
 
+	const { type } = result.data;
 
+	const session = await getServerSession(req, res);
+	const userId = session?.user.id;
 
+	let feed: any = {
+		posts: [],
+		parentPostMap: {},
+		responsePostMap: {},
+	};
+
+	if(FeedTypes.Bookmarks === type || FeedTypes.MyPosts === type) {
+		if(userId) {
+			feed = await FeedTypeQueryMap[type](userId);
+		}
+	} else {
+		feed = await FeedTypeQueryMap[type](userId);
+	}
 
 	res.status(200).json({
 		ok: true,
-		data: { foo: req.query },
+		data: { feed },
 	});
 }

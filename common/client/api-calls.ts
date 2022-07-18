@@ -3,7 +3,7 @@ import type { ApiResponse, LinkPreviewData } from '../types';
 import { signIn, signOut } from 'next-auth/react';
 import { get, post } from '@common/client/client-utils';
 import { urlJoin } from '../utils';
-import { API_URL } from '../constants';
+import { API_URL, FeedTypes } from '../constants';
 
 export
 async function login(username: string, password: string) {
@@ -45,6 +45,11 @@ interface Foo {
 export
 async function getLinkPreviewsFromContent(content: string, signal?: AbortSignal) {
 	return apiGet<ApiResponse<Foo>>('/link-previews-from-content', { content }, signal);
+}
+
+export
+async function getFeed(type: FeedTypes) {
+	return apiGet<ApiResponse>(`/feed/${type}`);
 }
 
 interface PostSaveArgs {
