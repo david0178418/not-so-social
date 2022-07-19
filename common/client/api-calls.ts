@@ -1,4 +1,8 @@
-import type { ApiResponse, LinkPreviewData } from '../types';
+import type {
+	ApiResponse,
+	Feed,
+	LinkPreviewData,
+} from '../types';
 
 import { signIn, signOut } from 'next-auth/react';
 import { get, post } from '@common/client/client-utils';
@@ -55,7 +59,7 @@ interface FetchFeedParams {
 
 export
 async function getFeed(type: FeedTypes, params?: FetchFeedParams) {
-	return apiGet<ApiResponse>(`/feed/${type}`, params);
+	return apiGet<ApiResponse<{feed: Feed}>>(`/feed/${type}`, params);
 }
 
 interface PostSaveArgs {

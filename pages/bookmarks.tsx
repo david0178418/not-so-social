@@ -9,14 +9,13 @@ import { SearchForm } from '@components/search-form';
 import { ScrollContent } from '@components/scroll-content';
 import { fetchBookmarkedPosts } from '@common/server/queries';
 import { LoadMoreButton } from '@components/load-more-button';
-import { getFeed } from '@common/client/api-calls';
+import { useFeed } from '@common/hooks';
 import {
 	AppName,
 	FeedTypes,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
-import { useFeed } from '@common/hooks';
 
 interface Props {
 	feed: Feed;
@@ -28,20 +27,18 @@ const BookmarksPage: NextPage<Props> = (props) => {
 		searchTerm,
 		feed: initialFeed,
 	} = props;
-	const [feed, isDone, onMore] = useFeed(initialFeed, loadMore);
+	const [feed, isDone, loadMore] = useFeed(initialFeed);
 	const {
 		parentPostMap,
 		posts,
 		responsePostMap,
 	} = feed;
 
-	async function loadMore() {
-		const { data }: any = await getFeed(FeedTypes.Bookmarks, {
+	function handleLoadMore() {
+		return loadMore(FeedTypes.Bookmarks, {
 			fromIndex: feed.posts.length,
 			searchTerm,
 		});
-
-		return data?.feed || null;
 	}
 
 	return (
@@ -102,7 +99,7 @@ const BookmarksPage: NextPage<Props> = (props) => {
 					/>
 				))}
 				<LoadMoreButton
-					onMore={onMore}
+					onMore={handleLoadMore}
 					isDone={isDone}
 				/>
 			</ScrollContent>

@@ -8,7 +8,6 @@ import { HomeSortTabs } from '@components/home-sort-tabs';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
 import { Box } from '@mui/material';
-import { getFeed } from '@common/client/api-calls';
 import { LoadMoreButton } from '@components/load-more-button';
 import { FeedTypeQueryMap } from '@common/server/queries';
 import { ReactNode } from 'react';
@@ -31,17 +30,15 @@ interface Props {
 
 const HomePage: NextPage<Props> = (props) => {
 	const { feed: initialFeed } = props;
-	const [feed, isDone, onMore] = useFeed(initialFeed, loadMore);
+	const [feed, isDone, loadMore] = useFeed(initialFeed);
 	const {
 		parentPostMap,
 		posts,
 		responsePostMap,
 	} = feed;
 
-	async function loadMore() {
-		const { data }: any = await getFeed(FeedTypes.Hot, { afterTimeISO: feed.cutoffISO });
-
-		return data?.feed || null;
+	function handleLoadMore() {
+		return loadMore(FeedTypes.Hot, { afterTimeISO: feed.cutoffISO });
 	}
 
 	return (
@@ -98,7 +95,7 @@ const HomePage: NextPage<Props> = (props) => {
 					/>
 				))}
 				<LoadMoreButton
-					onMore={onMore}
+					onMore={handleLoadMore}
 					isDone={isDone}
 				/>
 			</ScrollContent>

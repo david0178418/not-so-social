@@ -1,9 +1,13 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { PageSize, UserRoles } from '@common/constants';
 import { Feed } from '@common/types';
 import { tuple } from '@common/utils';
+import { getFeed } from '@common/client/api-calls';
+import {
+	PageSize,
+	UserRoles,
+} from '@common/constants';
 
 export
 function useIsLoggedIn() {
@@ -65,9 +69,8 @@ function useDebounce<T>(value: T, delay: number) {
 	return debouncedValue;
 }
 
-
 export
-function useFeed(initialFeed: Feed, loadMore: () => Promise<Feed | null>) {
+function useFeed(initialFeed: Feed) {
 	const [feed, setFeed] = useState(initialFeed);
 	const [isDone, setIsDone] = useState(false);
 
@@ -80,8 +83,10 @@ function useFeed(initialFeed: Feed, loadMore: () => Promise<Feed | null>) {
 		setIsDone(false);
 	}, [initialFeed]);
 
-	async function onMore() {
-		const newFeedItems = await loadMore();
+	async function onMore(...params: Parameters<typeof getFeed>) {
+		const [type, args] = params;
+		const response = await getFeed(type, args);
+		const newFeedItems = response?.data?.feed || null;
 
 		if(!newFeedItems) {
 			setIsDone(true);
