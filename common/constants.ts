@@ -35,7 +35,7 @@ export
 const MaxSearchTermSize = 100;
 
 export
-const PageSize = 3;
+const PageSize = 10;
 
 export
 const ISODateStringLength = 24;
