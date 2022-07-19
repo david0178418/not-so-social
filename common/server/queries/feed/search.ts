@@ -10,7 +10,7 @@ const DocPlaceholder = 'docTemp';
 interface Params {
 	userId?: string;
 	searchTerm?: string;
-	afterTime?: string;
+	fromIndex?: number;
 }
 
 export
@@ -18,6 +18,7 @@ async function fetchSearchFeed(params: Params): Promise<Feed> {
 	const {
 		userId,
 		searchTerm,
+		fromIndex = 0,
 	} = params;
 
 	if(!searchTerm) {
@@ -33,7 +34,8 @@ async function fetchSearchFeed(params: Params): Promise<Feed> {
 	const results = await col.aggregate<DbPost>([
 		{ $match: { $text: { $search: grammit(searchTerm) } } },
 		{ $sort: { score: { $meta: 'textScore' } } },
-		{ $limit: PageSize },
+		{ $limit: PageSize + fromIndex },
+		{ $skip: fromIndex },
 		{
 			$lookup: {
 				from: DbCollections.Posts,

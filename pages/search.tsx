@@ -7,9 +7,12 @@ import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
 import { fetchSearchFeed } from '@common/server/queries';
+import { LoadMoreButton } from '@components/load-more-button';
+import { useFeed } from '@common/hooks';
 import {
 	AppName,
 	BaseUrl,
+	FeedTypes,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
@@ -54,15 +57,24 @@ interface Props {
 const SearchPage: NextPage<Props> = (props) => {
 	const {
 		searchTerm,
-		feed: {
-			parentPostMap,
-			posts,
-			responsePostMap,
-		},
+		feed: initialFeed,
 	} = props;
+	const [feed, isDone, loadMore] = useFeed(initialFeed);
+	const {
+		parentPostMap,
+		posts,
+		responsePostMap,
+	} = feed;
 
 	const title = `${AppName} - Search Results`;
 	const description = `"${searchTerm}" Search Results - ${AppName}`;
+
+	function handleLoadMore() {
+		return loadMore(FeedTypes.Search, {
+			fromIndex: feed.posts.length,
+			searchTerm,
+		});
+	}
 
 	return (
 		<>
@@ -123,6 +135,10 @@ const SearchPage: NextPage<Props> = (props) => {
 						}
 					/>
 				))}
+				<LoadMoreButton
+					onMore={handleLoadMore}
+					isDone={isDone}
+				/>
 			</ScrollContent>
 		</>
 	);
