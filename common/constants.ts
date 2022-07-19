@@ -1,11 +1,11 @@
 export
-const AppName = 'BublUpper';
+const AppName = 'NotSo.Social';
 
 export
 const MongoDbName = 'pinboard';
 
 export
-const BaseUrl = 'https://www.bublupper.com';
+const BaseUrl = 'https://notso.social';
 
 export
 const MinPostCost = 10;
