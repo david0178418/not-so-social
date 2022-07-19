@@ -11,16 +11,12 @@ import { Box } from '@mui/material';
 import { getFeed } from '@common/client/api-calls';
 import { LoadMoreButton } from '@components/load-more-button';
 import { FeedTypeQueryMap } from '@common/server/queries';
-import {
-	ReactNode,
-	useEffect,
-	useState,
-} from 'react';
+import { ReactNode } from 'react';
+import { useFeed } from '@common/hooks';
 import {
 	AppName,
 	BaseUrl,
 	FeedTypes,
-	PageSize,
 	Paths,
 } from '@common/constants';
 
@@ -35,49 +31,17 @@ interface Props {
 
 const HomePage: NextPage<Props> = (props) => {
 	const { feed: initialFeed } = props;
-	const [feed, setFeed] = useState<typeof initialFeed>(initialFeed);
-	const [isDone, setIsDone] = useState(false);
+	const [feed, isDone, onMore] = useFeed(initialFeed, loadMore);
 	const {
 		parentPostMap,
 		posts,
 		responsePostMap,
 	} = feed;
 
-	useEffect(() => {
-		if(feed === initialFeed) {
-			return;
-		}
-
-		setFeed(initialFeed);
-		setIsDone(false);
-	}, [initialFeed]);
-
 	async function loadMore() {
 		const { data }: any = await getFeed(FeedTypes.Hot, { afterTimeISO: feed.cutoffISO });
 
-		if(data?.feed) {
-			setFeed({
-				cutoffISO: data.feed.cutoffISO,
-				posts: [
-					...feed.posts,
-					...data.feed.posts,
-				],
-				parentPostMap: {
-					...feed.parentPostMap,
-					...data.feed.parentPostMap,
-				},
-				responsePostMap: {
-					...feed.responsePostMap,
-					...data.feed.responsePostMap,
-				},
-			});
-		}
-
-		if(!data.feed?.posts || data.feed.posts.length < PageSize) {
-			return true;
-		}
-
-		return false;
+		return data?.feed || null;
 	}
 
 	return (
@@ -111,6 +75,8 @@ const HomePage: NextPage<Props> = (props) => {
 						},
 					}}>
 						<SearchForm />
+						<br/>
+						{initialFeed.cutoffISO}
 					</Box>
 				}
 			>
@@ -132,9 +98,8 @@ const HomePage: NextPage<Props> = (props) => {
 					/>
 				))}
 				<LoadMoreButton
-					onMore={loadMore}
+					onMore={onMore}
 					isDone={isDone}
-					onDone={() => setIsDone(true)}
 				/>
 			</ScrollContent>
 		</>
@@ -169,11 +134,13 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 		};
 	}
 
+	const feed = await FeedTypeQueryMap[feedType]({ userId });
+
 	return {
 		props: {
 			session,
 			feedType,
-			feed: await FeedTypeQueryMap[feedType]({ userId }),
+			feed,
 		},
 	};
 };

@@ -9,8 +9,7 @@ import {
 
 interface Props {
 	isDone?: boolean;
-	onDone(): void;
-	onMore(): Promise<boolean>;
+	onMore(): Promise<any>;
 }
 
 export
@@ -18,18 +17,13 @@ function LoadMoreButton(props: Props) {
 	const {
 		onMore,
 		isDone,
-		onDone,
 	} = props;
 	const [isLoading, setIsLoading] = useState(true);
 	const { observe } = useInView({ onEnter: handleMore });
 
 	async function handleMore() {
 		setIsLoading(true);
-		const done = await onMore();
-
-		if(done) {
-			onDone();
-		}
+		await onMore();
 
 		setIsLoading(false);
 	}

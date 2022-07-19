@@ -1,7 +1,9 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { UserRoles } from '@common/constants';
+import { PageSize, UserRoles } from '@common/constants';
+import { Feed } from '@common/types';
+import { tuple } from '@common/utils';
 
 export
 function useIsLoggedIn() {
@@ -61,4 +63,51 @@ function useDebounce<T>(value: T, delay: number) {
 	}, [value, delay]);
 
 	return debouncedValue;
+}
+
+
+export
+function useFeed(initialFeed: Feed, loadMore: () => Promise<Feed | null>) {
+	const [feed, setFeed] = useState(initialFeed);
+	const [isDone, setIsDone] = useState(false);
+
+	useEffect(() => {
+		if(feed === initialFeed) {
+			return;
+		}
+
+		setFeed(initialFeed);
+		setIsDone(false);
+	}, [initialFeed]);
+
+	async function onMore() {
+		const newFeedItems = await loadMore();
+
+		if(!newFeedItems) {
+			setIsDone(true);
+
+			return;
+		}
+
+		setFeed({
+			posts: [
+				...feed.posts,
+				...newFeedItems.posts,
+			],
+			parentPostMap: {
+				...feed.parentPostMap,
+				...newFeedItems.parentPostMap,
+			},
+			responsePostMap: {
+				...feed.responsePostMap,
+				...newFeedItems.responsePostMap,
+			},
+		});
+
+		if(!newFeedItems?.posts || newFeedItems.posts.length < PageSize) {
+			return setIsDone(true);
+		}
+	}
+
+	return tuple(feed, isDone, onMore);
 }

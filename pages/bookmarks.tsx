@@ -9,15 +9,14 @@ import { SearchForm } from '@components/search-form';
 import { ScrollContent } from '@components/scroll-content';
 import { fetchBookmarkedPosts } from '@common/server/queries';
 import { LoadMoreButton } from '@components/load-more-button';
-import { useEffect, useState } from 'react';
 import { getFeed } from '@common/client/api-calls';
 import {
 	AppName,
 	FeedTypes,
 	MaxSearchTermSize,
-	PageSize,
 	Paths,
 } from '@common/constants';
+import { useFeed } from '@common/hooks';
 
 interface Props {
 	feed: Feed;
@@ -29,22 +28,12 @@ const BookmarksPage: NextPage<Props> = (props) => {
 		searchTerm,
 		feed: initialFeed,
 	} = props;
-	const [feed, setFeed] = useState<Feed>(initialFeed);
-	const [isDone, setIsDone] = useState(false);
+	const [feed, isDone, onMore] = useFeed(initialFeed, loadMore);
 	const {
 		parentPostMap,
 		posts,
 		responsePostMap,
 	} = feed;
-
-	useEffect(() => {
-		if(feed === initialFeed) {
-			return;
-		}
-
-		setFeed(initialFeed);
-		setIsDone(false);
-	}, [initialFeed]);
 
 	async function loadMore() {
 		const { data }: any = await getFeed(FeedTypes.Bookmarks, {
@@ -52,28 +41,7 @@ const BookmarksPage: NextPage<Props> = (props) => {
 			searchTerm,
 		});
 
-		if(data?.feed) {
-			setFeed({
-				posts: [
-					...feed.posts,
-					...data.feed.posts,
-				],
-				parentPostMap: {
-					...feed.parentPostMap,
-					...data.feed.parentPostMap,
-				},
-				responsePostMap: {
-					...feed.responsePostMap,
-					...data.feed.responsePostMap,
-				},
-			});
-		}
-
-		if(!data.feed?.posts || data.feed.posts.length < PageSize) {
-			return true;
-		}
-
-		return false;
+		return data?.feed || null;
 	}
 
 	return (
@@ -134,9 +102,8 @@ const BookmarksPage: NextPage<Props> = (props) => {
 					/>
 				))}
 				<LoadMoreButton
-					onMore={loadMore}
+					onMore={onMore}
 					isDone={isDone}
-					onDone={() => setIsDone(true)}
 				/>
 			</ScrollContent>
 		</>

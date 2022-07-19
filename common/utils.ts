@@ -165,3 +165,8 @@ function truncate(input: string, maxLen = 50) {
 
 export
 const NoOp = () => {};
+
+export
+function tuple<T extends any[]>(...args: T) {
+	return args;
+}
