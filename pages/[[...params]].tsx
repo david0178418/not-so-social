@@ -72,8 +72,6 @@ const HomePage: NextPage<Props> = (props) => {
 						},
 					}}>
 						<SearchForm />
-						<br/>
-						{initialFeed.cutoffISO}
 					</Box>
 				}
 			>

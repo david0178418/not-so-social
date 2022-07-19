@@ -1,9 +1,8 @@
 import type { Feed } from '@common/types';
+import type { DbPost } from '@common/server/db-schema';
 
-import { getCollection } from '@common/server/mongodb';
 import { ObjectId } from 'mongodb';
-import { Document } from 'bson';
-import { DbPost } from '@common/server/db-schema';
+import { getCollection } from '@common/server/mongodb';
 import { grammit } from '@common/server/server-utils';
 import { DbCollections, PageSize } from '@common/constants';
 import { fetchRelatedPostsAndPrepareForClient } from '..';
@@ -38,7 +37,7 @@ async function fetchBookmarkedPosts(params: Params): Promise<Feed> {
 		getCollection(DbCollections.Grams) :
 		getCollection(DbCollections.PostBookmarks));
 
-	const searchStages: Document[] = [];
+	const searchStages: Record<string, any>[] = [];
 
 	if(searchTerm) {
 		[

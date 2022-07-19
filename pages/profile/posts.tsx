@@ -9,45 +9,12 @@ import { ScrollContent } from '@components/scroll-content';
 import { fetchMyPosts } from '@common/server/queries';
 import {
 	AppName,
+	FeedTypes,
 	MaxSearchTermSize,
 	Paths,
 } from '@common/constants';
-
-export
-const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-	const session = await getServerSession(ctx.req, ctx.res);
-
-	if(!session) {
-		return {
-			redirect: {
-				permanent: false,
-				destination: Paths.ProfilePosts,
-			},
-		};
-	}
-
-	const rawTerm = ctx.query?.q || '';
-	const foo = Array.isArray(rawTerm) ?
-		rawTerm.join() :
-		rawTerm;
-	const searchTerm = foo.substring(0, MaxSearchTermSize);
-
-	const feed = await fetchMyPosts({
-		userId: session.user.id,
-		searchQuery: searchTerm,
-	});
-
-	return {
-		props: {
-			session,
-			feed,
-			searchTerm,
-			// posts: userId ?
-			// 	await fetchUserBookmarkedPosts(userId) :
-			// 	[],
-		},
-	};
-};
+import { LoadMoreButton } from '@components/load-more-button';
+import { useFeed } from '@common/hooks';
 
 interface Props {
 	feed: AsyncFnReturnType<typeof fetchMyPosts>;
@@ -57,17 +24,26 @@ interface Props {
 const ProfilePostsPage: NextPage<Props> = (props) => {
 	const {
 		searchTerm,
-		feed: {
-			parentPostMap,
-			posts,
-			responsePostMap,
-		},
+		feed: initialFeed,
 	} = props;
+	const [feed, isDone, loadMore] = useFeed(initialFeed);
+	const {
+		parentPostMap,
+		posts,
+		responsePostMap,
+	} = feed;
+
+	function handleLoadMore() {
+		return loadMore(FeedTypes.MyPosts, {
+			fromIndex: feed.posts.length,
+			searchTerm,
+		});
+	}
 
 	return (
 		<>
 			<Head>
-				<title>{AppName}</title>
+				<title>{AppName} - My Posts</title>
 				<meta name="description" content={`${AppName} - My Posts`} />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
@@ -121,9 +97,49 @@ const ProfilePostsPage: NextPage<Props> = (props) => {
 						}
 					/>
 				))}
+				<LoadMoreButton
+					onMore={handleLoadMore}
+					isDone={isDone}
+				/>
 			</ScrollContent>
 		</>
 	);
 };
 
 export default ProfilePostsPage;
+
+export
+const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+	const session = await getServerSession(ctx.req, ctx.res);
+
+	if(!session) {
+		return {
+			redirect: {
+				permanent: false,
+				destination: Paths.ProfilePosts,
+			},
+		};
+	}
+
+	const rawTerm = ctx.query?.q || '';
+	const foo = Array.isArray(rawTerm) ?
+		rawTerm.join() :
+		rawTerm;
+	const searchTerm = foo.substring(0, MaxSearchTermSize);
+
+	const feed = await fetchMyPosts({
+		userId: session.user.id,
+		searchTerm: searchTerm,
+	});
+
+	return {
+		props: {
+			session,
+			feed,
+			searchTerm,
+			// posts: userId ?
+			// 	await fetchUserBookmarkedPosts(userId) :
+			// 	[],
+		},
+	};
+};

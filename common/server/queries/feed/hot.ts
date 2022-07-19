@@ -1,9 +1,8 @@
-import type { Document } from 'bson';
 import { getCollection } from '@common/server/mongodb';
-import { ObjectId } from 'mongodb';
 import { DbPointTransaction, DbPost } from '@common/server/db-schema';
 import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';
+import { ObjectId } from 'mongodb';
 import {
 	DbCollections,
 	PageSize,
@@ -23,7 +22,7 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 	} = params;
 	const txnCol = await getCollection(DbCollections.PointTransactions);
 
-	const pipeline: Document[] = [
+	const pipeline: Record<string, any>[] = [
 		{ $sort: { date: -1 } },
 	];
 
