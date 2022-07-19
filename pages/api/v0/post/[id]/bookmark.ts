@@ -21,6 +21,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const postObjId = new ObjectId(postId);
 
 		const col = await getCollection(DbCollections.PostBookmarks);
+		const date = nowISOString();
 		await col.updateOne(
 			{
 				userId,
@@ -30,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 				$setOnInsert: {
 					userId,
 					postId: postObjId,
-					date: nowISOString(),
+					date,
 				},
 			},
 			{ upsert: true }
@@ -38,7 +39,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 		return res
 			.status(200)
-			.json({ ok: true });
+			.json({
+				ok: true,
+				data: { date },
+			});
 	} catch (message) {
 		console.error(message);
 		return res

@@ -164,12 +164,10 @@ async function fetchBookmarksFromPostIds(userId: string, postIds: string[]) {
 	}
 
 	const col = await getCollection(DbCollections.PostBookmarks);
-	const bookmarks = await col.find({
+	return col.find({
 		userId: new ObjectId(userId),
 		postId: { $in: postIds.map(p => new ObjectId(p)) },
 	}).toArray();
-
-	return bookmarks.map(b => b.postId.toString());
 }
 
 export

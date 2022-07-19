@@ -129,8 +129,8 @@ function objectToArgs(args: any) {
 }
 
 export
-function last<T>(arr: T[]) {
-	return arr[arr.length - 1];
+function last<T>(arr: T[]): T | null {
+	return arr[arr.length - 1] || null;
 }
 
 export

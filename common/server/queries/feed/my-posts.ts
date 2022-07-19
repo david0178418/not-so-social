@@ -62,10 +62,5 @@ async function fetchMyPosts(params: Params): Promise<Feed> {
 		{ $match: { ownerId: new ObjectId(userId) } },
 	]).toArray();
 
-	const feedPosts = await fetchRelatedPostsAndPrepareForClient(results);
-
-	return {
-		...feedPosts,
-		cutoffISO: '',
-	};
+	return fetchRelatedPostsAndPrepareForClient(results, userId);
 }

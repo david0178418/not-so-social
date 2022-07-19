@@ -1,4 +1,6 @@
-import type { DbPointTransaction, DbPost } from './db-schema';
+import type {
+	DbBookmark, DbPointTransaction, DbPost,
+} from './db-schema';
 import { hash } from 'bcryptjs';
 import { isTruthy, unique } from '@common/utils';
 import type {
@@ -50,10 +52,10 @@ function dbPointTransactionToPointTransaction(transaction: DbPointTransaction): 
 }
 
 export
-function postToBookmarkedPostFn(bookmarkedIds: string[]) {
+function postToBookmarkedPostFn(bookmarks: DbBookmark[]) {
 	return (p: Post): Post => ({
 		...p,
-		bookmarked: bookmarkedIds.includes(p._id || ''),
+		bookmarkedDate: bookmarks.find(b => b.postId.toString() === p._id)?.date || '',
 	});
 }
 

@@ -23,7 +23,7 @@ function BookmarkToggle(props: Props) {
 		isLoggedIn,
 		size = 'medium',
 	} = props;
-	const [isBookmarked, setIsBookmarked] = useState(!!post.bookmarked);
+	const [isBookmarked, setIsBookmarked] = useState(!!post.bookmarkedDate);
 	const pushToastMsg = useSetAtom(pushToastMsgAtom);
 	const {
 		pathname,
@@ -35,20 +35,23 @@ function BookmarkToggle(props: Props) {
 			return;
 		}
 
+		// TODO Unwind logic for optimistic update
 		setIsBookmarked(!isBookmarked);
 
-		await post.bookmarked ?
-			unbookmarkPost(post._id) :
-			bookmarkPost(post._id);
+		// TODO Bad mutation
+		if(post.bookmarkedDate) {
+			await unbookmarkPost(post._id);
+			delete post.bookmarkedDate;
+		} else {
+			const result = await bookmarkPost(post._id);
+			post.bookmarkedDate = result.data?.date;
+		}
 
 		const shortTitle = truncate(post.title);
 
-		const msg = post.bookmarked ?
-			`Removed "${shortTitle}" from bookmarks` :
-			`Bookmarked "${shortTitle}"`;
-
-		// TODO Nicer/cleaner way to update this without mutating
-		post.bookmarked = !post.bookmarked;
+		const msg = post.bookmarkedDate ?
+			`Bookmarked "${shortTitle}"` :
+			`Removed "${shortTitle}" from bookmarks` ;
 
 		pushToastMsg(msg);
 	}

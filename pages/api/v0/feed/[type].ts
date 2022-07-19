@@ -2,22 +2,32 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { ZodType } from 'zod';
 
-import { FeedTypes, ISODateStringLength } from '@common/constants';
+import {
+	FeedTypes, ISODateStringLength, MaxSearchTermSize,
+} from '@common/constants';
 import { z } from 'zod';
 import { getServerSession } from '@common/server/auth-options';
 import { FeedTypeQueryMap } from '@common/server/queries';
 
 interface Schema {
-	bar?: string;
 	afterTimeISO?: string;
+	bar?: string;
+	searchTerm?: string;
 	type: FeedTypes;
 }
 
 const schema: ZodType<Schema> = z.object({
 	foo: z.string().optional(),
+	fromIndex: z
+		.number()
+		.optional(),
+	searchTerm: z
+		.string()
+		.max(MaxSearchTermSize)
+		.optional(),
 	afterTimeISO: z
 		.string()
-		.length(ISODateStringLength)
+		.max(ISODateStringLength)
 		.optional(),
 	type: z.nativeEnum(FeedTypes),
 });
@@ -26,7 +36,11 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	const result = await schema.safeParseAsync(req.query);
+	const result = await schema.safeParseAsync({
+		...req.query,
+		// @ts-ignore
+		fromIndex: +req.query.fromIndex || 0,
+	});
 
 	if(!result.success) {
 		return res
@@ -41,8 +55,8 @@ export default async function handler(
 	}
 
 	const {
-		afterTimeISO,
 		type,
+		...args
 	} = result.data;
 
 	const session = await getServerSession(req, res);
@@ -50,7 +64,7 @@ export default async function handler(
 
 	const feed = await FeedTypeQueryMap[type]({
 		userId,
-		afterTimeISO,
+		...args,
 	});
 
 	res.status(200).json({

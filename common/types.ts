@@ -6,7 +6,7 @@ export
 interface Post {
 	_id?: string;
 	body: string;
-	bookmarked?: boolean;
+	bookmarkedDate?: string;
 	created: string;
 	isOwner: boolean;
 	lastUpdated: string;
@@ -58,8 +58,8 @@ export
 interface Feed {
 	posts: Post[];
 	parentPostMap: PostIdMap;
-	responsePostMap: PostIdMap,
-	cutoffISO: string;
+	responsePostMap: PostIdMap;
+	cutoffISO?: string;
 }
 
 export

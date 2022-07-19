@@ -47,12 +47,14 @@ async function getLinkPreviewsFromContent(content: string, signal?: AbortSignal)
 	return apiGet<ApiResponse<Foo>>('/link-previews-from-content', { content }, signal);
 }
 
-interface FetFeedParams {
+interface FetchFeedParams {
 	afterTimeISO?: string;
+	fromIndex?: number;
+	searchTerm?: string;
 }
 
 export
-async function getFeed(type: FeedTypes, params?: FetFeedParams) {
+async function getFeed(type: FeedTypes, params?: FetchFeedParams) {
 	return apiGet<ApiResponse>(`/feed/${type}`, params);
 }
 
@@ -77,12 +79,12 @@ export async function postBoost(postId: string, points: number) {
 
 export
 async function bookmarkPost(id: string) {
-	return apiPost(`post/${id}/bookmark`);
+	return apiPost<ApiResponse<{date: string}>>(`post/${id}/bookmark`);
 }
 
 export
 async function unbookmarkPost(id: string) {
-	return apiPost(`post/${id}/remove-bookmark`);
+	return apiPost<ApiResponse>(`post/${id}/remove-bookmark`);
 }
 
 export

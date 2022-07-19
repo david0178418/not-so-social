@@ -15,6 +15,7 @@ interface Params {
 }
 
 export
+// TODO Rethink what "hot" means
 async function fetchHotPosts(params: Params): Promise<Feed> {
 	const {
 		afterTimeISO,

@@ -1,10 +1,12 @@
+import type { Feed } from '@common/types';
+
 import { getCollection } from '@common/server/mongodb';
 import { ObjectId } from 'mongodb';
+import { Document } from 'bson';
 import { DbPost } from '@common/server/db-schema';
 import { grammit } from '@common/server/server-utils';
-import { DbCollections } from '@common/constants';
+import { DbCollections, PageSize } from '@common/constants';
 import { fetchRelatedPostsAndPrepareForClient } from '..';
-import { Feed } from '@common/types';
 
 // TODO Is there a better way to do this in MongoDB?
 const DocPlaceholder = 'docTemp';
@@ -12,7 +14,7 @@ const DocPlaceholder = 'docTemp';
 interface Params {
 	userId?: string;
 	searchTerm?: string;
-	afterTime?: string;
+	fromIndex?: number;
 }
 
 export
@@ -20,7 +22,8 @@ export
 async function fetchBookmarkedPosts(params: Params): Promise<Feed> {
 	const {
 		userId,
-		searchTerm: searchQuery,
+		searchTerm,
+		fromIndex = 0,
 	} = params;
 
 	if(!userId) {
@@ -28,19 +31,18 @@ async function fetchBookmarkedPosts(params: Params): Promise<Feed> {
 			posts: [],
 			parentPostMap: {},
 			responsePostMap: {},
-			cutoffISO: '',
 		};
 	}
 
-	const col = await (searchQuery ?
+	const col = await (searchTerm ?
 		getCollection(DbCollections.Grams) :
 		getCollection(DbCollections.PostBookmarks));
 
-	const searchStages: any[] = [];
+	const searchStages: Document[] = [];
 
-	if(searchQuery) {
+	if(searchTerm) {
 		[
-			{ $match: { $text: { $search: grammit(searchQuery) } } },
+			{ $match: { $text: { $search: grammit(searchTerm) } } },
 			{
 				$lookup: {
 					from: DbCollections.PostBookmarks,
@@ -70,12 +72,9 @@ async function fetchBookmarkedPosts(params: Params): Promise<Feed> {
 		},
 		{ $unwind: { path: `$${DocPlaceholder}` } },
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
+		{ $limit: PageSize + fromIndex },
+		{ $skip: fromIndex },
 	]).toArray();
 
-	const feedPosts = await fetchRelatedPostsAndPrepareForClient(results, userId);
-
-	return {
-		...feedPosts,
-		cutoffISO: '',
-	};
+	return fetchRelatedPostsAndPrepareForClient(results, userId);
 }
