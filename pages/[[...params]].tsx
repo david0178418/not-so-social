@@ -12,6 +12,7 @@ import { LoadMoreButton } from '@components/load-more-button';
 import { FeedTypeQueryMap } from '@common/server/queries';
 import { ReactNode } from 'react';
 import { useFeed } from '@common/hooks';
+import { last } from '@common/utils';
 import {
 	AppName,
 	BaseUrl,
@@ -24,12 +25,15 @@ type HomeFeedTypes = FeedTypes.Hot | FeedTypes.New | FeedTypes.Top;
 
 interface Props {
 	children?: ReactNode;
-	feedType: string;
+	feedType: HomeFeedTypes;
 	feed: Feed;
 }
 
 const HomePage: NextPage<Props> = (props) => {
-	const { feed: initialFeed } = props;
+	const {
+		feedType,
+		feed: initialFeed,
+	} = props;
 	const [feed, isDone, loadMore] = useFeed(initialFeed);
 	const {
 		parentPostMap,
@@ -38,7 +42,7 @@ const HomePage: NextPage<Props> = (props) => {
 	} = feed;
 
 	function handleLoadMore() {
-		return loadMore(FeedTypes.Hot, { afterTimeISO: feed.cutoffISO });
+		return loadMore(feedType, { afterTimeISO: last(feed.posts)?.created || '' });
 	}
 
 	return (
@@ -59,20 +63,23 @@ const HomePage: NextPage<Props> = (props) => {
 						paddingTop: 1,
 						paddingBottom: 1,
 					}}>
-						<Box paddingBottom={1} sx={{
-							paddingLeft: {
-								xs: 2,
-								sm: 10,
-								md: 15,
-								lg: 20,
-							},
-							paddingRight: {
-								xs: 2,
-								sm: 10,
-								md: 15,
-								lg: 20,
-							},
-						}}>
+						<Box
+							paddingBottom={1}
+							sx={{
+								paddingLeft: {
+									xs: 2,
+									sm: 10,
+									md: 15,
+									lg: 20,
+								},
+								paddingRight: {
+									xs: 2,
+									sm: 10,
+									md: 15,
+									lg: 20,
+								},
+							}}
+						>
 							<SearchForm />
 						</Box>
 						<HomeSortTabs />

@@ -73,8 +73,6 @@ function LeftRail() {
 	} = router;
 	const user = data?.user;
 
-	console.log(router);
-
 	return (
 		<>
 			<Typography>
