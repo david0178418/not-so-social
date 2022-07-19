@@ -22,7 +22,6 @@ async function fetchSearchFeed(params: Params): Promise<Feed> {
 
 	if(!searchTerm) {
 		return {
-			cutoffISO: '',
 			posts: [],
 			parentPostMap: {},
 			responsePostMap: {},
@@ -47,10 +46,5 @@ async function fetchSearchFeed(params: Params): Promise<Feed> {
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 	]).toArray();
 
-	const feedPosts = await fetchRelatedPostsAndPrepareForClient(results, userId);
-
-	return {
-		...feedPosts,
-		cutoffISO: '',
-	};
+	return fetchRelatedPostsAndPrepareForClient(results, userId);
 }

@@ -1,28 +1,27 @@
 import { getCollection } from '@common/server/mongodb';
 import { DbPost } from '@common/server/db-schema';
-import { DbCollections } from '@common/constants';
+import { DbCollections, PageSize } from '@common/constants';
 import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';
 
 interface Params {
 	userId?: string;
-	afterTime?: string;
+	fromIndex?: number;
 }
 
 export
 async function fetchTopPosts(params: Params): Promise<Feed> {
-	const { userId } = params;
+	const {
+		userId,
+		fromIndex = 0,
+	} = params;
 	const col = await getCollection(DbCollections.Posts);
 
 	const results = await col.aggregate<DbPost>([
 		{ $sort: { totalPoints: -1 } },
-		// { $match: { created: { $gt: cutoffDate } } },
+		{ $limit: PageSize + fromIndex },
+		{ $skip: fromIndex },
 	]).toArray();
 
-	const feedPosts = await fetchRelatedPostsAndPrepareForClient(results, userId);
-
-	return {
-		...feedPosts,
-		cutoffISO: '',
-	};
+	return fetchRelatedPostsAndPrepareForClient(results, userId);
 }

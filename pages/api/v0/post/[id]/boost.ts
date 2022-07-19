@@ -132,7 +132,7 @@ async function boostPost(props: BoostPostProps) {
 	const calls: Promise<any>[] = [
 		postCol.updateOne(
 			{ _id: postId },
-			{ $inc: { points: appliedPoints } }
+			{ $inc: { totalPoints: appliedPoints } }
 		),
 	];
 

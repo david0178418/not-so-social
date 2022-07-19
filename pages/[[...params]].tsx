@@ -42,7 +42,10 @@ const HomePage: NextPage<Props> = (props) => {
 	} = feed;
 
 	function handleLoadMore() {
-		return loadMore(feedType, { afterTimeISO: last(feed.posts)?.created || '' });
+		return loadMore(feedType, {
+			afterTimeISO: last(feed.posts)?.created || '',
+			fromIndex: feed.posts.length,
+		});
 	}
 
 	return (
