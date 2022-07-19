@@ -131,7 +131,7 @@ function LeftRail() {
 								<ListItemButton>
 									<RailButtonContent label="My Posts">
 										{
-											Paths.ProfilePosts === asPath ?
+											asPath.startsWith(Paths.ProfilePosts) ?
 												<PostActiveIcon /> :
 												<PostIcon />
 										}
@@ -148,7 +148,7 @@ function LeftRail() {
 								<ListItemButton>
 									<RailButtonContent label="Bookmarks" >
 										{
-											Paths.Bookmarks === asPath ?
+											asPath.startsWith(Paths.Bookmarks) ?
 												<BookmarkActiveIcon /> :
 												<BookmarkIcon />
 										}
@@ -165,7 +165,7 @@ function LeftRail() {
 								<ListItemButton>
 									<RailButtonContent label={user.username}>
 										{
-											Paths.Profile === asPath ?
+											asPath.startsWith(Paths.Profile) ?
 												<ProfileActiveIcon /> :
 												<ProfileIcon />
 										}

@@ -123,7 +123,7 @@ function BottomNav() {
 								key="a"
 								label="Bookmarks"
 								icon={
-									Paths.Bookmarks === asPath ?
+									asPath.startsWith(Paths.Bookmarks) ?
 										<BookmarkActiveIcon /> :
 										<BookmarkIcon />
 								}
@@ -138,7 +138,7 @@ function BottomNav() {
 							<BottomNavigationAction
 								label={user.username}
 								icon={
-									Paths.Profile === asPath ?
+									asPath.startsWith(Paths.Profile) ?
 										<ProfileActiveIcon /> :
 										<ProfileIcon />
 								}
