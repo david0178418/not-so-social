@@ -57,25 +57,28 @@ const HomePage: NextPage<Props> = (props) => {
 				header={
 					<Box sx={{
 						paddingTop: 1,
-						paddingBottom: 2,
-						paddingLeft: {
-							xs: 2,
-							sm: 10,
-							md: 15,
-							lg: 20,
-						},
-						paddingRight: {
-							xs: 2,
-							sm: 10,
-							md: 15,
-							lg: 20,
-						},
+						paddingBottom: 1,
 					}}>
-						<SearchForm />
+						<Box paddingBottom={1} sx={{
+							paddingLeft: {
+								xs: 2,
+								sm: 10,
+								md: 15,
+								lg: 20,
+							},
+							paddingRight: {
+								xs: 2,
+								sm: 10,
+								md: 15,
+								lg: 20,
+							},
+						}}>
+							<SearchForm />
+						</Box>
+						<HomeSortTabs />
 					</Box>
 				}
 			>
-				<HomeSortTabs />
 				{posts.map((p, i) => (
 					<FeedPost
 						key={`${p._id}+${i}`}
