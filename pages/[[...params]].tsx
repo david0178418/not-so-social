@@ -33,44 +33,10 @@ interface Props {
 	feed: Feed;
 }
 
-const ValidFeedTypes = [
-	FeedTypes.Hot,
-	FeedTypes.New,
-	FeedTypes.Top,
-];
-
-export
-const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
-	const session = await getServerSession(ctx.req, ctx.res);
-	const userId = session?.user.id || '';
-
-	const { params = [FeedTypes.Hot] } = ctx.params;
-
-	// Compensate for some weird vercel behavior where "index" is being
-	// passed as the path parameter rather than nothing, as expected.
-	const feedType: HomeFeedTypes = (params[0] === 'index') ? FeedTypes.Hot : params[0];
-
-	if(!ValidFeedTypes.includes(feedType)) {
-		return {
-			redirect: {
-				permanent: false,
-				destination: Paths.Home,
-			},
-		};
-	}
-
-	return {
-		props: {
-			session,
-			feedType,
-			feed: await FeedTypeQueryMap[feedType]({ userId }),
-		},
-	};
-};
-
 const HomePage: NextPage<Props> = (props) => {
 	const { feed: initialFeed } = props;
 	const [feed, setFeed] = useState<typeof initialFeed>(initialFeed);
+	const [isDone, setIsDone] = useState(false);
 	const {
 		parentPostMap,
 		posts,
@@ -83,6 +49,7 @@ const HomePage: NextPage<Props> = (props) => {
 		}
 
 		setFeed(initialFeed);
+		setIsDone(false);
 	}, [initialFeed]);
 
 	async function loadMore() {
@@ -164,10 +131,49 @@ const HomePage: NextPage<Props> = (props) => {
 						}
 					/>
 				))}
-				<LoadMoreButton onMore={loadMore}/>
+				<LoadMoreButton
+					onMore={loadMore}
+					isDone={isDone}
+					onDone={() => setIsDone(true)}
+				/>
 			</ScrollContent>
 		</>
 	);
 };
 
 export default HomePage;
+
+const ValidFeedTypes = [
+	FeedTypes.Hot,
+	FeedTypes.New,
+	FeedTypes.Top,
+];
+
+export
+const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
+	const session = await getServerSession(ctx.req, ctx.res);
+	const userId = session?.user.id || '';
+
+	const { params = [FeedTypes.Hot] } = ctx.params;
+
+	// Compensate for some weird vercel behavior where "index" is being
+	// passed as the path parameter rather than nothing, as expected.
+	const feedType: HomeFeedTypes = (params[0] === 'index') ? FeedTypes.Hot : params[0];
+
+	if(!ValidFeedTypes.includes(feedType)) {
+		return {
+			redirect: {
+				permanent: false,
+				destination: Paths.Home,
+			},
+		};
+	}
+
+	return {
+		props: {
+			session,
+			feedType,
+			feed: await FeedTypeQueryMap[feedType]({ userId }),
+		},
+	};
+};

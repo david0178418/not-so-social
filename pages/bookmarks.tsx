@@ -19,42 +19,6 @@ import {
 	Paths,
 } from '@common/constants';
 
-export
-const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-	const session = await getServerSession(ctx.req, ctx.res);
-
-	if(!session) {
-		return {
-			redirect: {
-				permanent: false,
-				destination: Paths.Bookmarks,
-			},
-		};
-	}
-
-	const rawTerm = ctx.query?.q || '';
-	const foo = Array.isArray(rawTerm) ?
-		rawTerm.join() :
-		rawTerm;
-	const searchTerm = foo.substring(0, MaxSearchTermSize);
-
-	const feed = await fetchBookmarkedPosts({
-		userId: session.user.id,
-		searchTerm,
-	});
-
-	return {
-		props: {
-			session,
-			feed,
-			searchTerm,
-			// posts: userId ?
-			// 	await fetchUserBookmarkedPosts(userId) :
-			// 	[],
-		},
-	};
-};
-
 interface Props {
 	feed: Feed;
 	searchTerm: string;
@@ -62,7 +26,8 @@ interface Props {
 
 const BookmarksPage: NextPage<Props> = (props) => {
 	const {
-		searchTerm, feed: initialFeed,
+		searchTerm,
+		feed: initialFeed,
 	} = props;
 	const [feed, setFeed] = useState<Feed>(initialFeed);
 	const [isDone, setIsDone] = useState(false);
@@ -78,11 +43,8 @@ const BookmarksPage: NextPage<Props> = (props) => {
 		}
 
 		setFeed(initialFeed);
-	}, [initialFeed]);
-
-	useEffect(() => {
 		setIsDone(false);
-	}, [searchTerm]);
+	}, [initialFeed]);
 
 	async function loadMore() {
 		const { data }: any = await getFeed(FeedTypes.Bookmarks, {
@@ -174,6 +136,7 @@ const BookmarksPage: NextPage<Props> = (props) => {
 				<LoadMoreButton
 					onMore={loadMore}
 					isDone={isDone}
+					onDone={() => setIsDone(true)}
 				/>
 			</ScrollContent>
 		</>
@@ -181,3 +144,39 @@ const BookmarksPage: NextPage<Props> = (props) => {
 };
 
 export default BookmarksPage;
+
+export
+const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+	const session = await getServerSession(ctx.req, ctx.res);
+
+	if(!session) {
+		return {
+			redirect: {
+				permanent: false,
+				destination: Paths.Bookmarks,
+			},
+		};
+	}
+
+	const rawTerm = ctx.query?.q || '';
+	const foo = Array.isArray(rawTerm) ?
+		rawTerm.join() :
+		rawTerm;
+	const searchTerm = foo.substring(0, MaxSearchTermSize);
+
+	const feed = await fetchBookmarkedPosts({
+		userId: session.user.id,
+		searchTerm,
+	});
+
+	return {
+		props: {
+			session,
+			feed,
+			searchTerm,
+			// posts: userId ?
+			// 	await fetchUserBookmarkedPosts(userId) :
+			// 	[],
+		},
+	};
+};

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useInView } from 'react-cool-inview';
 import {
 	Box,
@@ -8,30 +8,27 @@ import {
 } from '@mui/material';
 
 interface Props {
-	onMore(): Promise<boolean>;
 	isDone?: boolean;
+	onDone(): void;
+	onMore(): Promise<boolean>;
 }
 
 export
 function LoadMoreButton(props: Props) {
 	const {
 		onMore,
-		isDone: rawIsDone = false,
+		isDone,
+		onDone,
 	} = props;
 	const [isLoading, setIsLoading] = useState(true);
-	const [isDone, setIsDone] = useState(rawIsDone);
 	const { observe } = useInView({ onEnter: handleMore });
-
-	useEffect(() => {
-		setIsDone(rawIsDone);
-	}, [rawIsDone]);
 
 	async function handleMore() {
 		setIsLoading(true);
 		const done = await onMore();
 
 		if(done) {
-			setIsDone(true);
+			onDone();
 		}
 
 		setIsLoading(false);
