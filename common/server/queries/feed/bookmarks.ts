@@ -61,6 +61,8 @@ async function fetchBookmarkedPosts(params: Params): Promise<Feed> {
 	const results = await col.aggregate<DbPost>([
 		...searchStages,
 		{ $match: { userId: new ObjectId(userId) } },
+		{ $limit: PageSize + fromIndex },
+		{ $skip: fromIndex },
 		{
 			$lookup: {
 				from: DbCollections.Posts,
@@ -71,8 +73,6 @@ async function fetchBookmarkedPosts(params: Params): Promise<Feed> {
 		},
 		{ $unwind: { path: `$${DocPlaceholder}` } },
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
-		{ $limit: PageSize + fromIndex },
-		{ $skip: fromIndex },
 	]).toArray();
 
 	return fetchRelatedPostsAndPrepareForClient(results, userId);
