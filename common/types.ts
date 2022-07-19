@@ -59,6 +59,7 @@ interface Feed {
 	posts: Post[];
 	parentPostMap: PostIdMap;
 	responsePostMap: PostIdMap,
+	cutoffISO: string;
 }
 
 export

@@ -2,7 +2,7 @@ import { getCollection } from '@common/server/mongodb';
 import { DbPost } from '@common/server/db-schema';
 import { DbCollections, PageSize } from '@common/constants';
 import { grammit } from '@common/server/server-utils';
-import { fetchRelatedPosts } from '..';
+import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';
 
 const DocPlaceholder = 'docTemp';
@@ -10,6 +10,7 @@ const DocPlaceholder = 'docTemp';
 interface Params {
 	userId?: string;
 	searchTerm?: string;
+	afterTime?: string;
 }
 
 export
@@ -21,6 +22,7 @@ async function fetchSearchFeed(params: Params): Promise<Feed> {
 
 	if(!searchTerm) {
 		return {
+			cutoffISO: '',
 			posts: [],
 			parentPostMap: {},
 			responsePostMap: {},
@@ -45,5 +47,10 @@ async function fetchSearchFeed(params: Params): Promise<Feed> {
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 	]).toArray();
 
-	return fetchRelatedPosts(results, userId);
+	const feedPosts = await fetchRelatedPostsAndPrepareForClient(results, userId);
+
+	return {
+		...feedPosts,
+		cutoffISO: '',
+	};
 }

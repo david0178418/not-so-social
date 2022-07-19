@@ -28,7 +28,7 @@ import {
 	fetchTopPosts,
 } from '@common/server/queries';
 
-export { fetchRelatedPosts } from './fetch-related-posts';
+export { fetchRelatedPostsAndPrepareForClient } from './fetch-related-posts';
 export { fetchBookmarkedPosts } from './feed/bookmarks';
 export { fetchHotPosts } from './feed/hot';
 export { fetchMyPosts } from './feed/my-posts';
@@ -39,6 +39,7 @@ export { fetchTopPosts } from './feed/top';
 interface CommonFeedParams {
 	userId?: string;
 	searchTerm?: string;
+	afterTimeISO?: string;
 }
 
 type FeedQuery = <T extends CommonFeedParams>(args: T) => Promise<Feed>;

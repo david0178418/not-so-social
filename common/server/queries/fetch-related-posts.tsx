@@ -1,4 +1,5 @@
 import type { DbPost } from '@common/server/db-schema';
+import type { Feed } from '@common/types';
 
 import { isTruthy, unique } from '@common/utils';
 import {
@@ -13,8 +14,12 @@ import {
 	fetchTopChildPosts,
 } from '.';
 
+type RelatedPosts = Omit<Feed, 'cutoffISO'>
+
 export
-async function fetchRelatedPosts(results: DbPost[], userId?: string) {
+// TODO This all smells wrong. Doing too many urelated things. Investigate for refactor.
+// Potentially starting with fetchPosts and removing the transform from that level...?
+async function fetchRelatedPostsAndPrepareForClient(results: DbPost[], userId?: string): Promise<RelatedPosts> {
 	const posts = results.map(dbPostToPostFn(userId));
 
 	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));

@@ -38,6 +38,9 @@ export
 const PageSize = 10;
 
 export
+const ISODateStringLength = 24;
+
+export
 enum Paths {
 	Bookmarks = '/bookmarks',
 	Home = '/',

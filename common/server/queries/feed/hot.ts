@@ -1,7 +1,8 @@
+import type { Document } from 'bson';
 import { getCollection } from '@common/server/mongodb';
 import { ObjectId } from 'mongodb';
 import { DbPointTransaction, DbPost } from '@common/server/db-schema';
-import { fetchRelatedPosts } from '..';
+import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';
 import {
 	DbCollections,
@@ -10,18 +11,43 @@ import {
 
 interface Params {
 	userId?: string;
+	afterTimeISO?: string;
 }
 
 export
 async function fetchHotPosts(params: Params): Promise<Feed> {
-	const { userId } = params;
+	const {
+		afterTimeISO,
+		userId,
+	} = params;
 	const txnCol = await getCollection(DbCollections.PointTransactions);
 
-	const txnAgg = await txnCol.aggregate<DbPointTransaction>([
+	const pipeline: Document[] = [
 		{ $sort: { date: -1 } },
-	]);
+	];
+
+	if(afterTimeISO) {
+		const foo = await txnCol.aggregate<DbPointTransaction>([
+			{ $match: { date: { $gte: afterTimeISO } } },
+			{ $group: { _id: '$postId' } },
+		]).toArray();
+
+		pipeline.push(
+			{
+				$match: {
+					$and: [
+						{ date: { $lt: afterTimeISO } },
+						{ postId: { $nin: foo.map(f => f._id) } },
+					],
+				},
+			},
+		);
+	}
+
+	const txnAgg = await txnCol.aggregate<DbPointTransaction>(pipeline);
 
 	const pointRollup: Record<string, number> = {};
+	let cutoffISO = '';
 
 	while(await txnAgg.hasNext()) {
 		const doc = await txnAgg.next();
@@ -41,6 +67,7 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 		}
 
 		pointRollup[postId] = pointRollup[postId] + doc.appliedPoints;
+		cutoffISO = doc.date.toString();
 	}
 
 	const postIds = Object.keys(pointRollup).sort((idA, idB) => pointRollup[idA] - pointRollup[idB]);
@@ -51,5 +78,10 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
 		.toArray();
 
-	return fetchRelatedPosts(results, userId);
+	const feedPosts = await fetchRelatedPostsAndPrepareForClient(results, userId);
+
+	return {
+		...feedPosts,
+		cutoffISO,
+	};
 }

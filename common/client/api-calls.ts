@@ -47,9 +47,13 @@ async function getLinkPreviewsFromContent(content: string, signal?: AbortSignal)
 	return apiGet<ApiResponse<Foo>>('/link-previews-from-content', { content }, signal);
 }
 
+interface FetFeedParams {
+	afterTimeISO?: string;
+}
+
 export
-async function getFeed(type: FeedTypes) {
-	return apiGet<ApiResponse>(`/feed/${type}`);
+async function getFeed(type: FeedTypes, params?: FetFeedParams) {
+	return apiGet<ApiResponse>(`/feed/${type}`, params);
 }
 
 interface PostSaveArgs {

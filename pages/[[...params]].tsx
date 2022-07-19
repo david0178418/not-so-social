@@ -1,6 +1,8 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import type { AsyncFnReturnType } from '@common/types';
-import { ReactNode, useState } from 'react';
+import {
+	ReactNode, useEffect, useState,
+} from 'react';
 
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
@@ -13,11 +15,13 @@ import {
 	Box,
 	Button,
 	CircularProgress,
+	Typography,
 } from '@mui/material';
 import {
 	AppName,
 	BaseUrl,
 	FeedTypes,
+	PageSize,
 	Paths,
 } from '@common/constants';
 import {
@@ -75,6 +79,7 @@ const getServerSideProps: GetServerSideProps<Props, any> = async (ctx) => {
 
 const HomePage: NextPage<Props> = (props) => {
 	const { feed: initialFeed } = props;
+	const [isDone, setIsDone] = useState(false);
 	const [feed, setFeed] = useState<typeof initialFeed>(initialFeed);
 	const [isLoading, setIsLoading] = useState(true);
 	const { observe } = useInView({ onEnter: loadMore });
@@ -84,12 +89,21 @@ const HomePage: NextPage<Props> = (props) => {
 		responsePostMap,
 	} = feed;
 
+	useEffect(() => {
+		if(feed === initialFeed) {
+			return;
+		}
+
+		setFeed(initialFeed);
+	}, [initialFeed]);
+
 	async function loadMore() {
 		setIsLoading(true);
-		const { data }: any = await getFeed(FeedTypes.New);
+		const { data }: any = await getFeed(FeedTypes.Hot, { afterTimeISO: feed.cutoffISO });
 
 		if(data?.feed) {
 			setFeed({
+				cutoffISO: data.feed.cutoffISO,
 				posts: [
 					...feed.posts,
 					...data.feed.posts,
@@ -105,7 +119,9 @@ const HomePage: NextPage<Props> = (props) => {
 			});
 		}
 
-		setIsLoading(false);
+		if(!data.feed?.posts || data.feed.posts.length < PageSize) {
+			setIsDone(true);
+		}
 	}
 
 	return (
@@ -160,21 +176,27 @@ const HomePage: NextPage<Props> = (props) => {
 					/>
 				))}
 				<Box paddingTop={5} paddingBottom={8}>
-					<Button
-						fullWidth
-						ref={observe}
-						disabled={isLoading}
-						endIcon={
-							isLoading ?
-								<CircularProgress color="inherit" /> :
-								null
-						}
-					>
-						{isLoading ?
-							'Loading' :
-							'Load More'
-						}
-					</Button>
+					{isDone ? (
+						<Typography>
+							End of Feed
+						</Typography>
+					) : (
+						<Button
+							fullWidth
+							ref={observe}
+							disabled={isLoading}
+							endIcon={
+								isLoading ?
+									<CircularProgress color="inherit" /> :
+									null
+							}
+						>
+							{isLoading ?
+								'Loading' :
+								'Load More'
+							}
+						</Button>
+					)}
 				</Box>
 			</ScrollContent>
 		</>

@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 import { DbPost } from '@common/server/db-schema';
 import { grammit } from '@common/server/server-utils';
 import { DbCollections } from '@common/constants';
-import { fetchRelatedPosts } from '..';
+import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';
 
 // TODO Is there a better way to do this in MongoDB?
@@ -12,6 +12,7 @@ const DocPlaceholder = 'docTemp';
 interface Params {
 	userId?: string;
 	searchQuery?: string;
+	afterTime?: string;
 }
 
 export
@@ -24,6 +25,7 @@ async function fetchMyPosts(params: Params): Promise<Feed> {
 
 	if(!userId) {
 		return {
+			cutoffISO: '',
 			posts: [],
 			parentPostMap: {},
 			responsePostMap: {},
@@ -60,5 +62,10 @@ async function fetchMyPosts(params: Params): Promise<Feed> {
 		{ $match: { ownerId: new ObjectId(userId) } },
 	]).toArray();
 
-	return fetchRelatedPosts(results);
+	const feedPosts = await fetchRelatedPostsAndPrepareForClient(results);
+
+	return {
+		...feedPosts,
+		cutoffISO: '',
+	};
 }
