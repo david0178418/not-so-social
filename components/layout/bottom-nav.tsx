@@ -20,6 +20,8 @@ import {
 	HomeActiveIcon,
 	HomeIcon,
 	LoginIcon,
+	PostActiveIcon,
+	PostIcon,
 	ProfileActiveIcon,
 	ProfileIcon,
 } from '@components/icons';
@@ -123,7 +125,7 @@ function BottomNav() {
 								key="a"
 								label="Bookmarks"
 								icon={
-									asPath.startsWith(Paths.Bookmarks) ?
+									Paths.Bookmarks === pathname ?
 										<BookmarkActiveIcon /> :
 										<BookmarkIcon />
 								}
@@ -133,12 +135,27 @@ function BottomNav() {
 							key="b"
 							shallow
 							passHref
+							href={Paths.ProfilePosts}
+						>
+							<BottomNavigationAction
+								label="My Posts"
+								icon={
+									Paths.ProfilePosts === pathname ?
+										<PostActiveIcon /> :
+										<PostIcon />
+								}
+							/>
+						</Link>,
+						<Link
+							key="c"
+							shallow
+							passHref
 							href={Paths.Profile}
 						>
 							<BottomNavigationAction
 								label={user.username}
 								icon={
-									asPath.startsWith(Paths.Profile) ?
+									Paths.Profile === pathname ?
 										<ProfileActiveIcon /> :
 										<ProfileIcon />
 								}

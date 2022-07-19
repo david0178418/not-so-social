@@ -73,6 +73,8 @@ function LeftRail() {
 	} = router;
 	const user = data?.user;
 
+	console.log(router);
+
 	return (
 		<>
 			<Typography>
@@ -131,7 +133,7 @@ function LeftRail() {
 								<ListItemButton>
 									<RailButtonContent label="My Posts">
 										{
-											asPath.startsWith(Paths.ProfilePosts) ?
+											Paths.ProfilePosts === pathname ?
 												<PostActiveIcon /> :
 												<PostIcon />
 										}
@@ -148,7 +150,7 @@ function LeftRail() {
 								<ListItemButton>
 									<RailButtonContent label="Bookmarks" >
 										{
-											asPath.startsWith(Paths.Bookmarks) ?
+											Paths.Bookmarks === pathname ?
 												<BookmarkActiveIcon /> :
 												<BookmarkIcon />
 										}
@@ -165,7 +167,7 @@ function LeftRail() {
 								<ListItemButton>
 									<RailButtonContent label={user.username}>
 										{
-											asPath.startsWith(Paths.Profile) ?
+											Paths.Profile === pathname ?
 												<ProfileActiveIcon /> :
 												<ProfileIcon />
 										}

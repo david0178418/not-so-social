@@ -4,7 +4,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { getServerSession } from '@common/server/auth-options';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { PasswordChangeForm } from '@components/password-change-form';
 
 export
@@ -32,27 +32,36 @@ const ProfilePage: NextPage<any> = () => {
 	} = router;
 
 	return (
-		<div>
+		<Box padding={2}>
 			Signed in as {session.data?.user.username}
-			<div>
+			<Link
+				shallow
+				passHref
+				href={{
+					pathname,
+					query: {
+						a: ModalActions.Logout,
+						...query,
+					},
+				}}
+			>
+				<Button>
+					Logout
+				</Button>
+			</Link>
+			<Box paddingY={2}>
 				<Link
 					shallow
 					passHref
-					href={{
-						pathname,
-						query: {
-							a: ModalActions.Logout,
-							...query,
-						},
-					}}
+					href={Paths.ProfilePosts}
 				>
 					<Button>
-						Logout
+						My Posts
 					</Button>
 				</Link>
-			</div>
+			</Box>
 			<PasswordChangeForm />
-		</div>
+		</Box>
 	);
 };
 
