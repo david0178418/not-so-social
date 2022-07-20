@@ -6,6 +6,7 @@ import {
 	useAtomValue,
 	useSetAtom,
 } from 'jotai';
+import { DefaultToastMsgDelay } from '@common/constants';
 
 export
 function Toast() {
@@ -25,10 +26,10 @@ function Toast() {
 		<>
 			<Snackbar
 				open={isOpen}
-				autoHideDuration={4000}
+				autoHideDuration={toastMsg.delay || DefaultToastMsgDelay}
 				onClose={handleClose}
 				TransitionProps={{ onExited: () => clearMsg() }}
-				message={toastMsg}
+				message={toastMsg.message}
 				action={
 					<IconButton
 						size="small"

@@ -8,6 +8,9 @@ export
 const BaseUrl = 'https://notso.social';
 
 export
+const DefaultToastMsgDelay = 4000;
+
+export
 const MinPostCost = 10;
 
 export

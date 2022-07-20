@@ -33,6 +33,13 @@ type SharedPointTransactionProps = Pick<DbPointTransaction,
 >;
 
 export
+interface ToastMesssage {
+	message: string;
+	delay?: number;
+}
+
+
+export
 interface PointTransaction extends SharedPointTransactionProps {
 	_id?: string;
 	postId?: string;
