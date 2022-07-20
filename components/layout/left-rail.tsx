@@ -22,7 +22,6 @@ import {
 	PostActiveIcon,
 } from '@components/icons';
 import {
-	Divider,
 	Fab,
 	List,
 	ListItem,
@@ -221,7 +220,6 @@ function LeftRail() {
 						</Link>
 					</>
 				)}
-				<Divider />
 			</List>
 		</>
 	);
