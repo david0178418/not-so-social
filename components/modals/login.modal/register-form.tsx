@@ -53,6 +53,15 @@ function RegistrationForm(props: Props) {
 				await login(username, password)
 			) {
 				setUsername('');
+
+				setTimeout(() => pustToastMsg({
+					message: `
+						Find your balance under your username on the left raile.
+						You've earned points for signing up!
+						Use them to boost posts you like or to create content of your own!
+					`,
+					delay: 15000,
+				}));
 			}
 		} catch(e: any) {
 			const { errors = ['Something went wrong. Try again.'] } = e;

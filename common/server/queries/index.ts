@@ -194,10 +194,7 @@ async function recordActivity(userId: string, type: UserActivityTypes, params?: 
 		record.params = params;
 	}
 
-	await col.replaceOne({
-		userId: record.userId,
-		type,
-	}, record, { upsert: true });
+	await col.insertOne(record);
 }
 
 export
