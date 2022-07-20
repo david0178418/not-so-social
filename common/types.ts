@@ -17,6 +17,14 @@ interface Post {
 	linkPreviews?: LinkPreviewData[];
 }
 
+export
+interface Settings {
+	awardSignup: number;
+	awardDailyPointBase: number;
+	awardDailyStreakIncrement: number;
+	awardDailyStreakCap: number;
+}
+
 type SharedPointTransactionProps = Pick<DbPointTransaction,
 'appliedPoints' |
 'date' |

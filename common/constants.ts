@@ -136,6 +136,7 @@ enum UserActivityTypes {
 
 export
 enum DbCollections {
+	AppMetadata = 'app-metadata',
 	Grams = 'grams',
 	PointTransactions = 'point-transactions',
 	PostBookmarks = 'post-bookmarks',
@@ -144,6 +145,19 @@ enum DbCollections {
 	UserActivity = 'user-activity',
 	Users = 'users',
 	UsersMeta = 'users-meta',
+}
+
+export
+enum SettingTypes {
+	AwardSettings ='award-settings',
+}
+
+export
+enum AppSettings {
+	AwardSignup = 'award-signup',
+	AwardDailyPointBase = 'award-daily-point-base',
+	AwardDailyStreakIncrement = 'award-daily-streak-increment',
+	AwardDailyStreakCap = 'award-daily-streak-cap',
 }
 
 export

@@ -2,6 +2,7 @@ import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 import {
 	PointTransactionTypes,
+	SettingTypes,
 	UserActivityTypes,
 	UserRoles,
 } from '@common/constants';
@@ -14,6 +15,12 @@ type SharedPostProps = Pick<Post,
 'linkPreviews' |
 'totalPoints'
 >;
+
+export
+interface DbSettings {
+	type: SettingTypes;
+	data: any;
+}
 
 export
 interface DbPostTextGram {

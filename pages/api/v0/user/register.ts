@@ -14,6 +14,7 @@ import {
 	UsernameMaxLength,
 	UsernameMinLength,
 } from '@common/constants';
+import { fetchSettings } from '@common/server/queries/fetch-settings';
 
 interface Schema {
 	password: string;
@@ -73,13 +74,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 }
 
 async function createUser(username: string, password: string) {
+	const settings = await fetchSettings();
 	const usersCol = await getCollection(DbCollections.Users);
 	const hash = await passwordToHash(password);
 
 	const result = await usersCol
 		.insertOne({
 			username,
-			pointBalance: 0,
+			pointBalance: settings.awardSignup,
 			hash,
 		});
 

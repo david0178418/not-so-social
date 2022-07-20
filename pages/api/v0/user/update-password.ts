@@ -39,7 +39,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
 		res.send({ ok: true });
 	} catch(error: unknown) {
-		console.log(error);
 		return res
 			.status(400)
 			.send({
