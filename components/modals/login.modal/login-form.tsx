@@ -38,7 +38,6 @@ function LoginForm(props: Props) {
 		}
 
 		try {
-
 			if(await login(username, password)) {
 				setUsername('');
 			} else {
