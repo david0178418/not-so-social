@@ -36,6 +36,7 @@ const HomePage: NextPage<Props> = (props) => {
 	} = props;
 	const [feed, isDone, loadMore] = useFeed(initialFeed);
 	const {
+		cutoffISO,
 		parentPostMap,
 		posts,
 		responsePostMap,
@@ -43,7 +44,7 @@ const HomePage: NextPage<Props> = (props) => {
 
 	function handleLoadMore() {
 		return loadMore(feedType, {
-			afterTimeISO: last(feed.posts)?.created || '',
+			afterTimeISO: cutoffISO || last(feed.posts)?.created || '',
 			fromIndex: feed.posts.length,
 		});
 	}
