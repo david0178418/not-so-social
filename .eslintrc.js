@@ -33,6 +33,7 @@ module.exports = {
 		'jsx-a11y/anchor-is-valid': OFF,
 		'key-spacing': ERR,
 		'no-extra-semi': WARN,
+		'no-multi-spaces': ERR,
 		'no-shadow': OFF,
 		'no-trailing-spaces': ERR,
 		'object-curly-spacing': [ERR, 'always'],

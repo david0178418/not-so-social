@@ -19,7 +19,7 @@ function SearchForm(props: Props) {
 		value: searchTerm = '',
 		searchPath = Paths.Search,
 	} = props;
-	const [searchQueary, setSearchQuery] =  useState(searchTerm);
+	const [searchQueary, setSearchQuery] = useState(searchTerm);
 	const { push } = useRouter();
 
 	function handleSubmit() {

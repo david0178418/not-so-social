@@ -41,7 +41,7 @@ const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
 	const [
 		post,
 		transactions,
-	] = await  Promise.all([
+	] = await Promise.all([
 		fetchPost(id, userId),
 		fetchPostTransactions(id),
 	]);

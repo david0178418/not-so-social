@@ -74,7 +74,7 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 
 	const col = await getCollection(DbCollections.Posts);
 
-	const results = await  col
+	const results = await col
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
 		.toArray();
 
