@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Feed } from '@common/types';
 import { tuple } from '@common/utils';
-import { getFeed } from '@common/client/api-calls';
+import { getBalance, getFeed } from '@common/client/api-calls';
 import {
 	PageSize,
 	UserRoles,
@@ -115,4 +115,15 @@ function useFeed(initialFeed: Feed) {
 	}
 
 	return tuple(feed, isDone, onMore);
+}
+
+export
+function useBalance() {
+	const [balance, setBalance] = useState(0);
+
+	useEffect(() => {
+		getBalance().then(setBalance);
+	}, []);
+
+	return balance;
 }

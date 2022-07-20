@@ -1,14 +1,14 @@
-import type { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import Head from 'next/head';
 import { BottomNav } from './bottom-nav';
 import { LeftRail } from './left-rail';
 import { AppName } from '@common/constants';
+import dynamic from 'next/dynamic';
 import {
 	Container,
 	Grid,
 } from '@mui/material';
-import dynamic from 'next/dynamic';
 
 const CommonModals = dynamic(() => import('./common-stuff'));
 

@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
+import { formatCompactNumber } from '@common/utils';
+import { ReactNode } from 'react';
 import {
 	AppName,
 	HomePaths,
@@ -21,6 +22,7 @@ import {
 	PostActiveIcon,
 } from '@components/icons';
 import {
+	Divider,
 	Fab,
 	List,
 	ListItem,
@@ -29,6 +31,7 @@ import {
 	ListItemText,
 	Typography,
 } from '@mui/material';
+import { useBalance } from '@common/hooks';
 
 interface Props {
 	label: string;
@@ -64,6 +67,7 @@ function RailButtonContent(props: Props) {
 // TODO Implement better path matching for active icon
 
 function LeftRail() {
+	const balance = useBalance();
 	const router = useRouter();
 	const { data } = useSession();
 	const {
@@ -72,6 +76,7 @@ function LeftRail() {
 		query,
 	} = router;
 	const user = data?.user;
+
 
 	return (
 		<>
@@ -163,7 +168,10 @@ function LeftRail() {
 								href={Paths.Profile}
 							>
 								<ListItemButton>
-									<RailButtonContent label={user.username}>
+									<RailButtonContent
+										label={user.username}
+										secondary={balance ? `${formatCompactNumber(balance)} points` : ''}
+									>
 										{
 											Paths.Profile === pathname ?
 												<ProfileActiveIcon /> :
@@ -213,6 +221,7 @@ function LeftRail() {
 						</Link>
 					</>
 				)}
+				<Divider />
 			</List>
 		</>
 	);
