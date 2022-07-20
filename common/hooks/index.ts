@@ -72,7 +72,7 @@ function useDebounce<T>(value: T, delay: number) {
 export
 function useFeed(initialFeed: Feed) {
 	const [feed, setFeed] = useState(initialFeed);
-	const [isDone, setIsDone] = useState(false);
+	const [isDone, setIsDone] = useState(initialFeed.posts.length < PageSize);
 
 	useEffect(() => {
 		if(feed === initialFeed) {
@@ -80,7 +80,7 @@ function useFeed(initialFeed: Feed) {
 		}
 
 		setFeed(initialFeed);
-		setIsDone(false);
+		setIsDone(initialFeed.posts.length < PageSize);
 	}, [initialFeed]);
 
 	async function onMore(...params: Parameters<typeof getFeed>) {
