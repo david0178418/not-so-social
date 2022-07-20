@@ -1,4 +1,3 @@
-import twttr from 'twitter-text';
 import { format, formatDistanceToNow } from 'date-fns';
 import { IS_SSR } from './constants';
 
@@ -22,17 +21,6 @@ function clamp(num: number, min: number, max: number) {
 export
 function getTimeSinceDate(dateStr: string) {
 	return formatDistanceToNow(new Date(dateStr));
-}
-
-export
-function parseContentString(str: string) {
-	return twttr.autoLink(str, {
-		hashtagUrlBase: '/q=',
-		cashtagUrlBase: '/q=',
-		usernameUrlBase: '/u/',
-		listUrlBase: '/',
-		targetBlank: true,
-	}).trim().replace(/(?:\r\n|\r|\n)/g, '<br>');
 }
 
 export
