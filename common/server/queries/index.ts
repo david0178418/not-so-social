@@ -29,11 +29,11 @@ import {
 } from '@common/server/queries';
 
 export { fetchRelatedPostsAndPrepareForClient } from './fetch-related-posts';
-export { fetchBookmarkedPosts } from './feed/bookmarks';
-export { fetchHotPosts } from './feed/hot';
-export { fetchMyPosts } from './feed/my-posts';
-export { fetchNewPosts } from './feed/new';
-export { fetchSearchFeed } from './feed/search';
+export { fetchBookmarkedPosts } from './feed/bookmarks.feed';
+export { fetchHotPosts } from './feed/hot.feed';
+export { fetchMyPosts } from './feed/my-posts.feed';
+export { fetchNewPosts } from './feed/new.feed';
+export { fetchSearchFeed } from './feed/search.feed';
 export { fetchTopPosts } from './feed/top';
 
 interface CommonFeedParams {
