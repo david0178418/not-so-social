@@ -34,7 +34,7 @@ type SharedPointTransactionProps = Pick<DbPointTransaction,
 
 export
 interface ToastMesssage {
-	message: string;
+	message: ReactNode;
 	delay?: number;
 }
 
