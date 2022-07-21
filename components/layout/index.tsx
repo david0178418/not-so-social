@@ -10,7 +10,7 @@ import {
 	Grid,
 } from '@mui/material';
 
-const CommonModals = dynamic(() => import('./common-stuff'));
+const CommonModals = dynamic(() => import('./common-stuff'), { ssr: false });
 
 interface Props {
 	title?: string;
