@@ -253,7 +253,7 @@ async function checkAwards(userId: string) {
 	let streakSize = 0;
 
 	if(data.awardType === AwardTypes.Daily && daysSinceLastAward === 1) {
-		streakSize = data.streakSize;
+		streakSize = data.streakSize + 1;
 	}
 
 	const appliedPoints = awardDailyPointBase + (
