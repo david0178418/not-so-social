@@ -36,16 +36,21 @@ function dbPostToPostFn(userId?: string) {
 
 export
 function dbPointTransactionToPointTransaction(transaction: DbPointTransaction): PointTransaction {
+	// TODO Fix typing issues introduced with DB txn type changes for awards.
 	/* eslint-disable @typescript-eslint/no-unused-vars */
 	const {
+		// @ts-ignore
 		userId,
+		// @ts-ignore
 		fromUserId,
 		...cleanedTxn
 	} = transaction;
 	/* eslint-enable @typescript-eslint/no-unused-vars */
 
+	// @ts-ignore
 	return {
 		...cleanedTxn,
+		// @ts-ignore
 		postId: transaction.postId?.toString(),
 		_id: transaction._id?.toString(),
 	};
