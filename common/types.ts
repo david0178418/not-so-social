@@ -26,6 +26,7 @@ interface Settings {
 }
 
 type SharedPointTransactionProps = Pick<DbPointTransaction,
+// @ts-ignore
 'appliedPoints' |
 'date' |
 'spentPoints' |
