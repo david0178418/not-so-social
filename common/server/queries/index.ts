@@ -1,8 +1,11 @@
 import { Feed, Post } from '@common/types';
-import { ObjectId } from 'mongodb';
 import { getCollection } from '@common/server/mongodb';
 import { nowISOString } from '@common/utils';
+import { fetchSettings } from './fetch-settings';
+import { differenceInDays } from 'date-fns';
+import { ObjectId } from 'mongodb';
 import {
+	AwardTypes,
 	DbCollections,
 	FeedTypes,
 	PointTransactionTypes,
@@ -12,6 +15,7 @@ import {
 	DbUser,
 	DbPost,
 	DbUserActivity,
+	DbPointTransaction,
 } from '@common/server/db-schema';
 import {
 	dbPostToPostFn,
@@ -204,5 +208,75 @@ async function fetchUserBalance(userId: ObjectId) {
 	const result = await col.findOne({ _id: userId });
 
 	return result?.pointBalance || 0;
+}
+
+export
+// TODO clean this up?
+async function checkAwards(userId: string) {
+	const settings = await fetchSettings();
+	const txnCol = await getCollection(DbCollections.PointTransactions);
+	const usersCol = await getCollection(DbCollections.Users);
+	const result = await txnCol.aggregate<DbPointTransaction>([
+		{
+			$match: {
+				'data.userId': new ObjectId(userId),
+				type: PointTransactionTypes.Award,
+			},
+		},
+		{ $sort: { date: -1 } },
+		{ $limit: 1 },
+	]).toArray();
+
+	const lastAward = result?.[0] || null;
+	const {
+		awardDailyPointBase,
+		awardDailyStreakIncrement,
+		awardDailyStreakCap,
+	} = settings;
+
+	if(lastAward?.type !== PointTransactionTypes.Award) {
+		return;
+	}
+
+	const {
+		date,
+		data,
+	} = lastAward;
+	const lastAwardDate = new Date(date);
+	const daysSinceLastAward = differenceInDays(new Date(), lastAwardDate);
+
+	if(daysSinceLastAward < 1) {
+		return;
+	}
+
+	const userIdObj = new ObjectId(userId);
+	let streakSize = 0;
+
+	if(data.awardType === AwardTypes.Daily && daysSinceLastAward === 1) {
+		streakSize = data.streakSize;
+	}
+
+	const appliedPoints = awardDailyPointBase + (
+		awardDailyStreakIncrement * Math.min(awardDailyStreakCap, streakSize)
+	);
+
+	const newAward: DbPointTransaction = {
+		type: PointTransactionTypes.Award,
+		appliedPoints,
+		date: nowISOString(),
+		data: {
+			userId: userIdObj,
+			awardType: AwardTypes.Daily,
+			streakSize,
+		},
+	};
+
+	await Promise.all([
+		txnCol.insertOne(newAward),
+		usersCol.updateOne(
+			{ _id: userIdObj },
+			{ $inc: { pointBalance: appliedPoints } },
+		),
+	]);
 }
 

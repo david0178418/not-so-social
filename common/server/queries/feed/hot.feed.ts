@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb';
 import {
 	DbCollections,
 	PageSize,
+	PointTransactionTypes,
 } from '@common/constants';
 
 interface Params {
@@ -28,7 +29,12 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 
 	if(afterTimeISO) {
 		const foo = await txnCol.aggregate<DbPointTransaction>([
-			{ $match: { date: { $gte: afterTimeISO } } },
+			{
+				$match: {
+					date: { $gte: afterTimeISO },
+					type: PointTransactionTypes.postBoost,
+				},
+			},
 			{ $group: { _id: '$postId' } },
 		]).toArray();
 
@@ -52,7 +58,7 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 	while(await txnAgg.hasNext()) {
 		const doc = await txnAgg.next();
 
-		if(!doc?.postId) {
+		if(!(doc?.type === PointTransactionTypes.postBoost && doc?.postId)) {
 			continue;
 		}
 

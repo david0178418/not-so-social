@@ -8,9 +8,11 @@ import { getServerSession } from '@common/server/auth-options';
 import { fetchUser } from '@common/server/queries';
 import { passwordToHash } from '@common/server/transforms';
 import {
+	AwardTypes,
 	DbCollections,
 	PasswordMaxLength,
 	PasswordMinLength,
+	PointTransactionTypes,
 	UsernameMaxLength,
 	UsernameMinLength,
 } from '@common/constants';
@@ -76,6 +78,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 async function createUser(username: string, password: string) {
 	const settings = await fetchSettings();
 	const usersCol = await getCollection(DbCollections.Users);
+	const txnCol = await getCollection(DbCollections.PointTransactions);
+	const usersMeta = await getCollection(DbCollections.UsersMeta);
 	const hash = await passwordToHash(password);
 
 	const result = await usersCol
@@ -85,10 +89,20 @@ async function createUser(username: string, password: string) {
 			hash,
 		});
 
-	(await getCollection(DbCollections.UsersMeta))
-		.insertOne({
-			userId: result.insertedId,
-			created: nowISOString(),
-		});
-
+	await Promise.all([
+		usersMeta
+			.insertOne({
+				userId: result.insertedId,
+				created: nowISOString(),
+			}),
+		txnCol.insertOne({
+			type: PointTransactionTypes.Award,
+			appliedPoints: settings.awardSignup,
+			date: nowISOString(),
+			data: {
+				userId: result.insertedId,
+				awardType: AwardTypes.Signup,
+			},
+		}),
+	]);
 }

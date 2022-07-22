@@ -4,11 +4,18 @@ import type {
 	NextApiResponse,
 } from 'next';
 
-import { NextAuthOptions, unstable_getServerSession } from 'next-auth';
-import { fetchUser, recordActivity } from '@common/server/queries';
 import { UserActivityTypes, UserRoles } from '@common/constants';
 import { compare } from 'bcryptjs';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import {
+	NextAuthOptions,
+	unstable_getServerSession,
+} from 'next-auth';
+import {
+	checkAwards,
+	fetchUser,
+	recordActivity,
+} from '@common/server/queries';
 
 const {
 	JWT_SECRET,
@@ -185,9 +192,15 @@ const authOptions: NextAuthOptions = {
 		// async updateUser(message) { /* user updated - e.g. their email was verified */ },
 		// async linkAccount(message) { /* account (e.g. Twitter) linked to a user */ },
 		// async session(message) { /* session is active */ },
-		async session(message: any) {
+
+		// Don't know if "session" is or will be awaited in its usage. In the
+		// even it is, implementing in a way as to record activity without
+		// blocking the request.
+		session(message: any) {
 			const { session: { user: { id } } } = message;
-			recordActivity(id, UserActivityTypes.Navigate);
+
+			recordActivity(id, UserActivityTypes.Navigate)
+				.then(() => checkAwards(id));
 		},
 	},
 

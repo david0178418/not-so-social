@@ -149,7 +149,6 @@ async function boostPost(props: BoostPostProps) {
 
 	calls.push(transactionCol.insertOne(transaction));
 
-
 	if(!isAdmin) {
 		calls.push(
 			usersCol.updateOne(

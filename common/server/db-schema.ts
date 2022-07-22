@@ -1,6 +1,7 @@
 import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 import {
+	AwardTypes,
 	PointTransactionTypes,
 	SettingTypes,
 	UserActivityTypes,
@@ -35,16 +36,44 @@ interface DbPost extends SharedPostProps {
 	parentId?: ObjectId;
 }
 
+// export
+// interface DbPointTransaction<T extends AwardTransactionMetadataTypes> {
+// 	_id?: ObjectId;
+// 	type: PointTransactionTypes;
+// 	spentPoints?: number;
+// 	appliedPoints: number;
+// 	postId?: ObjectId;
+// 	userId?: ObjectId;
+// 	date: string;
+// 	fromUserId?: ObjectId;
+// 	data?: T;
+// }
+
 export
-interface DbPointTransaction {
+type DbPointTransaction = DbTxnProps & {
 	_id?: ObjectId;
-	type: PointTransactionTypes;
-	spentPoints?: number;
 	appliedPoints: number;
-	postId?: ObjectId;
-	userId?: ObjectId;
 	date: string;
-	fromUserId: ObjectId;
+}
+
+type DbTxnProps = {
+	type: PointTransactionTypes.Award;
+	data: AwardTransactionMetadata;
+} | {
+	type: PointTransactionTypes.postBoost;
+	userId?: ObjectId;
+	spentPoints?: number;
+	postId?: ObjectId;
+	fromUserId?: ObjectId;
+}
+
+type AwardTransactionMetadata = {
+	awardType: AwardTypes.Daily;
+	streakSize: number; // 0 based.
+	userId: ObjectId;
+} | {
+	awardType: AwardTypes.Signup;
+	userId: ObjectId;
 }
 
 export

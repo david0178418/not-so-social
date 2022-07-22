@@ -164,6 +164,12 @@ enum AppSettings {
 }
 
 export
+enum AwardTypes {
+	Daily = 'daily',
+	Signup = 'signup',
+}
+
+export
 enum ModalActions {
 	CreatePost = 'create-post',
 	LoginRegister = 'login-register',
@@ -172,6 +178,7 @@ enum ModalActions {
 
 export
 enum PointTransactionTypes {
+	Award = 'award',
 	postBoost = 'post-boost',
 	userTransfer = 'user-transfer',
 }
