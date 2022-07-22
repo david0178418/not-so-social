@@ -140,7 +140,6 @@ function multiplyList<T>(list: T[], multiple: number) {
 
 export
 function range(size: number, startValue = 0) {
-	// @ts-ignore
 	return [ ...Array(size).keys() ].map(i => i + startValue);
 }
 

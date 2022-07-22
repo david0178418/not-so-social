@@ -17,11 +17,7 @@ function ScrollContent(props: Props) {
 			<div className="bar">
 				{children}
 			</div>
-			<style
-				// @ts-ignore Error started happening possibly with NextJS
-				// v12.2 update. Needd to see what the deal is here
-				jsx
-			>{`
+			<style jsx>{`
 				.baz {
 					display: flex;
 					flex-direction: column;

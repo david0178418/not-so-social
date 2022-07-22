@@ -16,10 +16,7 @@ function YoutubeEmbed(props: Props) {
 				allowFullScreen
 				title="Embedded youtube"
 			/>
-			<style
-				// @ts-ignore
-				jsx
-			>{`
+			<style jsx>{`
 				.video-responsive {
 					overflow: hidden;
 					padding-bottom: 56.25%;
