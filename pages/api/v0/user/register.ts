@@ -97,7 +97,7 @@ async function createUser(username: string, password: string) {
 			}),
 		txnCol.insertOne({
 			type: PointTransactionTypes.Award,
-			appliedPoints: settings.awardSignup,
+			points: settings.awardSignup,
 			date: nowISOString(),
 			data: {
 				userId: result.insertedId,

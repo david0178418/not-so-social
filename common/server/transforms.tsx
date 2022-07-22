@@ -3,13 +3,13 @@ import type {
 } from './db-schema';
 import { hash } from 'bcryptjs';
 import { isTruthy, unique } from '@common/utils';
+import { PasswordSaltLength } from '@common/constants';
 import type {
 	Nullable,
 	PointTransaction,
 	Post,
 	PostIdMap,
 } from '@common/types';
-import { PasswordSaltLength } from '@common/constants';
 
 export
 function dbPostToPostFn(userId?: string) {
@@ -39,19 +39,16 @@ function dbPointTransactionToPointTransaction(transaction: DbPointTransaction): 
 	// TODO Fix typing issues introduced with DB txn type changes for awards.
 	/* eslint-disable @typescript-eslint/no-unused-vars */
 	const {
-		// @ts-ignore
-		userId,
-		// @ts-ignore
-		fromUserId,
+		data,
 		...cleanedTxn
 	} = transaction;
 	/* eslint-enable @typescript-eslint/no-unused-vars */
-
-	// @ts-ignore
 	return {
 		...cleanedTxn,
-		// @ts-ignore
-		postId: transaction.postId?.toString(),
+		data: {
+			// @ts-ignore TODO Fix this
+			postId: data.postId?.toString() || '',
+		},
 		_id: transaction._id?.toString(),
 	};
 }

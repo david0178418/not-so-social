@@ -179,6 +179,7 @@ enum ModalActions {
 export
 enum PointTransactionTypes {
 	Award = 'award',
+	PostCreate = 'post-create',
 	postBoost = 'post-boost',
 	userTransfer = 'user-transfer',
 }

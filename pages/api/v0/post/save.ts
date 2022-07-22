@@ -152,12 +152,14 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 		gramCol.insertOne(newPostGram),
 		pointPostCol
 			.insertOne({
-				type: PointTransactionTypes.postBoost,
-				fromUserId: ownerId,
-				postId: newPostId,
+				type: PointTransactionTypes.PostCreate,
+				data: {
+					userId: ownerId,
+					postId: newPostId,
+					spentPoints,
+				},
 				date: now,
-				appliedPoints,
-				spentPoints,
+				points: appliedPoints,
 			}),
 	];
 

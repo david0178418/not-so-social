@@ -155,7 +155,7 @@ async function fetchPostTransactions(id: string) {
 
 	const result = await col.find({
 		type: PointTransactionTypes.postBoost,
-		postId: new ObjectId(id),
+		'data.postId': new ObjectId(id),
 	}).toArray();
 
 	return result.map(dbPointTransactionToPointTransaction);
@@ -262,7 +262,7 @@ async function checkAwards(userId: string) {
 
 	const newAward: DbPointTransaction = {
 		type: PointTransactionTypes.Award,
-		appliedPoints,
+		points: appliedPoints,
 		date: nowISOString(),
 		data: {
 			userId: userIdObj,

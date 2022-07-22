@@ -95,7 +95,7 @@ const PostPointsPage: NextPage<Props> = (props) => {
 					{transactions.map(t => (
 						<ListItem key={t._id}>
 							<ListItemText
-								primary={`${t.appliedPoints.toLocaleString()}pts`}
+								primary={`${t.points.toLocaleString()}pts`}
 								secondary={formatDate(t.date)}
 							/>
 						</ListItem>

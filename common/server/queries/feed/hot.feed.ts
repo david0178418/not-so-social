@@ -58,11 +58,11 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 	while(await txnAgg.hasNext()) {
 		const doc = await txnAgg.next();
 
-		if(!(doc?.type === PointTransactionTypes.postBoost && doc?.postId)) {
+		if(!(doc?.type === PointTransactionTypes.postBoost && doc?.data.postId)) {
 			continue;
 		}
 
-		const postId = doc.postId.toString();
+		const postId = doc.data.postId.toString();
 
 		if(!pointRollup[postId]) {
 			if(Object.keys(pointRollup).length === PageSize) {
@@ -72,7 +72,7 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 			pointRollup[postId] = 0;
 		}
 
-		pointRollup[postId] = pointRollup[postId] + doc.appliedPoints;
+		pointRollup[postId] = pointRollup[postId] + doc.points;
 		cutoffISO = doc.date.toString();
 	}
 

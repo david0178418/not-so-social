@@ -26,10 +26,8 @@ interface Settings {
 }
 
 type SharedPointTransactionProps = Pick<DbPointTransaction,
-// @ts-ignore
-'appliedPoints' |
 'date' |
-'spentPoints' |
+'points' |
 'type'
 >;
 
@@ -39,11 +37,13 @@ interface ToastMesssage {
 	delay?: number;
 }
 
-
 export
 interface PointTransaction extends SharedPointTransactionProps {
 	_id?: string;
-	postId?: string;
+	// TODO address this
+	data: {
+		postId?: string;
+	};
 }
 
 export
@@ -67,9 +67,6 @@ interface PostIdMap {
 }
 
 export
-type AsyncFnReturnType<T extends (...args: any[]) => Promise<any>> = Awaited<ReturnType<T>>;
-
-export
 // TODO break this up?
 interface Feed {
 	posts: Post[];
@@ -77,9 +74,6 @@ interface Feed {
 	responsePostMap: PostIdMap;
 	cutoffISO?: string;
 }
-
-export
-type Nullable<T> = T | null;
 
 export
 interface LinkPreviewData {
@@ -129,3 +123,10 @@ declare module 'joi' {
 		validateAsync(value: any, options?: AsyncValidationOptions): Promise<TSchema>;
 	}
 }
+
+// Utility types
+export
+type AsyncFnReturnType<T extends (...args: any[]) => Promise<any>> = Awaited<ReturnType<T>>;
+
+export
+type Nullable<T> = T | null;

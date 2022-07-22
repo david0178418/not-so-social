@@ -122,11 +122,13 @@ async function boostPost(props: BoostPostProps) {
 
 	const transaction: DbPointTransaction = {
 		type: PointTransactionTypes.postBoost,
-		appliedPoints,
-		postId: postId,
-		userId: userId,
+		points: appliedPoints,
 		date,
-		fromUserId: userId,
+		data: {
+			userId: userId,
+			postId,
+			fromUserId: userId,
+		},
 	};
 
 	const calls: Promise<any>[] = [
@@ -137,7 +139,7 @@ async function boostPost(props: BoostPostProps) {
 	];
 
 	if(isOwner) {
-		transaction.spentPoints = points;
+		transaction.data.spentPoints = points;
 	} else {
 		calls.push(
 			usersCol.updateOne(
