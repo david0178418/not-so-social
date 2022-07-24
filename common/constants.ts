@@ -141,6 +141,7 @@ export
 enum DbCollections {
 	AppMetadata = 'app-metadata',
 	Grams = 'grams',
+	Notifications = 'notifications',
 	PointTransactions = 'point-transactions',
 	PostBookmarks = 'post-bookmarks',
 	PostEditHistory = 'post-edit-history',

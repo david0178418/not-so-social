@@ -37,6 +37,14 @@ interface DbPost extends SharedPostProps {
 }
 
 export
+interface DbNotification {
+	date: string;
+	readOn?: string;
+	message: string;
+	userId: ObjectId;
+}
+
+export
 interface DbUser {
 	_id?: ObjectId;
 	role?: UserRoles;

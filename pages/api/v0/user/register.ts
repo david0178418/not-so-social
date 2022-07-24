@@ -7,6 +7,7 @@ import { nowISOString } from '@common/utils';
 import { getServerSession } from '@common/server/auth-options';
 import { fetchUser } from '@common/server/queries';
 import { passwordToHash } from '@common/server/transforms';
+import { fetchSettings } from '@common/server/queries/fetch-settings';
 import {
 	AwardTypes,
 	DbCollections,
@@ -16,7 +17,6 @@ import {
 	UsernameMaxLength,
 	UsernameMinLength,
 } from '@common/constants';
-import { fetchSettings } from '@common/server/queries/fetch-settings';
 
 interface Schema {
 	password: string;
@@ -80,7 +80,9 @@ async function createUser(username: string, password: string) {
 	const usersCol = await getCollection(DbCollections.Users);
 	const txnCol = await getCollection(DbCollections.PointTransactions);
 	const usersMeta = await getCollection(DbCollections.UsersMeta);
+	const notificationsCol = await getCollection(DbCollections.Notifications);
 	const hash = await passwordToHash(password);
+	const now = nowISOString();
 
 	const result = await usersCol
 		.insertOne({
@@ -89,11 +91,12 @@ async function createUser(username: string, password: string) {
 			hash,
 		});
 
+
 	await Promise.all([
 		usersMeta
 			.insertOne({
 				userId: result.insertedId,
-				created: nowISOString(),
+				created: now,
 			}),
 		txnCol.insertOne({
 			type: PointTransactionTypes.Award,
@@ -103,6 +106,11 @@ async function createUser(username: string, password: string) {
 				userId: result.insertedId,
 				awardType: AwardTypes.Signup,
 			},
+		}),
+		notificationsCol.insertOne({
+			userId: result.insertedId,
+			date: now,
+			message: `You've earned ${settings.awardSignup} for creating an account!`,
 		}),
 	]);
 }

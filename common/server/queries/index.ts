@@ -16,6 +16,7 @@ import {
 	DbPost,
 	DbUserActivity,
 	DbPointTransaction,
+	DbNotification,
 } from '@common/server/db-schema';
 import {
 	dbPostToPostFn,
@@ -235,7 +236,7 @@ async function checkAwards(userId: string) {
 	} = settings;
 
 	if(lastAward?.type !== PointTransactionTypes.Award) {
-		return;
+		return false;
 	}
 
 	const {
@@ -246,10 +247,13 @@ async function checkAwards(userId: string) {
 	const daysSinceLastAward = differenceInDays(new Date(), lastAwardDate);
 
 	if(daysSinceLastAward < 1) {
-		return;
+		return false;
 	}
 
+	const notificationsCol = await getCollection(DbCollections.Notifications);
+
 	const userIdObj = new ObjectId(userId);
+	const now = nowISOString();
 	let streakSize = 0;
 
 	if(data.awardType === AwardTypes.Daily && daysSinceLastAward === 1) {
@@ -263,7 +267,7 @@ async function checkAwards(userId: string) {
 	const newAward: DbPointTransaction = {
 		type: PointTransactionTypes.Award,
 		points: appliedPoints,
-		date: nowISOString(),
+		date: now,
 		data: {
 			userId: userIdObj,
 			awardType: AwardTypes.Daily,
@@ -271,12 +275,19 @@ async function checkAwards(userId: string) {
 		},
 	};
 
+	const newNotification: DbNotification = {
+		userId: userIdObj,
+		date: now,
+		message: `You've earned ${appliedPoints} for looking at cool stuff!`,
+	};
+
 	await Promise.all([
-		txnCol.insertOne(newAward),
 		usersCol.updateOne(
 			{ _id: userIdObj },
 			{ $inc: { pointBalance: appliedPoints } },
 		),
+		txnCol.insertOne(newAward),
+		notificationsCol.insertOne(newNotification),
 	]);
 }
 
