@@ -9,6 +9,11 @@ import {
 	PointTransactionTypes,
 } from '@common/constants';
 
+const HotTypeTxns = [
+	PointTransactionTypes.postBoost,
+	PointTransactionTypes.postBoost,
+];
+
 interface Params {
 	userId?: string;
 	afterTimeISO?: string;
@@ -32,10 +37,10 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 			{
 				$match: {
 					date: { $gte: afterTimeISO },
-					type: PointTransactionTypes.postBoost,
+					type: { $in: HotTypeTxns },
 				},
 			},
-			{ $group: { _id: '$postId' } },
+			{ $group: { _id: '$data.postId' } },
 		]).toArray();
 
 		pipeline.push(
@@ -43,7 +48,7 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 				$match: {
 					$and: [
 						{ date: { $lt: afterTimeISO } },
-						{ postId: { $nin: foo.map(f => f._id) } },
+						{ 'data.postId': { $nin: foo.map(f => f._id) } },
 					],
 				},
 			},
@@ -58,7 +63,10 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 	while(await txnAgg.hasNext()) {
 		const doc = await txnAgg.next();
 
-		if(!(doc?.type === PointTransactionTypes.postBoost && doc?.data.postId)) {
+		if(!((
+			doc?.type === PointTransactionTypes.postBoost ||
+			doc?.type === PointTransactionTypes.PostCreate
+		) && doc.data.postId)) {
 			continue;
 		}
 
