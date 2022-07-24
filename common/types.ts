@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { UserRoles } from './constants';
-import { DbPointTransaction } from './server/db-schema';
+import { DbNotification, DbPointTransaction } from './server/db-schema';
 
 export
 interface Post {
@@ -87,6 +87,9 @@ interface LinkPreviewData {
 	videos: VideoLinkPreviewData[];
 	favicons: string[];
 }
+
+export
+type Notification = Pick<DbNotification, 'message' | 'date'>;
 
 export
 interface VideoLinkPreviewData {

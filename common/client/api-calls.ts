@@ -93,7 +93,7 @@ async function unbookmarkPost(id: string) {
 
 export
 async function getBalance() {
-	const { data } = await apiGet('/balance');
+	const { data } = await apiGet('/user/balance');
 
 	return data?.balance || 0;
 }
