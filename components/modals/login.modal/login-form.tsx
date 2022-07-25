@@ -4,6 +4,7 @@ import { login } from '@common/client/api-calls';
 import { useSetAtom } from 'jotai';
 import { pushToastMsgAtom } from '@common/atoms';
 import Link from 'next/link';
+import { UrlObject } from 'url';
 import {
 	Box,
 	Button,
@@ -12,7 +13,6 @@ import {
 	DialogTitle,
 	TextField,
 } from '@mui/material';
-import { UrlObject } from 'url';
 
 interface Props {
 	urlObj: UrlObject;
@@ -21,7 +21,7 @@ interface Props {
 export
 function LoginForm(props: Props) {
 	const { urlObj } = props;
-	const pustToastMsg = useSetAtom(pushToastMsgAtom);
+	const pushToastMsg = useSetAtom(pushToastMsgAtom);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const valid = !!(password && username);
@@ -41,11 +41,11 @@ function LoginForm(props: Props) {
 			if(await login(username, password)) {
 				setUsername('');
 			} else {
-				pustToastMsg('Incorrect Login');
+				pushToastMsg('Incorrect Login');
 			}
 
 		} catch(e) {
-			pustToastMsg('Something went wrong. Try again.');
+			pushToastMsg('Something went wrong. Try again.');
 			console.log(e);
 		}
 
