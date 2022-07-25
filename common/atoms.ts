@@ -7,7 +7,7 @@ const loadingAtom = atom(false);
 const toastQueueAtom = atom<ToastMesssage[]>([]);
 
 export
-const toastMsgAtom = atom(get => get(toastQueueAtom)[0] || '');
+const toastMsgAtom = atom(get => get(toastQueueAtom)[0] || null);
 
 export
 const boostPostAtom = atom<Post | null>(null);

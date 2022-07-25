@@ -218,7 +218,7 @@ async function fetchUserNotifications(userId: ObjectId) {
 	const result = await col.aggregate<DbNotification>([
 		{
 			$match: {
-				_id: userId,
+				userId,
 				readOn: null,
 			},
 		},

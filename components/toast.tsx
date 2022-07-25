@@ -13,6 +13,10 @@ function Toast() {
 	const toastMsg = useAtomValue(toastMsgAtom);
 	const clearMsg = useSetAtom(clearCurrentToastMsgAtom);
 	const [isOpen, setOpen] = useState(false);
+	const {
+		delay = DefaultToastMsgDelay,
+		message = '',
+	} = toastMsg || {};
 
 	useEffect(() => {
 		setOpen(!!toastMsg);
@@ -25,10 +29,10 @@ function Toast() {
 	return (
 		<Snackbar
 			open={isOpen}
-			autoHideDuration={toastMsg.delay || DefaultToastMsgDelay}
+			autoHideDuration={delay}
 			onClose={handleClose}
 			TransitionProps={{ onExited: clearMsg }}
-			message={toastMsg.message}
+			message={message}
 			action={
 				<IconButton
 					size="small"

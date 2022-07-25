@@ -2,12 +2,13 @@ import type {
 	ApiResponse,
 	Feed,
 	LinkPreviewData,
-} from '../types';
+	Notification,
+} from '@common/types';
 
 import { signIn, signOut } from 'next-auth/react';
 import { get, post } from '@common/client/client-utils';
-import { urlJoin } from '../utils';
-import { API_URL, FeedTypes } from '../constants';
+import { urlJoin } from '@common/utils';
+import { API_URL, FeedTypes } from '@common/constants';
 
 export
 async function login(username: string, password: string) {
@@ -97,6 +98,14 @@ async function getBalance() {
 
 	return data?.balance || 0;
 }
+
+export
+async function getNotificaitons(): Promise<Notification[]> {
+	const result = await apiGet<ApiResponse<{notifications: Notification[]}>>('/user/notifications');
+
+	return result?.data?.notifications || [];
+}
+
 
 function apiPost<T = any>(path: string, requestBody?: any) {
 	return post<T>(urlJoin(API_URL, path), requestBody);
