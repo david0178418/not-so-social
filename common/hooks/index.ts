@@ -119,9 +119,14 @@ function useFeed(initialFeed: Feed) {
 
 export
 function useBalance() {
+	const isLoggedIn = useIsLoggedIn();
 	const [balance, setBalance] = useState(0);
 
 	useEffect(() => {
+		if(!isLoggedIn) {
+			return;
+		}
+
 		getBalance().then(setBalance);
 	}, []);
 

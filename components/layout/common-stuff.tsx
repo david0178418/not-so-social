@@ -8,12 +8,18 @@ import { useEffect } from 'react';
 import { getNotificaitons } from '@common/client/api-calls';
 import { pushToastMsgAtom } from '@common/atoms';
 import { useSetAtom } from 'jotai';
+import { useIsLoggedIn } from '@common/hooks';
 
 export
 function CommonStuff() {
 	const pushToastMsg = useSetAtom(pushToastMsgAtom);
+	const isLoggedIn = useIsLoggedIn();
 
 	useEffect(() => {
+		if(!isLoggedIn) {
+			return;
+		}
+
 		const reset = setTimeout(() => {
 			// TODO where should this logic go?
 			getNotificaitons()
@@ -22,7 +28,7 @@ function CommonStuff() {
 				});
 		}, 1000);
 		return () => clearTimeout(reset);
-	}, [pushToastMsg]);
+	}, [isLoggedIn]);
 
 	return (
 		<>
