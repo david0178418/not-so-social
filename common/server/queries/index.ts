@@ -212,24 +212,6 @@ async function fetchUserBalance(userId: ObjectId) {
 }
 
 export
-async function fetchUserNotifications(userId: ObjectId) {
-	const col = await getCollection(DbCollections.Notifications);
-
-	const result = await col.aggregate<DbNotification>([
-		{
-			$match: {
-				userId,
-				readOn: null,
-			},
-		},
-		{ $sort: { date: -1 } },
-		{ $limit: 10 },
-	]).toArray();
-
-	return result;
-}
-
-export
 // TODO clean this up?
 async function checkAwards(userId: string) {
 	const settings = await fetchSettings();
