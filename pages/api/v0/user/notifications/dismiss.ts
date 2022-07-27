@@ -45,5 +45,5 @@ async function dismissNotifications(id: string, ownerId: string) {
 	col.updateOne({
 		_id: new ObjectId(id),
 		userId: new ObjectId(ownerId),
-	}, { readOn: nowISOString() });
+	}, { $set: { readOn: nowISOString() } });
 }

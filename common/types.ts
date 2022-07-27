@@ -35,6 +35,7 @@ export
 interface ToastMesssage {
 	message: ReactNode;
 	delay?: number;
+	onClose?(): void;
 }
 
 export
@@ -89,7 +90,9 @@ interface LinkPreviewData {
 }
 
 export
-type Notification = Pick<DbNotification, 'message' | 'date'>;
+type Notification = Pick<DbNotification, 'message' | 'date'> & {
+	_id: string;
+};
 
 export
 interface VideoLinkPreviewData {

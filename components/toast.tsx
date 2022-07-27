@@ -16,6 +16,7 @@ function Toast() {
 	const {
 		delay = DefaultToastMsgDelay,
 		message = '',
+		onClose = () => {},
 	} = toastMsg || {};
 
 	useEffect(() => {
@@ -24,6 +25,7 @@ function Toast() {
 
 	function handleClose() {
 		setOpen(false);
+		onClose();
 	}
 
 	return (

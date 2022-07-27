@@ -106,6 +106,11 @@ async function getNotificaitons(): Promise<Notification[]> {
 	return result?.data?.notifications || [];
 }
 
+export
+async function dismissNotification(id: string): Promise<void> {
+	await apiGet('/user/notifications/dismiss', { id });
+}
+
 
 function apiPost<T = any>(path: string, requestBody?: any) {
 	return post<T>(urlJoin(API_URL, path), requestBody);
