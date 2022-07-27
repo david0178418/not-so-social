@@ -9,7 +9,7 @@ import { fetchUserBalance } from '@common/server/queries';
 import { grammit } from '@common/server/server-utils';
 import { LinkPreviewData } from '@common/types';
 import { z, ZodType } from 'zod';
-import { linkPreviewSchema } from '@common/server/validations';
+import { linkPreviewSchema, MongoObjectId } from '@common/server/validations';
 import {
 	DbCollections,
 	MaxPostBodyLength,
@@ -48,10 +48,7 @@ const schema: ZodType<Schema> = z.object({
 	linkPreviews: z
 		.array(linkPreviewSchema)
 		.optional(),
-	parentId: z
-		.string()
-		.trim()
-		.length(24)
+	parentId: MongoObjectId
 		.optional(),
 });
 

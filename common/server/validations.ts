@@ -4,6 +4,12 @@ import { z, ZodType } from 'zod';
 import { MaxPostBodyLength } from '@common/constants';
 
 export
+const MongoObjectId = z
+	.string()
+	.trim()
+	.length(24);
+
+export
 const linkPreviewVideoSchema: ZodType<VideoLinkPreviewData> = z.object({
 	url: z
 		.string()
