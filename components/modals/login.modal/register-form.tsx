@@ -56,7 +56,7 @@ function RegistrationForm(props: Props) {
 
 				setTimeout(() => pustToastMsg({
 					message: `
-						Find your balance under your username on the left raile.
+						Find your balance under your username on the left rail.
 						You've earned points for signing up!
 						Use them to boost posts you like or to create content of your own!
 					`,
