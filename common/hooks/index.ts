@@ -1,9 +1,13 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { Feed } from '@common/types';
 import { tuple } from '@common/utils';
-import { getBalance, getFeed } from '@common/client/api-calls';
+import {
+	useEffect,
+	useState,
+	useRef,
+	useLayoutEffect,
+} from 'react';
+
 import {
 	PageSize,
 	UserRoles,
@@ -68,6 +72,35 @@ function useDebounce<T>(value: T, delay: number) {
 
 	return debouncedValue;
 }
+
+export
+// See: https://usehooks-ts.com/react-hook/use-isomorphic-layout-effect
+function useTimeout(callback: () => void, delay: number | null) {
+	const savedCallback = useRef(callback);
+
+	// Remember the latest callback if it changes.
+	useLayoutEffect(() => {
+		savedCallback.current = callback;
+	}, [callback]);
+
+	// Set up the timeout.
+	useEffect(() => {
+		// Don't schedule if no delay is specified.
+		// Note: 0 is a valid value for delay.
+		if (!delay && delay !== 0) {
+			return;
+		}
+
+		const id = setTimeout(() => savedCallback.current(), delay);
+
+		return () => clearTimeout(id);
+	}, [delay]);
+}
+
+// TODO Put business logic hooks elsewhere
+
+import { Feed } from '@common/types';
+import { getBalance, getFeed } from '@common/client/api-calls';
 
 export
 function useFeed(initialFeed: Feed) {
