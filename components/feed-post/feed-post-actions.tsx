@@ -6,6 +6,8 @@ import { writeToClipboard } from '@common/client/client-utils';
 import { Paths } from '@common/constants';
 import Link from 'next/link';
 import { DropdownMenu } from '@components/dropdown-menu';
+import { useSetAtom } from 'jotai';
+import { boostPostAtom } from '@common/atoms';
 import {
 	BoostIcon,
 	CommentIcon,
@@ -17,8 +19,6 @@ import {
 	MenuItem,
 	Tooltip,
 } from '@mui/material';
-import { useSetAtom } from 'jotai';
-import { boostPostAtom } from '@common/atoms';
 
 interface Props {
 	post: Post;
@@ -58,7 +58,7 @@ function PostActions(props: Props) {
 						startIcon={<CommentIcon/>}
 						onClick={onCommentClick}
 					>
-						{''}
+						{formatCompactNumber(post.replyCount)}
 					</Button>
 				</Tooltip>
 			</Grid>

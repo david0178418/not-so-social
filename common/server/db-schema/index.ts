@@ -14,8 +14,16 @@ type SharedPostProps = Pick<Post,
 'created' |
 'lastUpdated' |
 'linkPreviews' |
+'replyCount' |
 'totalPoints'
 >;
+
+export
+interface DbPost extends SharedPostProps {
+	_id?: ObjectId;
+	ownerId: ObjectId;
+	parentId?: ObjectId;
+}
 
 export
 interface DbSettings {
@@ -27,13 +35,6 @@ export
 interface DbPostTextGram {
 	postId: ObjectId;
 	grams: string;
-}
-
-export
-interface DbPost extends SharedPostProps {
-	_id?: ObjectId;
-	ownerId: ObjectId;
-	parentId?: ObjectId;
 }
 
 export

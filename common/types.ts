@@ -12,6 +12,7 @@ interface Post {
 	lastUpdated: string;
 	parentId?: string;
 	points?: number;
+	replyCount: number;
 	title: string;
 	totalPoints: number;
 	linkPreviews?: LinkPreviewData[];

@@ -123,6 +123,7 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 		created: now,
 		lastUpdated: now,
 		ownerId,
+		replyCount: 0,
 		totalPoints: appliedPoints,
 		_id: newPostId,
 	};
@@ -164,6 +165,15 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 		calls.push(
 			usersCol
 				.updateOne({ _id: ownerId }, { $inc: { pointBalance: -spentPoints } })
+		);
+	}
+
+	if(newPost.parentId) {
+		calls.push(
+			postCol.updateOne(
+				{ _id: newPost.parentId },
+				{ $inc: { replyCount: 1 } }
+			)
 		);
 	}
 
