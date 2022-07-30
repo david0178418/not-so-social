@@ -21,8 +21,6 @@ import {
 import { LinkPreviews } from '@components/link-previews';
 
 interface Props {
-	child?: boolean;
-	parent?: boolean;
 	parentPosts?: Post[];
 	post: Post;
 	responses?: Post[];
@@ -37,32 +35,39 @@ const styles = {
 	padding: 1,
 	marginX: 1,
 };
-const parentStyles = {
-	backgroundColor: 'white',
-	borderTopRightRadius: RADIUS,
-	borderTopLeftRadius: RADIUS,
-	overflow: 'hidden',
-};
-const childStyles = {
-	backgroundColor: 'white',
-	borderBottomRightRadius: RADIUS,
+const containerStyles = {
+	backgroundColor: '#e4e4e4',
 	borderBottomLeftRadius: RADIUS,
-	overflow: 'hidden',
-};
-const hasParentOrResponseStyles = {
+	borderBottomRightRadius: RADIUS,
+	borderTopLeftRadius: RADIUS,
+	borderTopRightRadius: RADIUS,
 	marginTop: 1,
 	paddingBottom: 1,
 	paddingTop: 1,
-	borderTopRightRadius: RADIUS,
+};
+const parentStyles = {
+	backgroundColor: 'white',
+	borderBottom: '1px solid #dedede',
 	borderTopLeftRadius: RADIUS,
+	borderTopRightRadius: RADIUS,
+	marginBottom: '-1px',
+	marginX: 2,
+	overflow: 'hidden',
+	position: 'relative',
+};
+const childStyles = {
+	backgroundColor: 'white',
+	borderBottomLeftRadius: RADIUS,
+	borderBottomRightRadius: RADIUS,
+	borderTop: '1px solid #dedede',
+	marginX: 2,
+	overflow: 'hidden',
+};
+const hasNoResponseStyle = {
 	borderBottomRightRadius: RADIUS,
 	borderBottomLeftRadius: RADIUS,
 };
-const hasParentNoResponseStyle = {
-	borderBottomRightRadius: RADIUS,
-	borderBottomLeftRadius: RADIUS,
-};
-const hasResponseNoParentStyle = {
+const hasNoParentStyle = {
 	borderTopRightRadius: RADIUS,
 	borderTopLeftRadius: RADIUS,
 };
@@ -71,8 +76,6 @@ export
 function FeedPost(props: Props) {
 	const {
 		post,
-		child,
-		parent,
 		responses = [],
 		parentPosts = [],
 	} = props;
@@ -81,24 +84,35 @@ function FeedPost(props: Props) {
 
 	const appliedStyles = {
 		...styles,
-		...(parent ? parentStyles : {}),
-		...(child ? childStyles : {}),
-		...((parentPosts.length && !responses.length) ? hasParentNoResponseStyle : {}),
-		...((!parentPosts.length && responses.length) ? hasResponseNoParentStyle : {}),
-	};
-	const appliedContainerStyles = {
-		backgroundColor: '#e4e4e4',
-		...(!(parent || child) ? hasParentOrResponseStyles : {}),
+		...((!responses.length) ? hasNoResponseStyle : {}),
+		...((!parentPosts.length) ? hasNoParentStyle : {}),
 	};
 
-	const content = (
-		<Box sx={appliedContainerStyles}>
+	return (
+		<Box sx={containerStyles}>
 			{parentPosts.map(p => (
-				<FeedPost
-					parent
+				<Box
 					key={p._id}
-					post={p}
-				/>
+					sx={parentStyles}
+					padding={1}
+				>
+					<Typography>
+						Response To:
+						<Link href={urlJoin(Paths.Post, p._id)} passHref>
+							<Typography
+								noWrap
+								component={MuiLink}
+								title={p.title}
+								sx={{
+									fontWeight: 'bold',
+									display: 'block',
+								}}
+							>
+								{p.title}
+							</Typography>
+						</Link>
+					</Typography>
+				</Box>
 			))}
 			<Box sx={appliedStyles}>
 				<div>
@@ -131,7 +145,7 @@ function FeedPost(props: Props) {
 											display: 'block',
 										}}
 									>
-										{post.title}
+										{(parentPosts.length && !responses.length).toString()}
 									</Typography>
 								</Link>
 							</Grid>
@@ -186,41 +200,29 @@ function FeedPost(props: Props) {
 				</div>
 			</Box>
 			{responses.map(p => (
-				<FeedPost
-					child
+				<Box
 					key={p._id}
-					post={p}
-				/>
+					sx={childStyles}
+					padding={1}
+				>
+					<Typography>
+						Top Response:
+						<Link href={urlJoin(Paths.Post, p._id)} passHref>
+							<Typography
+								noWrap
+								component={MuiLink}
+								title={p.title}
+								sx={{
+									fontWeight: 'bold',
+									display: 'block',
+								}}
+							>
+								{p.title}
+							</Typography>
+						</Link>
+					</Typography>
+				</Box>
 			))}
 		</Box>
 	);
-
-	if(parent) {
-		return (
-			// TODO Figure out the proper style inheritance
-			<Box
-				sx={{
-					position: 'relative',
-					marginBottom: '-1px',
-					borderBottom: '1px solid #dedede',
-					marginX: 1,
-				}}
-			>
-				{content}
-			</Box>
-		);
-	} else if(child) {
-		return (
-			// TODO Figure out the proper style inheritance
-			<Box sx={{
-				marginTop: '-1px',
-				borderTop: '1px solid #dedede',
-				marginX: 1,
-			}}>
-				{content}
-			</Box>
-		);
-	} else {
-		return content;
-	}
 }
