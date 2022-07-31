@@ -145,7 +145,7 @@ function FeedPost(props: Props) {
 											display: 'block',
 										}}
 									>
-										{(parentPosts.length && !responses.length).toString()}
+										{post.title}
 									</Typography>
 								</Link>
 							</Grid>
