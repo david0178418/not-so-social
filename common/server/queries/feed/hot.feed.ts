@@ -1,101 +1,159 @@
 import { getCollection } from '@common/server/mongodb';
-import { DbPointTransaction, DbPost } from '@common/server/db-schema';
+import { DbPost } from '@common/server/db-schema';
 import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';
-import { ObjectId } from 'mongodb';
 import {
 	DbCollections,
 	PageSize,
 	PointTransactionTypes,
 } from '@common/constants';
 
-const HotTypeTxns = [
+// TODO Is there a better way to do this in MongoDB?
+const DocPlaceholder = 'docTemp';
+
+const HotTxnTypes = [
 	PointTransactionTypes.postBoost,
 	PointTransactionTypes.postBoost,
 ];
 
 interface Params {
 	userId?: string;
-	afterTimeISO?: string;
+	fromIndex?: number;
 }
 
 export
 // TODO Rethink what "hot" means
 async function fetchHotPosts(params: Params): Promise<Feed> {
+	console.log(11111);
 	const {
-		afterTimeISO,
+		fromIndex = 0,
 		userId,
 	} = params;
-	const txnCol = await getCollection(DbCollections.PointTransactions);
+	const col = await getCollection(DbCollections.PointTransactions);
 
-	const pipeline: Record<string, any>[] = [
+	const results = await col.aggregate<DbPost>([
+		{ $match: { type: { $in: HotTxnTypes } } },
 		{ $sort: { date: -1 } },
-	];
-
-	if(afterTimeISO) {
-		const foo = await txnCol.aggregate<DbPointTransaction>([
-			{
-				$match: {
-					date: { $gte: afterTimeISO },
-					type: { $in: HotTypeTxns },
+		{ $limit: 1000 },
+		{
+			$set: {
+				hourDiff: {
+					$dateDiff: {
+						startDate: '$date',
+						endDate: new Date(),
+						unit: 'day',
+					},
 				},
 			},
-			{ $group: { _id: '$data.postId' } },
-		]).toArray();
-
-		pipeline.push(
-			{
-				$match: {
-					$and: [
-						{ date: { $lt: afterTimeISO } },
-						{ 'data.postId': { $nin: foo.map(f => f._id) } },
+		},
+		{
+			$set: {
+				weight: {
+					$cond: [
+						{ $eq: [ '$hourDiff', 0 ] },
+						1,
+						{
+							$divide: [
+								1,
+								'$hourDiff',
+							],
+						},
 					],
 				},
 			},
-		);
-	}
+		},
+		{
+			$set: {
+				weightedPoints: {
+					$multiply: [
+						'$weight',
+						'$points',
+					],
+				},
+			},
+		},
+		{
+			$group: {
+				_id: '$data.postId',
+				points: { $sum: '$weightedPoints' },
+			},
+		},
+		{ $sort: { points: -1 } },
+		{ $limit: PageSize + fromIndex },
+		{ $skip: fromIndex },
+		{
+			$lookup: {
+				from: DbCollections.Posts,
+				localField: '_id',
+				foreignField: '_id',
+				as: DocPlaceholder,
+			},
+		},
+		{ $unwind: { path: `$${DocPlaceholder}` } },
+		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
+	]).toArray();
 
-	const txnAgg = await txnCol.aggregate<DbPointTransaction>(pipeline);
+	console.log(111, JSON.stringify([
+		{ $match: { type: { $in: HotTxnTypes } } },
+		{ $sort: { date: -1 } },
+		{ $limit: 1000 },
+		{
+			$set: {
+				hourDiff: {
+					$dateDiff: {
+						startDate: '$date',
+						endDate: new Date(),
+						unit: 'day',
+					},
+				},
+			},
+		},
+		{
+			$set: {
+				weight: {
+					$cond: [
+						{ $eq: [ '$hourDiff', 0 ] },
+						1,
+						{
+							$divide: [
+								1,
+								'$hourDiff',
+							],
+						},
+					],
+				},
+			},
+		},
+		{
+			$set: {
+				weightedPoints: {
+					$multiply: [
+						'$weight',
+						'$points',
+					],
+				},
+			},
+		},
+		{
+			$group: {
+				_id: '$data.postId',
+				points: { $sum: '$weightedPoints' },
+			},
+		},
+		{ $sort: { points: -1 } },
+		{ $limit: PageSize + fromIndex },
+		{ $skip: fromIndex },
+		{
+			$lookup: {
+				from: DbCollections.Posts,
+				localField: '_id',
+				foreignField: '_id',
+				as: DocPlaceholder,
+			},
+		},
+		{ $unwind: { path: `$${DocPlaceholder}` } },
+		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
+	], undefined, 4));
 
-	const pointRollup: Record<string, number> = {};
-	let cutoffISO = '';
-
-	while(await txnAgg.hasNext()) {
-		const doc = await txnAgg.next();
-
-		if(!((
-			doc?.type === PointTransactionTypes.postBoost ||
-			doc?.type === PointTransactionTypes.PostCreate
-		) && doc.data.postId)) {
-			continue;
-		}
-
-		const postId = doc.data.postId.toString();
-
-		if(!pointRollup[postId]) {
-			if(Object.keys(pointRollup).length === PageSize) {
-				break;
-			}
-
-			pointRollup[postId] = 0;
-		}
-
-		pointRollup[postId] = pointRollup[postId] + doc.points;
-		cutoffISO = doc.date.toString();
-	}
-
-	const postIds = Object.keys(pointRollup).sort((idA, idB) => pointRollup[idA] - pointRollup[idB]);
-
-	const col = await getCollection(DbCollections.Posts);
-
-	const results = await col
-		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
-		.toArray();
-
-	const feedPosts = await fetchRelatedPostsAndPrepareForClient(results, userId);
-
-	return {
-		...feedPosts,
-		cutoffISO,
-	};
+	return fetchRelatedPostsAndPrepareForClient(results, userId);
 }

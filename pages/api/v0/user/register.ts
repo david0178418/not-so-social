@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import Joi from 'joi';
 import { getCollection } from '@common/server/mongodb';
-import { nowISOString } from '@common/utils';
 import { getServerSession } from '@common/server/auth-options';
 import { fetchUser } from '@common/server/queries';
 import { passwordToHash } from '@common/server/transforms';
@@ -82,7 +81,8 @@ async function createUser(username: string, password: string) {
 	const usersMeta = await getCollection(DbCollections.UsersMeta);
 	const notificationsCol = await getCollection(DbCollections.Notifications);
 	const hash = await passwordToHash(password);
-	const now = nowISOString();
+	const nowDate = new Date();
+	const nowISOStr = nowDate.toISOString();
 
 	const result = await usersCol
 		.insertOne({
@@ -96,12 +96,12 @@ async function createUser(username: string, password: string) {
 		usersMeta
 			.insertOne({
 				userId: result.insertedId,
-				created: now,
+				created: nowISOStr,
 			}),
 		txnCol.insertOne({
 			type: PointTransactionTypes.Award,
 			points: settings.awardSignup,
-			date: nowISOString(),
+			date: nowDate,
 			data: {
 				userId: result.insertedId,
 				awardType: AwardTypes.Signup,
@@ -109,7 +109,7 @@ async function createUser(username: string, password: string) {
 		}),
 		notificationsCol.insertOne({
 			userId: result.insertedId,
-			date: now,
+			date: nowISOStr,
 			message: `You've earned ${settings.awardSignup} for creating an account!`,
 		}),
 	]);

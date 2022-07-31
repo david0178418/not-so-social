@@ -2,7 +2,7 @@ import { format, formatDistanceToNow } from 'date-fns';
 import { IS_SSR } from './constants';
 
 export
-function formatDate(dateStr: string) {
+function formatDate(dateStr: string | Date) {
 	return format(new Date(dateStr), 'p · PP');
 }
 

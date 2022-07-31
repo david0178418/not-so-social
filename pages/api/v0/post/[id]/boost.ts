@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from '@common/server/auth-options';
 import { DbPointTransaction } from '@common/server/db-schema';
 import { getCollection } from '@common/server/mongodb';
-import { nowISOString } from '@common/utils';
 import Joi, { ValidationError } from 'joi';
 import { ObjectId } from 'mongodb';
 import {
@@ -101,7 +100,7 @@ async function boostPost(props: BoostPostProps) {
 		points,
 		isAdmin = false,
 	} = props;
-	const date = nowISOString();
+	const date = new Date();
 	const postCol = await getCollection(DbCollections.Posts);
 
 	const post = await postCol.findOne({ _id: postId });

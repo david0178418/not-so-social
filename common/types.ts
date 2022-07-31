@@ -27,7 +27,6 @@ interface Settings {
 }
 
 type SharedPointTransactionProps = Pick<DbPointTransaction,
-'date' |
 'points' |
 'type'
 >;
@@ -42,6 +41,7 @@ interface ToastMesssage {
 export
 interface PointTransaction extends SharedPointTransactionProps {
 	_id?: string;
+	date: string;
 	// TODO address this
 	data: {
 		postId?: string;

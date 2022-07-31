@@ -40,11 +40,13 @@ function dbPointTransactionToPointTransaction(transaction: DbPointTransaction): 
 	/* eslint-disable @typescript-eslint/no-unused-vars */
 	const {
 		data,
+		date,
 		...cleanedTxn
 	} = transaction;
 	/* eslint-enable @typescript-eslint/no-unused-vars */
 	return {
 		...cleanedTxn,
+		date: date.toISOString(),
 		data: {
 			// @ts-ignore TODO Fix this
 			postId: data.postId?.toString() || '',

@@ -253,7 +253,8 @@ async function checkAwards(userId: string) {
 	const notificationsCol = await getCollection(DbCollections.Notifications);
 
 	const userIdObj = new ObjectId(userId);
-	const now = nowISOString();
+	const nowDate = new Date();
+	const nowIsoStr = nowDate.toISOString();
 	let streakSize = 0;
 
 	if(data.awardType === AwardTypes.Daily && daysSinceLastAward === 1) {
@@ -267,7 +268,7 @@ async function checkAwards(userId: string) {
 	const newAward: DbPointTransaction = {
 		type: PointTransactionTypes.Award,
 		points: appliedPoints,
-		date: now,
+		date: nowDate,
 		data: {
 			userId: userIdObj,
 			awardType: AwardTypes.Daily,
@@ -277,7 +278,7 @@ async function checkAwards(userId: string) {
 
 	const newNotification: DbNotification = {
 		userId: userIdObj,
-		date: now,
+		date: nowIsoStr,
 		message: `You've earned ${appliedPoints} for looking at cool stuff!`,
 	};
 

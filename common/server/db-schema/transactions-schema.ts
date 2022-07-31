@@ -21,7 +21,7 @@ export
 type DbPointTransaction = DbTxn & {
 	_id?: ObjectId;
 	points: number;
-	date: string;
+	date: Date;
 }
 
 type DbTxn = DbTxnAward | DbTxnPostBoost | DbTxnPostCreate;

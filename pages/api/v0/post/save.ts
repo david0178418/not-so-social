@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { getCollection } from '@common/server/mongodb';
-import { nowISOString } from '@common/utils';
 import { ObjectId } from 'mongodb';
 import { DbPost, DbPostTextGram } from '@common/server/db-schema';
 import { getServerSession } from '@common/server/auth-options';
@@ -110,7 +109,8 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 		getCollection(DbCollections.Posts),
 	]);
 
-	const now = nowISOString();
+	const nowDate = new Date();
+	const nowIsoStr = nowDate.toISOString();
 	const {
 		parentId,
 		points: spentPoints,
@@ -120,8 +120,8 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 	const newPostId = new ObjectId();
 	const newPost: DbPost = {
 		...newPostContent,
-		created: now,
-		lastUpdated: now,
+		created: nowIsoStr,
+		lastUpdated: nowIsoStr,
 		ownerId,
 		replyCount: 0,
 		totalPoints: appliedPoints,
@@ -156,7 +156,7 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 					postId: newPostId,
 					spentPoints,
 				},
-				date: now,
+				date: nowDate,
 				points: appliedPoints,
 			}),
 	];
