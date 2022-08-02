@@ -24,7 +24,6 @@ interface Params {
 export
 // TODO Rethink what "hot" means
 async function fetchHotPosts(params: Params): Promise<Feed> {
-	console.log(11111);
 	const {
 		fromIndex = 0,
 		userId,
@@ -92,68 +91,6 @@ async function fetchHotPosts(params: Params): Promise<Feed> {
 		{ $unwind: { path: `$${DocPlaceholder}` } },
 		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
 	]).toArray();
-
-	console.log(111, JSON.stringify([
-		{ $match: { type: { $in: HotTxnTypes } } },
-		{ $sort: { date: -1 } },
-		{ $limit: 1000 },
-		{
-			$set: {
-				hourDiff: {
-					$dateDiff: {
-						startDate: '$date',
-						endDate: new Date(),
-						unit: 'day',
-					},
-				},
-			},
-		},
-		{
-			$set: {
-				weight: {
-					$cond: [
-						{ $eq: [ '$hourDiff', 0 ] },
-						1,
-						{
-							$divide: [
-								1,
-								'$hourDiff',
-							],
-						},
-					],
-				},
-			},
-		},
-		{
-			$set: {
-				weightedPoints: {
-					$multiply: [
-						'$weight',
-						'$points',
-					],
-				},
-			},
-		},
-		{
-			$group: {
-				_id: '$data.postId',
-				points: { $sum: '$weightedPoints' },
-			},
-		},
-		{ $sort: { points: -1 } },
-		{ $limit: PageSize + fromIndex },
-		{ $skip: fromIndex },
-		{
-			$lookup: {
-				from: DbCollections.Posts,
-				localField: '_id',
-				foreignField: '_id',
-				as: DocPlaceholder,
-			},
-		},
-		{ $unwind: { path: `$${DocPlaceholder}` } },
-		{ $replaceRoot: { newRoot: `$${DocPlaceholder}` } },
-	], undefined, 4));
 
 	return fetchRelatedPostsAndPrepareForClient(results, userId);
 }

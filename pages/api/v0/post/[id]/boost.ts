@@ -50,8 +50,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		const balance = await fetchUserBalance(ownerId);
 		const isAdmin = user.role === UserRoles.Admin;
 
-		console.log(user.role);
-
 		if(
 			!isAdmin &&
 			points > balance
