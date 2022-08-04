@@ -34,16 +34,16 @@ interface Schema {
 const schema: ZodType<Schema> = z.object({
 	body: z
 		.string()
-		.min(MinPostBodyLength)
-		.max(MaxPostBodyLength),
+		.min(MinPostBodyLength, { message: `Post body must be at least ${MinPostBodyLength} characters long.` })
+		.max(MaxPostBodyLength, { message: `Post body can be no more than ${MaxPostBodyLength} characters long.` }),
 	title: z
 		.string()
-		.min(MinPostTitleLength)
-		.max(MaxPostTitleLength),
+		.min(MinPostTitleLength, { message: `Post body must be at least ${MinPostBodyLength} characters long.` })
+		.max(MaxPostTitleLength, { message: `Post body can be no more than ${MaxPostBodyLength} characters long.` }),
 	points: z
 		.number()
 		.min(MinPostCost, { message: `Must spend at least ${MinPostCost} points` })
-		.max(MaxPostCost),
+		.max(MaxPostCost, { message: `Can't spend more than  ${MaxPostCost} points` }),
 	linkPreviews: z
 		.array(linkPreviewSchema)
 		.optional(),
