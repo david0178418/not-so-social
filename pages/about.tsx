@@ -71,5 +71,9 @@ const questionsAnswers = [
 		key: 'how-are-points-earned',
 		title: 'How are points earned?',
 		content: 'TODO',
+	}, {
+		key: 'shouldnt-this-be-faq',
+		title: 'Shouldn\'t this be called an "FAQ"?',
+		content: 'TODO',
 	},
 ];
