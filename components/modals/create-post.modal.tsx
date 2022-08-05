@@ -41,14 +41,15 @@ import {
 
 export
 function CreatePostModal() {
-	const pustToastMsg = useSetAtom(pushToastMsgAtom);
+	const pushToastMsg = useSetAtom(pushToastMsgAtom);
 	const setLoading = useSetAtom(loadingAtom);
 	const isLoggedOut = useIsLoggedOut();
 	const router = useRouter();
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
-	const debouncedBody = useDebounce(body, 750);
 	const [points, setPoints] = useState(MinPostCost);
+	const debouncedPoints = useDebounce(points, 750);
+	const debouncedBody = useDebounce(body, 750);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 	const [linkPreviews, setLinkPreviews] = useState<LinkPreviewData[]>([]);
@@ -73,6 +74,15 @@ function CreatePostModal() {
 		}
 
 	}, [actionIsCreatePost, isLoggedOut]);
+
+	useEffect(() => {
+		if(debouncedPoints >= MinPostCost) {
+			return;
+		}
+
+		setPoints(MinPostCost);
+		pushToastMsg(`Must spend at least ${MinPostCost}pts`);
+	}, [debouncedPoints]);
 
 	// TODO Clean this mess up
 	useEffect(() => {
@@ -122,7 +132,7 @@ function CreatePostModal() {
 		} catch(e: any) {
 			const { errors = ['Something went wrong. Try again.'] } = e;
 
-			errors.map(pustToastMsg);
+			errors.map(pushToastMsg);
 			console.log(e);
 		}
 
@@ -132,7 +142,7 @@ function CreatePostModal() {
 	function close() {
 		setBody('');
 		setTitle('');
-		setPoints(0);
+		setPoints(MinPostCost);
 		router.back();
 	}
 
