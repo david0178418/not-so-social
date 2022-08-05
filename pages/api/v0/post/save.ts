@@ -38,8 +38,8 @@ const schema: ZodType<Schema> = z.object({
 		.max(MaxPostBodyLength, { message: `Post body can be no more than ${MaxPostBodyLength} characters long.` }),
 	title: z
 		.string()
-		.min(MinPostTitleLength, { message: `Post body must be at least ${MinPostBodyLength} characters long.` })
-		.max(MaxPostTitleLength, { message: `Post body can be no more than ${MaxPostBodyLength} characters long.` }),
+		.min(MinPostTitleLength, { message: `Post title must be at least ${MinPostTitleLength} characters long.` })
+		.max(MaxPostTitleLength, { message: `Post title can be no more than ${MaxPostTitleLength} characters long.` }),
 	points: z
 		.number()
 		.min(MinPostCost, { message: `Must spend at least ${MinPostCost} points` })
