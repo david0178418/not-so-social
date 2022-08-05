@@ -76,7 +76,6 @@ function LeftRail() {
 	} = router;
 	const user = data?.user;
 
-
 	return (
 		<>
 			<Typography>
