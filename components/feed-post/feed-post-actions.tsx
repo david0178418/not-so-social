@@ -138,5 +138,3 @@ function PostActions(props: Props) {
 		</>
 	);
 }
-
-

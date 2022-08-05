@@ -32,6 +32,10 @@ module.exports = {
 		'jsx-a11y/alt-text': OFF,
 		'jsx-a11y/anchor-is-valid': OFF,
 		'key-spacing': ERR,
+		'no-multiple-empty-lines': [ERR, {
+			max: 1,
+			maxEOF: 0,
+		}],
 		'no-extra-semi': WARN,
 		'no-multi-spaces': ERR,
 		'no-shadow': OFF,

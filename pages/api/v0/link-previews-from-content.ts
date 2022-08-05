@@ -8,7 +8,6 @@ import Joi, { ValidationError } from 'joi';
 import { MaxPostBodyLength, MinPostBodyLength } from '@common/constants';
 import getUrls from 'get-urls';
 
-
 interface Schema {
 	content: string;
 }

@@ -91,7 +91,6 @@ async function createUser(username: string, password: string) {
 			hash,
 		});
 
-
 	await Promise.all([
 		usersMeta
 			.insertOne({

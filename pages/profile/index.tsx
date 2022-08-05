@@ -67,5 +67,3 @@ const ProfilePage: NextPage<any> = () => {
 };
 
 export default ProfilePage;
-
-

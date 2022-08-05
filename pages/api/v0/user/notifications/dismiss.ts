@@ -14,7 +14,6 @@ interface Schema {
 
 const schema: ZodType<Schema> = z.object({ id: MongoObjectId });
 
-
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const { user } = await getServerSession(req, res) || {};
