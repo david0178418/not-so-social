@@ -1,7 +1,8 @@
-import { AsyncFnReturnType } from '@common/types';
+import type { GetServerSideProps, NextPage } from 'next';
+import type { AsyncFnReturnType } from '@common/types';
+
 import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
-import { GetServerSideProps, NextPage } from 'next';
 import { getServerSession } from '@common/server/auth-options';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';

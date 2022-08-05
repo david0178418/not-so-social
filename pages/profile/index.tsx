@@ -1,6 +1,7 @@
+import type { GetServerSideProps, NextPage } from 'next';
+
 import Link from 'next/link';
 import { ModalActions, Paths } from '@common/constants';
-import { GetServerSideProps, NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { getServerSession } from '@common/server/auth-options';
