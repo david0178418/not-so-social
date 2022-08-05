@@ -9,6 +9,7 @@ const CancelButton = forwardRef<HTMLButtonElement, CommonButtonProps>((props: Co
 		children,
 		label,
 		href,
+		fullWidth,
 		onClick,
 	} = props;
 	const renderedLabel = label || children || 'Cancel';
@@ -16,8 +17,10 @@ const CancelButton = forwardRef<HTMLButtonElement, CommonButtonProps>((props: Co
 	return (
 		<Button
 			color="error"
+			variant="outlined"
 			href={href}
 			ref={ref}
+			fullWidth={fullWidth}
 			onClick={onClick}
 			endIcon={<CancelIcon />}
 		>

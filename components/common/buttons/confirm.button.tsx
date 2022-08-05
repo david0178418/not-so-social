@@ -9,6 +9,7 @@ const ConfirmButton = forwardRef<HTMLButtonElement, CommonButtonProps>((props, r
 		children,
 		label,
 		href,
+		fullWidth,
 		onClick,
 	} = props;
 	const renderedLabel = label || children || 'Confirm';
@@ -16,8 +17,10 @@ const ConfirmButton = forwardRef<HTMLButtonElement, CommonButtonProps>((props, r
 	return (
 		<Button
 			color="success"
+			variant="outlined"
 			href={href}
 			ref={ref}
+			fullWidth={fullWidth}
 			onClick={onClick}
 			endIcon={<ConfirmIcon />}
 		>

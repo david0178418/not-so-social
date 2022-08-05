@@ -57,6 +57,7 @@ interface ApiResponse<T = any> {
 
 export
 interface CommonButtonProps {
+	fullWidth?: boolean;
 	label?: string;
 	href?: string;
 	onClick?(): void;

@@ -7,9 +7,8 @@ import { getLinkPreviewsFromContent, postSave } from '@common/client/api-calls';
 import { ConfirmButton } from '@components/common/buttons/confirm.button';
 import { CancelButton } from '@components/common/buttons/cancel.button';
 import { exec, formatCompactNumber } from '@common/utils';
-import { InfoIconButton } from '@components/common/info-icon-button';
 import { LinkPreviews } from '@components/link-previews';
-import { CloseIcon } from '@components/icons';
+import { CloseIcon, InfoIcon } from '@components/icons';
 import { LinkPreviewData } from '@common/types';
 import {
 	useEffect,
@@ -25,6 +24,7 @@ import {
 import {
 	AppBar,
 	Box,
+	Button,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -212,7 +212,13 @@ function CreatePostModal() {
 					<LinkPreviews linkPreviews={linkPreviews} />
 				</DialogContent>
 			)}
-			<DialogActions>
+			<DialogActions sx={{
+				flexDirection: {
+					xs: 'column',
+					sm: 'row',
+				},
+				gap: 2,
+			}}>
 				<Link
 					replace
 					shallow
@@ -222,21 +228,28 @@ function CreatePostModal() {
 						query: newQuery,
 					}}
 				>
-					<CancelButton />
+					<CancelButton fullWidth={fullScreen} />
 				</Link>
-				<ConfirmButton onClick={handleSave}>
-					Post
+				<ConfirmButton onClick={handleSave} fullWidth={fullScreen}>
+						Post for {points}pts
+						(rank with {formatCompactNumber(Math.floor(points * OwnPostRatio))}pts)
 				</ConfirmButton>
 			</DialogActions>
 			<DialogContent>
 				<DialogContentText>
-					<em>
-						Post with {formatCompactNumber(Math.floor(points * OwnPostRatio))}pts
-						<InfoIconButton
-							label="When creating or boosting your own post, half of the points spent are applied."
-							placement="right"
-						/>
-					</em>
+					<Button
+						color="inherit"
+						size="small"
+						// ADD INFO PAGE
+						href="/"
+						target="__blank"
+						endIcon={<InfoIcon fontSize="small" />}
+					>
+						<em>
+						Why are only half of the spent points applied?
+
+						</em>
+					</Button>
 				</DialogContentText>
 			</DialogContent>
 		</Dialog>
