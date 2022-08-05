@@ -1,5 +1,5 @@
 export
-const AppName = 'NotSo.Social';
+const AppName = 'NotSo.Social (beta)';
 
 export
 const MongoDbName = 'pinboard';
