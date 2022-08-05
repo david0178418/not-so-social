@@ -62,6 +62,17 @@ const ProfilePage: NextPage<any> = () => {
 				</Link>
 			</Box>
 			<PasswordChangeForm />
+			<Box paddingY={2}>
+				<Link
+					shallow
+					passHref
+					href={Paths.About}
+				>
+					<Button>
+					About NotSo.Social
+					</Button>
+				</Link>
+			</Box>
 		</Box>
 	);
 };

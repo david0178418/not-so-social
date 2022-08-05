@@ -21,6 +21,8 @@ import {
 	ProfileActiveIcon,
 	PostIcon,
 	PostActiveIcon,
+	AboutActiveIcon,
+	AboutIcon,
 } from '@components/icons';
 import {
 	Fab,
@@ -174,6 +176,25 @@ function LeftRail() {
 											Paths.Profile === pathname ?
 												<ProfileActiveIcon /> :
 												<ProfileIcon />
+										}
+									</RailButtonContent>
+								</ListItemButton>
+							</Link>
+						</ListItem>
+						<ListItem disablePadding>
+							<Link
+								shallow
+								passHref
+								href={Paths.About}
+							>
+								<ListItemButton>
+									<RailButtonContent
+										label="Uhh...Wut?"
+									>
+										{
+											Paths.About === pathname ?
+												<AboutActiveIcon /> :
+												<AboutIcon />
 										}
 									</RailButtonContent>
 								</ListItemButton>
