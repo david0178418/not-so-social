@@ -26,13 +26,29 @@ function LinkPreview(props: Props) {
 	const image = images[0];
 	return (
 		<Card variant="outlined">
-			<CardActionArea sx={{ display: 'flex' }} href={url} target="__target">
+			<CardActionArea
+				target="__target"
+				href={url}
+				sx={{
+					display: 'flex',
+					flexDirection: {
+						xs: 'column',
+						md: 'row',
+					},
+				}}
+			>
 				<CardMedia
 					component="img"
 					image={image}
 					sx={{
-						height: '175px',
-						width: '175px',
+						maxHeight: {
+							xs: 'auto',
+							md: '175px',
+						},
+						maxWidth: {
+							xs: '100%',
+							md: 'auto',
+						},
 					}}
 				/>
 				<Box sx={{
