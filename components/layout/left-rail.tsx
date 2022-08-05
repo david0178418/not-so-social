@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { formatCompactNumber } from '@common/utils';
 import { ReactNode } from 'react';
+import { useBalance } from '@common/hooks';
 import {
 	AppName,
 	HomePaths,
@@ -30,7 +31,6 @@ import {
 	ListItemText,
 	Typography,
 } from '@mui/material';
-import { useBalance } from '@common/hooks';
 
 interface Props {
 	label: string;
