@@ -51,7 +51,7 @@ const ProfilePostsPage: NextPage<Props> = (props) => {
 				header={
 					<Box sx={{
 						paddingTop: 1,
-						paddingBottom: 2,
+						paddingBottom: 1,
 						paddingLeft: {
 							xs: 2,
 							sm: 10,
@@ -70,17 +70,19 @@ const ProfilePostsPage: NextPage<Props> = (props) => {
 							placeholder="Search My Posts"
 							value={searchTerm}
 						/>
+						{searchTerm && (
+							<Box paddingTop={1}>
+								<Typography>
+									{posts.length ?
+										`Search Results for "${searchTerm}"` :
+										`No Results for "${searchTerm}"`
+									}
+								</Typography>
+							</Box>
+						)}
 					</Box>
 				}
 			>
-				{searchTerm && (
-					<Typography>
-						{posts.length ?
-							`Search Results for "${searchTerm}"` :
-							`No Results for "${searchTerm}"`
-						}
-					</Typography>
-				)}
 				{posts.map(p => (
 					<FeedPost
 						key={p._id}
