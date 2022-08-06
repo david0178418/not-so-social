@@ -115,6 +115,7 @@ export
 const SpecialCharacterCodes = {
 	NBSP: '\u00A0',
 	DOT: '\u2022',
+	QUOTE: '\u0022',
 };
 
 export
