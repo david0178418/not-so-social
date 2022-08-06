@@ -102,28 +102,50 @@ function LeftRail() {
 					</Link>
 				</ListItem>
 				{!user && (
-					<ListItem disablePadding>
-						<Link
-							shallow
-							passHref
-							href={{
-								pathname,
-								query: {
-									a: ModalActions.LoginRegister,
-									...query,
-								},
-							}}
-						>
-							<ListItemButton>
-								<RailButtonContent
-									label="Login"
-									secondary="or register"
-								>
-									<LoginIcon/>
-								</RailButtonContent>
-							</ListItemButton>
-						</Link>
-					</ListItem>
+					<>
+
+						<ListItem disablePadding>
+							<Link
+								shallow
+								passHref
+								href={Paths.About}
+							>
+								<ListItemButton>
+									<RailButtonContent
+										label="Uhh...Wut?"
+									>
+										{
+											Paths.About === pathname ?
+												<AboutActiveIcon /> :
+												<AboutIcon />
+										}
+									</RailButtonContent>
+								</ListItemButton>
+							</Link>
+						</ListItem>
+						<ListItem disablePadding>
+							<Link
+								shallow
+								passHref
+								href={{
+									pathname,
+									query: {
+										a: ModalActions.LoginRegister,
+										...query,
+									},
+								}}
+							>
+								<ListItemButton>
+									<RailButtonContent
+										label="Login"
+										secondary="or register"
+									>
+										<LoginIcon/>
+									</RailButtonContent>
+								</ListItemButton>
+							</Link>
+						</ListItem>
+					</>
 				)}
 				{!!user && (
 					<>
