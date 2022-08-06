@@ -14,7 +14,7 @@ import {
 	AppName,
 	BaseUrl,
 	Paths,
-	UnicodeChars,
+	SpecialCharacterCodes,
 } from '@common/constants';
 import {
 	Box,
@@ -87,7 +87,7 @@ const PostPage: NextPage<Props> = (props) => {
 							{/** TODO Capture direct links and send them to home page */}
 							<IconButton color="primary" onClick={routeBack}>
 								<BackIcon />
-							</IconButton>{UnicodeChars.NBSP}
+							</IconButton>{SpecialCharacterCodes.NBSP}
 							Post
 						</Typography>
 					</Box>

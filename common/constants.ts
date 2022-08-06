@@ -112,7 +112,7 @@ export
 const MongoIdLength = 24;
 
 export
-const UnicodeChars = {
+const SpecialCharacterCodes = {
 	NBSP: '\u00A0',
 	DOT: '\u2022',
 };

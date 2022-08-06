@@ -12,7 +12,7 @@ import { formatDate } from '@common/utils';
 import {
 	AppName,
 	Paths,
-	UnicodeChars,
+	SpecialCharacterCodes,
 } from '@common/constants';
 import {
 	Box,
@@ -76,7 +76,7 @@ const PostPointsPage: NextPage<Props> = (props) => {
 					}}>
 						<IconButton color="primary" onClick={routeBack}>
 							<BackIcon />
-						</IconButton>{UnicodeChars.NBSP}
+						</IconButton>{SpecialCharacterCodes.NBSP}
 						<Typography
 							variant="h5"
 							gutterBottom
