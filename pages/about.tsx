@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import type { NextPage } from 'next';
 
 import { AppName, SpecialCharacterCodes } from '@common/constants';
@@ -48,10 +49,7 @@ const AboutPage: NextPage = () => {
 
 export default AboutPage;
 
-const {
-	NBSP,
-	QUOTE,
-} = SpecialCharacterCodes;
+const { NBSP } = SpecialCharacterCodes;
 
 const questionsAnswers = [
 	{
@@ -59,15 +57,11 @@ const questionsAnswers = [
 		title: 'What is NotSo.Social?',
 		content: (
 			<Typography>
-				<Link href="/" passHref>
-					<MuiLink>
-						NotSo.Social
-					</MuiLink>
-				</Link>{NBSP}
-				is a microblogging platform similar to Twitter, but with a twist.
-				Rather than rank content by {QUOTE}likes{QUOTE} or some other form of straight
-				vote, content is ranked by points where points are earned from your
-				activities that are beneficial to the platform and users in general.
+				<NotSoSocial/> {NBSP} is a microblogging platform similar to Twitter,
+				but with a twist. Rather than rank content by "likes" or some other
+				form of straight vote, content is ranked by points where points are
+				earned from your activities that are beneficial to the platform
+				and users in general.
 			</Typography>
 		),
 	}, {
@@ -76,17 +70,34 @@ const questionsAnswers = [
 		content: (
 			<>
 				<Typography paddingBottom={2}>
-					Once upon a time, platforms such as Twitter and Reddit where bastions
-					of free speech. They disrupted the news business by more efficiently
-					spreading news and facilitating open discussion. But a decade or so
-					later, the free flow of ideas has been significantly limited. These
-					corporate giants now stifle even common ideas that are found unacceptable
-					to the sensibilities of the NY/Silicon Valley elite.
+					Today, platforms such as Twitter are the defacto town square.
+					Anyone at any time can make a post and any one can democratically
+					vote to elevate that post with a "like/thumbs-up/up-vote".
+					Being the town square, social media has long been a target for
+					corporate and, more importantly, political <a href="https://archive.ph/nOzYI#selection-99.0-121.296" target="__blank">astroturfing</a>.
+					For every fake account that these bad actors create, they are
+					able to cast a vote on an unlimited number of posts, making
+					public discourse manipulation relatively easy.
 				</Typography>
 
 				<Typography paddingBottom={2}>
-					But how did these once counter-culter bastions of freespeech become the
-					censors?
+					In the face of this astroturfing pressure, there is also the pressure
+					to self-censor. This comes in the form of profiles and profile
+					history. The intellectually lazy can dismiss a "bad faith" idea
+					by simply looking for a past opinion they find unsavory. Or perhaps
+					the idea can be dismissed by simply looking at the poster's
+					choice of username or avatar.
+				</Typography>
+
+				<Typography paddingBottom={2}>
+					But what if the ability to vote on a post was scarce? What if that
+					scarcity was anchored to how much value to brought to the platform?
+					And what if your ideas stood on their own, unencumbered by your
+					past decisions or the clever username you came up with?
+				</Typography>
+
+				<Typography paddingBottom={2}>
+					Enter, <NotSoSocial/>!
 				</Typography>
 			</>
 		),
@@ -100,3 +111,13 @@ const questionsAnswers = [
 		content: 'TODO',
 	},
 ];
+
+function NotSoSocial() {
+	return (
+		<Link href="/" passHref>
+			<MuiLink>
+				NotSo.Social
+			</MuiLink>
+		</Link>
+	);
+}
