@@ -3,12 +3,16 @@ import type { NextPage } from 'next';
 
 import { AppName, SpecialCharacterCodes } from '@common/constants';
 import { ScrollContent } from '@components/scroll-content';
-import {
-	Box, Link as MuiLink, Typography,
-} from '@mui/material';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Fragment } from 'react';
+import Image from 'next/image';
+import botFarmImage from './botfarm.webp';
+import {
+	Box,
+	Typography,
+	Link as MuiLink,
+} from '@mui/material';
 
 const AboutPage: NextPage = () => {
 	return (
@@ -19,29 +23,31 @@ const AboutPage: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent>
-				<Box
-					component="ul"
-					paddingLeft={2}
-					paddingBottom={1}
-				>
+				<Box padding={2}>
+					<Box
+						component="ul"
+						paddingLeft={2}
+						paddingBottom={1}
+					>
+						{questionsAnswers.map(qa => (
+							<Box
+								component="li"
+								paddingBottom={1}
+								key={qa.key}
+							>
+								<MuiLink href={`#${qa.key}`}>{qa.title}</MuiLink>
+							</Box>
+						))}
+					</Box>
 					{questionsAnswers.map(qa => (
-						<Box
-							component="li"
-							paddingBottom={1}
-							key={qa.key}
-						>
-							<MuiLink href={`#${qa.key}`}>{qa.title}</MuiLink>
+						<Box paddingBottom={2} key={qa.key}>
+							<Typography id={qa.key} variant="h4" component="h2" >
+								{qa.title}
+							</Typography>
+							{qa.content}
 						</Box>
 					))}
 				</Box>
-				{questionsAnswers.map(qa => (
-					<Box paddingBottom={2} key={qa.key}>
-						<Typography id={qa.key} variant="h4" component="h2" >
-							{qa.title}
-						</Typography>
-						{qa.content}
-					</Box>
-				))}
 			</ScrollContent>
 		</>
 	);
@@ -80,7 +86,16 @@ const questionsAnswers = [
 					public discourse manipulation relatively easy.
 				</Typography>
 
-				<Typography paddingBottom={2}>
+				<Box sx={{ textAlign: 'center' }}>
+					<a href="https://archive.ph/lMySi" target="__blank">
+						<Image src={botFarmImage} />
+					</a>
+					<Typography variant="subtitle2">
+						Bot farm busted in Thailand
+					</Typography>
+				</Box>
+
+				<Typography paddingY={2}>
 					In the face of this astroturfing pressure, there is also the pressure
 					to self-censor. This comes in the form of profiles and profile
 					history. The intellectually lazy can dismiss a "bad faith" idea
@@ -89,9 +104,9 @@ const questionsAnswers = [
 					choice of username or avatar.
 				</Typography>
 
-				<Typography paddingBottom={2}>
+				<Typography paddingBottom={2} >
 					But what if the ability to vote on a post was scarce? What if that
-					scarcity was anchored to how much value to brought to the platform?
+					scarcity was anchored to how much value you brought to the platform?
 					And what if your ideas stood on their own, unencumbered by your
 					past decisions or the clever username you came up with?
 				</Typography>
