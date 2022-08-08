@@ -5,7 +5,6 @@ import { AppName, SpecialCharacterCodes } from '@common/constants';
 import { ScrollContent } from '@components/scroll-content';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Fragment } from 'react';
 import Image from 'next/image';
 import botFarmImage from './botfarm.webp';
 import {
