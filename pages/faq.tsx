@@ -31,7 +31,9 @@ const FaqPage: NextPage = () => {
 								paddingBottom={1}
 								key={qa.key}
 							>
-								<MuiLink href={`#${qa.key}`}>{qa.title}</MuiLink>
+								<strong>
+									<MuiLink href={`#${qa.key}`}>{qa.title}</MuiLink>
+								</strong>
 							</Box>
 						))}
 					</Box>

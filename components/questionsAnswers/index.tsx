@@ -28,7 +28,7 @@ const questionsAnswers = [
 				<Typography paddingBottom={2}>
 					First, <NotSoSocial/> removes the "social" from social media
 					(as the name implies). By reducing opportunities for bandwagoning
-					and in-group signaling,individual thoughts and questions can
+					and in-group signaling, individual thoughts and questions can
 					be more freely expressed.
 				</Typography>
 
@@ -71,7 +71,7 @@ const questionsAnswers = [
 					Anyone at any time can make a post and any one can democratically
 					vote to elevate that post with a "like/thumbs-up/up-vote".
 					Being the town square, social media has long been a target for
-					corporate and, more importantly, political <a href="https://archive.ph/nOzYI#selection-99.0-121.296" target="__blank">astroturfing</a>.
+					corporate and, more importantly, political <MuiLink href="https://archive.ph/nOzYI#selection-99.0-121.296" target="__blank">astroturfing</MuiLink>.
 					For every fake account that these bad actors create, they are
 					able to cast a vote on an unlimited number of posts, making
 					public discourse manipulation relatively easy.
@@ -99,11 +99,28 @@ const questionsAnswers = [
 					But what if the ability to vote on a post was scarce? What if that
 					scarcity was anchored to how much value you brought to the platform?
 					And what if your ideas stood on their own, unencumbered by your
-					past decisions or the clever username you came up with?
+					unrelated posts or how some might interpret your clever username?
 				</Typography>
 
 				<Typography>
 					Enter, <NotSoSocial/>!
+				</Typography>
+			</>
+		),
+	}, {
+		key: 'how-are-points-used',
+		title: 'How are points used?',
+		content: (
+			<>
+				<Typography paddingBottom={2}>
+					Points are used to create posts or "boost" posts you like. Points
+					are the main way that posts are ranked in the feed.
+				</Typography>
+				<Typography>
+					When you "boost" a post, the points help elevate the position
+					of the post in the feed. An equal number of points are awarded
+					to the creator for them to spend. When you boost your own post,
+					you do not get those points back.
 				</Typography>
 			</>
 		),
@@ -135,8 +152,8 @@ const questionsAnswers = [
 						you to boost more content.
 					</Box>
 					<Box component="li">
-						<strong>???</strong> - The idea is still new, so we'll have
-						experiment to see how it shakes out. But there will likely
+						<strong>???</strong> - The idea is still new, so w.e'll have
+						to experiment to see how it shakes out. But there will likely
 						be awards for certain "achievements" based on your activity.
 					</Box>
 				</Box>
@@ -165,7 +182,7 @@ const questionsAnswers = [
 				<Typography paddingBottom={2}>
 					Perhaps the act of spending the points is enough of a deterrent.
 					And if the user has created enough points to rank themselves
-					highly, perhaps this they've earned the right to "buy" the top
+					highly, perhaps they've earned the right to "buy" the top
 					spot. If it's not quality content, then they would have wasted
 					their points. And if the community values it, they will be
 					rewarded with more points.
@@ -201,7 +218,7 @@ const questionsAnswers = [
 					Usernames never appear next to a post. It's simply the unique
 					identifier you use to log in. However, the primary goal is not
 					full anonymity. It's simply to allow your thoughts and posts
-					to stand independent of your other posts/thoughts to general
+					to stand independent of your other thoughts/posts to general
 					posters. With enough effort, someone may be able to relate some
 					of your posts.  But the average intellectually lazy person
 					who would dismiss ideas based on your post history would not
@@ -213,6 +230,21 @@ const questionsAnswers = [
 					will be able to provide an email for password recovery, site updates,
 					activity notifications, etc. But all of this will be completely
 					optional.
+				</Typography>
+			</>
+		),
+	}, {
+		key: 'are-these-points-like-a-crypto-thing',
+		title: 'Points? Are these like a cryptocurrency thing?',
+		content: (
+			<>
+				<Typography paddingBottom={2}>
+					No. These points exist only on the site and have no monitary value.
+					They are only used to show approval of a post.
+				</Typography>
+				<Typography paddingBottom={2}>
+					You can think of them as points on reddit, but with utility
+					beyond internet bragging rights.
 				</Typography>
 			</>
 		),
