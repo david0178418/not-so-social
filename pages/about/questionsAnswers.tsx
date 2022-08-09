@@ -17,13 +17,49 @@ const questionsAnswers = [
 		key: 'what-is-not-so-social',
 		title: 'What is NotSo.Social?',
 		content: (
-			<Typography>
-				<NotSoSocial/> {NBSP} is a microblogging platform similar to Twitter,
-				but with a twist. Rather than rank content by "likes" or some other
-				form of straight vote, content is ranked by points where points are
-				earned from your activities that are beneficial to the platform
-				and users in general.
-			</Typography>
+			<>
+				<Typography paddingBottom={2}>
+					<NotSoSocial/>{NBSP}is a microblogging platform similar to Twitter,
+					but with some fundamental differences. Rather than rank content
+					by "likes" or some other form of straight vote, content is
+					ranked by earned points.
+				</Typography>
+
+				<Typography paddingBottom={2}>
+					First, <NotSoSocial/> removes the "social" from social media
+					(as the name implies). By reducing opportunities for bandwagoning
+					and in-group signaling,individual thoughts and questions can
+					be more freely expressed.
+				</Typography>
+
+				<Typography>
+					Second, rather than rank content by "likes" or some other
+					form of straight vote, content is ranked by points that are
+					earned from your activities that are beneficial to the platform.
+					This aims to ensure ranking influence is in the hands of those
+					that are invested in the platform as opposed to armies of bots
+					that can be cheaply created with limitless voting potential.
+				</Typography>
+			</>
+		),
+	}, {
+		key: 'what-is-the-goal',
+		title: 'What is the goal of NotSo.Social?',
+		content: (
+			<>
+				<Typography paddingBottom={2}>
+					The guiding principle of <NotSoSocial/> is that the antidote for
+					bad ideas is better ideas. And trying to bury bad ideas just
+					causes them to take root and metastasize.
+				</Typography>
+
+				<Typography>
+					There are many alternative platforms that have sprung up in an
+					attempt to essentially become "Free Speech Twitter". But they
+					largely duplicate the existing platform inheriting all of their
+					problems in the process.
+				</Typography>
+			</>
 		),
 	}, {
 		key: 'why',
