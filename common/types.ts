@@ -12,6 +12,8 @@ interface Post {
 	lastUpdated: string;
 	parentId?: string;
 	points?: number;
+	nsfw?: boolean;
+	nsfl?: boolean;
 	replyCount: number;
 	title: string;
 	totalPoints: number;

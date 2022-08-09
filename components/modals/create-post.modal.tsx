@@ -10,6 +10,7 @@ import { exec, formatCompactNumber } from '@common/utils';
 import { LinkPreviews } from '@components/link-previews';
 import { CloseIcon, InfoIcon } from '@components/icons';
 import { LinkPreviewData } from '@common/types';
+import { InfoIconButton } from '@components/common/info-icon-button';
 import {
 	useEffect,
 	useRef,
@@ -25,11 +26,13 @@ import {
 	AppBar,
 	Box,
 	Button,
+	Checkbox,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	FormControlLabel,
 	Grid,
 	IconButton,
 	TextField,
@@ -47,6 +50,8 @@ function CreatePostModal() {
 	const router = useRouter();
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
+	const [nsfw, setNsfw] = useState(false);
+	const [nsfl, setNsfl] = useState(false);
 	const [points, setPoints] = useState(MinPostCost);
 	const debouncedPoints = useDebounce(points, 750);
 	const debouncedBody = useDebounce(body, 750);
@@ -126,6 +131,8 @@ function CreatePostModal() {
 				title,
 				body,
 				points,
+				nsfl,
+				nsfw,
 				linkPreviews,
 			}));
 			close();
@@ -216,6 +223,40 @@ function CreatePostModal() {
 						onChange={e => setBody(e.target.value)}
 					/>
 				</Box>
+				<Grid container>
+					<Grid item>
+						<FormControlLabel
+							control={
+								<Checkbox
+									value={nsfw}
+									onChange={e => setNsfw(e.target.checked)}
+								/>
+							}
+							label={
+								<>
+									NSFW
+									<InfoIconButton label="Contains explicit sexual material." />
+								</>
+							}
+						/>
+					</Grid>
+					<Grid item>
+						<FormControlLabel
+							control={
+								<Checkbox
+									value={nsfl}
+									onChange={e => setNsfl(e.target.checked)}
+								/>
+							}
+							label={
+								<>
+									NSFL
+									<InfoIconButton label="Contains contains extreme content such as gore or other distirbing material" />
+								</>
+							}
+						/>
+					</Grid>
+				</Grid>
 			</DialogContent>
 			{!!linkPreviews.length && (
 				<DialogContent>
@@ -241,8 +282,8 @@ function CreatePostModal() {
 					<CancelButton fullWidth={fullScreen} />
 				</Link>
 				<ConfirmButton onClick={handleSave} fullWidth={fullScreen}>
-						Post for {points}pts
-						(rank with {formatCompactNumber(Math.floor(points * OwnPostRatio))}pts)
+					Post for {points}pts
+					(rank with {formatCompactNumber(Math.floor(points * OwnPostRatio))}pts)
 				</ConfirmButton>
 			</DialogActions>
 			<DialogContent>

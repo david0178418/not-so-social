@@ -14,6 +14,8 @@ type SharedPostProps = Pick<Post,
 'created' |
 'lastUpdated' |
 'linkPreviews' |
+'nsfl' |
+'nsfw' |
 'replyCount' |
 'totalPoints'
 >;

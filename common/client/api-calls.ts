@@ -67,6 +67,8 @@ interface PostSaveArgs {
 	title: string;
 	body: string;
 	points: number;
+	nsfw?: boolean;
+	nsfl?: boolean;
 	parentId?: string;
 	linkPreviews?: LinkPreviewData[];
 }
@@ -110,7 +112,6 @@ export
 async function dismissNotification(id: string): Promise<void> {
 	await apiGet('/user/notifications/dismiss', { id });
 }
-
 
 function apiPost<T = any>(path: string, requestBody?: any) {
 	return post<T>(urlJoin(API_URL, path), requestBody);

@@ -47,6 +47,12 @@ const schema: ZodType<Schema> = z.object({
 	linkPreviews: z
 		.array(linkPreviewSchema)
 		.optional(),
+	nsfw: z
+		.boolean()
+		.optional(),
+	nsfl: z
+		.boolean()
+		.optional(),
 	parentId: MongoObjectId
 		.optional(),
 });
