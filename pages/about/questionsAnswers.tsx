@@ -66,7 +66,7 @@ const questionsAnswers = [
 					past decisions or the clever username you came up with?
 				</Typography>
 
-				<Typography paddingBottom={2}>
+				<Typography>
 					Enter, <NotSoSocial/>!
 				</Typography>
 			</>
@@ -81,7 +81,6 @@ const questionsAnswers = [
 				<Box
 					component="ul"
 					paddingLeft={2}
-					paddingBottom={1}
 				>
 					<Box component="li" paddingBottom={1}>
 						<strong>Signing up!</strong> - The platform doesn't exist
@@ -99,7 +98,7 @@ const questionsAnswers = [
 						Any points they spend on your posts become available for
 						you to boost more content.
 					</Box>
-					<Box component="li" paddingBottom={1}>
+					<Box component="li">
 						<strong>???</strong> - The idea is still new, so we'll have
 						experiment to see how it shakes out. But there will likely
 						be awards for certain "achievements" based on your activity.
@@ -135,7 +134,7 @@ const questionsAnswers = [
 					their points. And if the community values it, they will be
 					rewarded with more points.
 				</Typography>
-				<Typography paddingBottom={2}>
+				<Typography>
 					We shall see...
 				</Typography>
 			</>
@@ -151,7 +150,7 @@ const questionsAnswers = [
 					you consider "spammy" expenses. The points spent by that person
 					will no longer influence their feed.
 				</Typography>
-				<Typography paddingBottom={2}>
+				<Typography>
 					Some of the details on how best to implement this still need
 					to be worked out.
 				</Typography>
@@ -172,7 +171,7 @@ const questionsAnswers = [
 					who would dismiss ideas based on your post history would not
 					have easy access to this.
 				</Typography>
-				<Typography paddingBottom={2}>
+				<Typography>
 					Additionally, <NotSoSocial /> does not require an email or
 					other personally identifying information. In the future, you
 					will be able to provide an email for password recovery, site updates,

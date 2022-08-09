@@ -36,8 +36,12 @@ const AboutPage: NextPage = () => {
 						))}
 					</Box>
 					{questionsAnswers.map(qa => (
-						<Box paddingBottom={2} key={qa.key}>
-							<Typography id={qa.key} variant="h4" component="h2" >
+						<Box paddingBottom={4} key={qa.key}>
+							<Typography
+								id={qa.key}
+								variant="h4"
+								component="h2"
+							>
 								{qa.title}
 							</Typography>
 							{qa.content}
