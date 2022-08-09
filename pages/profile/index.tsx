@@ -66,10 +66,10 @@ const ProfilePage: NextPage<any> = () => {
 				<Link
 					shallow
 					passHref
-					href={Paths.About}
+					href={Paths.Faq}
 				>
 					<Button>
-					About NotSo.Social
+						NotSo.Social FAQ
 					</Button>
 				</Link>
 			</Box>

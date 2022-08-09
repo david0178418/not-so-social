@@ -21,8 +21,8 @@ import {
 	ProfileActiveIcon,
 	PostIcon,
 	PostActiveIcon,
-	AboutActiveIcon,
-	AboutIcon,
+	FaqActiveIcon,
+	FaqIcon,
 } from '@components/icons';
 import {
 	Fab,
@@ -108,16 +108,16 @@ function LeftRail() {
 							<Link
 								shallow
 								passHref
-								href={Paths.About}
+								href={Paths.Faq}
 							>
 								<ListItemButton>
 									<RailButtonContent
 										label="Uhh...Wut?"
 									>
 										{
-											Paths.About === pathname ?
-												<AboutActiveIcon /> :
-												<AboutIcon />
+											Paths.Faq === pathname ?
+												<FaqActiveIcon /> :
+												<FaqIcon />
 										}
 									</RailButtonContent>
 								</ListItemButton>
@@ -207,16 +207,16 @@ function LeftRail() {
 							<Link
 								shallow
 								passHref
-								href={Paths.About}
+								href={Paths.Faq}
 							>
 								<ListItemButton>
 									<RailButtonContent
 										label="Uhh...Wut?"
 									>
 										{
-											Paths.About === pathname ?
-												<AboutActiveIcon /> :
-												<AboutIcon />
+											Paths.Faq === pathname ?
+												<FaqActiveIcon /> :
+												<FaqIcon />
 										}
 									</RailButtonContent>
 								</ListItemButton>

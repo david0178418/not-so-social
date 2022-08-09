@@ -45,7 +45,7 @@ const ISODateStringLength = 24;
 
 export
 enum Paths {
-	About = '/about',
+	Faq = '/faq',
 	Bookmarks = '/bookmarks',
 	Home = '/',
 	HomeNew = '/new',

@@ -10,7 +10,7 @@ import {
 	Link as MuiLink,
 } from '@mui/material';
 
-const AboutPage: NextPage = () => {
+const FaqPage: NextPage = () => {
 	return (
 		<>
 			<Head>
@@ -19,7 +19,7 @@ const AboutPage: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent>
-				<Box padding={2}>
+				<Box padding={2} paddingBottom={10}>
 					<Box
 						component="ul"
 						paddingLeft={2}
@@ -53,4 +53,4 @@ const AboutPage: NextPage = () => {
 	);
 };
 
-export default AboutPage;
+export default FaqPage;

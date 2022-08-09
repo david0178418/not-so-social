@@ -28,5 +28,5 @@ export { default as SearchIcon } from '@mui/icons-material/Search';
 export { default as SettingsIcon } from '@mui/icons-material/Settings';
 export { default as SettingsOutlinedIcon } from '@mui/icons-material/SettingsOutlined';
 export { default as InfoIcon } from '@mui/icons-material/Info';
-export { default as AboutIcon } from '@mui/icons-material/HelpOutline';
-export { default as AboutActiveIcon } from '@mui/icons-material/Help';
+export { default as FaqIcon } from '@mui/icons-material/HelpOutline';
+export { default as FaqActiveIcon } from '@mui/icons-material/Help';
