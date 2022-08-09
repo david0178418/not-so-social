@@ -136,7 +136,7 @@ const questionsAnswers = [
 					paddingLeft={2}
 				>
 					<Box component="li" paddingBottom={1}>
-						<strong>Signing up!</strong> - The platform doesn't exist
+						<strong>Signing up</strong> - The platform doesn't exist
 						without you!
 					</Box>
 					<Box component="li" paddingBottom={1}>
@@ -152,7 +152,7 @@ const questionsAnswers = [
 						you to boost more content.
 					</Box>
 					<Box component="li">
-						<strong>???</strong> - The idea is still new, so w.e'll have
+						<strong>???</strong> - The idea is still new, so we'll have
 						to experiment to see how it shakes out. But there will likely
 						be awards for certain "achievements" based on your activity.
 					</Box>
@@ -167,21 +167,20 @@ const questionsAnswers = [
 				<Typography paddingBottom={2}>
 					When you create a post, you spend as many of your points as you'd
 					like. But in an effort to{NBSP}<Typography component="em">mildly</Typography>{NBSP}
-					discourage self promotion, half of the points are burned as a "post fee"
+					discourage spam, half of the points are burned as a "post fee"
 					of sorts.
 				</Typography>
 				<Typography paddingBottom={2}>
 					<NotSoSocial/> is attempting to be a platform that self-corrects
-					for spam and bots. The points are the core of that system. And
-					the less beneficial it is for an individual to self-promote,
-					the less it will be for spam to propagate.
+					for spam and bots. Nudging people to use points on other
+					users' content is one aspect of that system.
 				</Typography>
 				<Typography paddingBottom={2}>
 					This, however, is an experimental idea. It may change.
 				</Typography>
 				<Typography paddingBottom={2}>
 					Perhaps the act of spending the points is enough of a deterrent.
-					And if the user has created enough points to rank themselves
+					And if the user has created enough points to rank their content
 					highly, perhaps they've earned the right to "buy" the top
 					spot. If it's not quality content, then they would have wasted
 					their points. And if the community values it, they will be
@@ -201,7 +200,7 @@ const questionsAnswers = [
 					At the moment, you can view the full history of points spent
 					on a post. In the future, you will be able to ignore what
 					you consider "spammy" expenses. The points spent by that person
-					will no longer influence their feed.
+					will no longer influence your feed.
 				</Typography>
 				<Typography>
 					Some of the details on how best to implement this still need
@@ -242,9 +241,73 @@ const questionsAnswers = [
 					No. These points exist only on the site and have no monitary value.
 					They are only used to show approval of a post.
 				</Typography>
-				<Typography paddingBottom={2}>
+				<Typography>
 					You can think of them as points on reddit, but with utility
 					beyond internet bragging rights.
+				</Typography>
+			</>
+		),
+	}, {
+		key: 'what-is-allowed',
+		title: 'What content is allowed?',
+		content: (
+			<>
+				<Typography paddingBottom={2}>
+					First and foremost, any idea is allowed. <NotSoSocial/> is
+					confident that the most offensive ideas are not difficult to
+					rebut. However, that does not mean anything can be posted.
+					Here are some examples of what are not permitted:
+				</Typography>
+
+				<Box
+					component="ul"
+					paddingLeft={2}
+				>
+					<Box component="li" paddingBottom={1}>
+						<strong>Illegal content under United States law</strong>
+						- This should be a given. While no personally identifying
+						information is required, <NotSoSocial/> will notify and
+						with with approriate law enforcement for any content which
+						depicts child abuse, violent crimes in progress, violent
+						threats, and so on.
+					</Box>
+					<Box component="li" paddingBottom={1}>
+						<strong>NSFW/Sexually explicit material</strong> - While
+						any ideas may be freely expressed, sexually explicit/pornographic
+						material will be removed.
+					</Box>
+					<Box component="li" paddingBottom={1}>
+						<strong>NSFL/Gore content</strong> - Similar to ponography,
+						any "gore porn" will also be removed.
+					</Box>
+					<Box component="li" paddingBottom={1}>
+						<strong>Private information</strong> - Post
+						containing contact information, etc of an individual will
+						be removed.
+					</Box>
+					<Box component="li" paddingBottom={1}>
+						<strong>Just use common sense</strong>
+					</Box>
+				</Box>
+			</>
+		),
+	}, {
+		key: 'if-gore-nsfw-content-not-allowed-why-mark-content',
+		title: 'If NSFW/NSFL content is not allowed, why can content be marked to contain that material?',
+		content: (
+			<>
+				<Typography paddingBottom={2}>
+					This is a grey area.  The primary goal is to facilitate the spread
+					of ideas. Sometimes, that means allowing content that happens to
+					include NSFW/NSFL content.  However, marking the post allows people
+					who do not wish to see explicit material to be able to avoid it.
+				</Typography>
+				<Typography paddingBottom={2}>
+					As with anything else in life, sometimes things are not black
+					and white. For those shades of grey, judgement calls will need
+					to be made. But when in doubt, the biase will be toward
+					leaving posts in place. The offensiveness of the ideas are not
+					part of the equation.
 				</Typography>
 			</>
 		),
