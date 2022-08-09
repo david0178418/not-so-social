@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import { AppName } from '@common/constants';
 import { ScrollContent } from '@components/scroll-content';
 import Head from 'next/head';
-import { questionsAnswers } from './questionsAnswers';
+import { questionsAnswers } from '@components/questionsAnswers';
 import {
 	Box,
 	Typography,
