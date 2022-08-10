@@ -12,7 +12,7 @@ import {
 const DocPlaceholder = 'docTemp';
 
 const HotTxnTypes = [
-	PointTransactionTypes.postBoost,
+	PointTransactionTypes.PostCreate,
 	PointTransactionTypes.postBoost,
 ];
 
