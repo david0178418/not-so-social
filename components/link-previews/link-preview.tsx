@@ -23,7 +23,7 @@ function LinkPreview(props: Props) {
 			images,
 		},
 	} = props;
-	const image = images[0];
+	const image = images[0] as string | undefined;
 	return (
 		<Card variant="outlined">
 			<CardActionArea
@@ -37,20 +37,22 @@ function LinkPreview(props: Props) {
 					},
 				}}
 			>
-				<CardMedia
-					component="img"
-					image={image}
-					sx={{
-						maxHeight: {
-							xs: 'auto',
-							md: '175px',
-						},
-						maxWidth: {
-							xs: '100%',
-							md: 'auto',
-						},
-					}}
-				/>
+				{image && (
+					<CardMedia
+						component="img"
+						image={image}
+						sx={{
+							maxHeight: {
+								xs: 'auto',
+								md: '175px',
+							},
+							maxWidth: {
+								xs: '100%',
+								md: 'auto',
+							},
+						}}
+					/>
+				)}
 				<Box sx={{
 					display: 'flex',
 					flexDirection: 'column',
