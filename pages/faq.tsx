@@ -16,7 +16,6 @@ const FaqPage: NextPage = () => {
 			<Head>
 				<title>{AppName}</title>
 				<meta name="description" content={`${AppName} - Bookmarks`} />
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent>
 				<Box padding={2} paddingBottom={10}>

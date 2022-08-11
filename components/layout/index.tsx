@@ -29,7 +29,6 @@ function Layout(props: Props) {
 			<Head>
 				<title>{AppName} {title ? `- ${title}` : ''}</title>
 				<meta name="description" content={AppName} />
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
 			<Container

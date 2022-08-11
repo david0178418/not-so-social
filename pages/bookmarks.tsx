@@ -46,7 +46,6 @@ const BookmarksPage: NextPage<Props> = (props) => {
 			<Head>
 				<title>{AppName}</title>
 				<meta name="description" content={`${AppName} - Bookmarks`} />
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent
 				header={
