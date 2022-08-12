@@ -46,7 +46,6 @@ const ProfilePostsPage: NextPage<Props> = (props) => {
 			<Head>
 				<title>{AppName} - My Posts</title>
 				<meta name="description" content={`${AppName} - My Posts`} />
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ScrollContent
 				header={
