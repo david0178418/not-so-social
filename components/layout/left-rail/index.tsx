@@ -95,8 +95,7 @@ function LeftRail() {
 				<Image src={NotSoSocialImg} />
 			</Box>
 			<Box
-				textAlign="center"
-				width="100%"
+				paddingLeft={1.5}
 				sx={{
 					display: {
 						xs: 'block',
