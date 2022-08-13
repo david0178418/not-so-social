@@ -17,6 +17,8 @@ import {
 	BookmarkActiveIcon,
 	BookmarkIcon,
 	CreateIcon,
+	FaqActiveIcon,
+	FaqIcon,
 	HomeActiveIcon,
 	HomeIcon,
 	LoginIcon,
@@ -96,22 +98,38 @@ function BottomNav() {
 					/>
 				</Link>
 				{!user && (
-					<Link
-						shallow
-						passHref
-						href={{
-							pathname,
-							query: {
-								a: ModalActions.LoginRegister,
-								...query,
-							},
-						}}
-					>
-						<BottomNavigationAction
-							label="Login"
-							icon={<LoginIcon />}
-						/>
-					</Link>
+					<>
+						<Link
+							shallow
+							passHref
+							href={{
+								pathname,
+								query: {
+									a: ModalActions.LoginRegister,
+									...query,
+								},
+							}}
+						>
+							<BottomNavigationAction
+								label="Login"
+								icon={<LoginIcon />}
+							/>
+						</Link>
+						<Link
+							shallow
+							passHref
+							href={Paths.Faq}
+						>
+							<BottomNavigationAction
+								label="Uhh...Wut?"
+								icon={
+									Paths.Faq === pathname ?
+										<FaqActiveIcon /> :
+										<FaqIcon />
+								}
+							/>
+						</Link>
+					</>
 				)}
 				{!!user && (
 					[
