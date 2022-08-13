@@ -9,10 +9,22 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SessionProvider } from 'next-auth/react';
 import { Layout } from '@components/layout';
+import { createTheme, ThemeProvider } from '@mui/material';
 
 interface Props {
 	initialState: any;
 }
+
+const theme = createTheme({
+	palette: {
+		primary: {
+			main: '#5271ff',
+			light: 'rgb(116, 141, 255)',
+			dark: 'rgb(57, 79, 178)',
+			contrastText: '#fff',
+		},
+	},
+});
 
 function App(props: AppProps<Props>) {
 	const {
@@ -38,11 +50,13 @@ function App(props: AppProps<Props>) {
 					content="initial-scale=1, width=device-width"
 				/>
 			</Head>
-			<SessionProvider session={session}>
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
-			</SessionProvider>
+			<ThemeProvider theme={theme}>
+				<SessionProvider session={session}>
+					<Layout>
+						<Component {...pageProps} />
+					</Layout>
+				</SessionProvider>
+			</ThemeProvider>
 		</>);
 }
 

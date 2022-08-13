@@ -4,8 +4,10 @@ import { useSession } from 'next-auth/react';
 import { formatCompactNumber } from '@common/utils';
 import { ReactNode } from 'react';
 import { useBalance } from '@common/hooks';
+import Image from 'next/image';
+import NotSoSocialImg from './NotSo.Social.png';
+import NotSoSocialSmallImg from './NotSo.Social-small.png';
 import {
-	AppName,
 	HomePaths,
 	ModalActions,
 	Paths,
@@ -25,13 +27,13 @@ import {
 	FaqIcon,
 } from '@components/icons';
 import {
+	Box,
 	Fab,
 	List,
 	ListItem,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
-	Typography,
 } from '@mui/material';
 
 interface Props {
@@ -80,9 +82,30 @@ function LeftRail() {
 
 	return (
 		<>
-			<Typography>
-				{AppName}
-			</Typography>
+			<Box
+				textAlign="center"
+				width="100%"
+				sx={{
+					display: {
+						xs: 'none',
+						md: 'block',
+					},
+				}}
+			>
+				<Image src={NotSoSocialImg} />
+			</Box>
+			<Box
+				textAlign="center"
+				width="100%"
+				sx={{
+					display: {
+						xs: 'block',
+						md: 'none',
+					},
+				}}
+			>
+				<Image src={NotSoSocialSmallImg} />
+			</Box>
 			<List>
 				<ListItem disablePadding>
 					<Link
