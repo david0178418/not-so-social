@@ -42,13 +42,10 @@ function LinkPreview(props: Props) {
 						component="img"
 						image={image}
 						sx={{
-							maxHeight: {
-								xs: 'auto',
-								md: '175px',
-							},
+							maxHeight: '100%',
 							maxWidth: {
 								xs: '100%',
-								md: 'auto',
+								md: '50%',
 							},
 						}}
 					/>
