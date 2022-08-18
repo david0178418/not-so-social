@@ -98,8 +98,9 @@ function BottomNav() {
 					/>
 				</Link>
 				{!user && (
-					<>
+					[
 						<Link
+							key="0"
 							shallow
 							passHref
 							href={{
@@ -114,8 +115,9 @@ function BottomNav() {
 								label="Login"
 								icon={<LoginIcon />}
 							/>
-						</Link>
+						</Link>,
 						<Link
+							key="1"
 							shallow
 							passHref
 							href={Paths.Faq}
@@ -128,8 +130,8 @@ function BottomNav() {
 										<FaqIcon />
 								}
 							/>
-						</Link>
-					</>
+						</Link>,
+					]
 				)}
 				{!!user && (
 					[
