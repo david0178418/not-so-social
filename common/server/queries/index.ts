@@ -81,7 +81,7 @@ async function fetchTopChildPosts(postIds: string[], userId?: string): Promise<P
 	const postObjectIds = postIds.map(i => new ObjectId(i));
 	const results = await col.aggregate<DbPost>([
 		{ $match: { parentId: { $in: postObjectIds } } },
-		{ $sort: { points: 1 } },
+		{ $sort: { totalPoints: -1 } },
 		{
 			$group: {
 				_id: '$parentId',
