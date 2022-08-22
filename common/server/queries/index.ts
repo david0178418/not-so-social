@@ -94,11 +94,12 @@ async function fetchTopChildPosts(postIds: string[], userId?: string): Promise<P
 	return results.map(dbPostToPostFn(userId));
 }
 
-
 async function fetchChildPosts(postId: string, userId: string): Promise<Post[]> {
 	const col = await getCollection(DbCollections.Posts);
 	const results = await col
 		.find<DbPost>({ parentId: new ObjectId(postId) })
+		.sort({ totalPoints: -1 })
+		.limit(100)	// TODO paging
 		.toArray();
 
 	return results.map(dbPostToPostFn(userId));
@@ -291,4 +292,3 @@ async function checkAwards(userId: string) {
 		notificationsCol.insertOne(newNotification),
 	]);
 }
-
