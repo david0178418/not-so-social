@@ -1,6 +1,6 @@
 import { Feed, Post } from '@common/types';
 import { getCollection } from '@common/server/mongodb';
-import { nowISOString } from '@common/utils';
+import { isTruthy, nowISOString } from '@common/utils';
 import { fetchSettings } from './fetch-settings';
 import { differenceInDays } from 'date-fns';
 import { ObjectId } from 'mongodb';
@@ -109,6 +109,7 @@ interface getFocusedPostProps {
 	parentPost: Post | null;
 	post: Post | null;
 	responses: Post[];
+	lv2Responses: Post[];
 }
 
 export
@@ -121,6 +122,7 @@ async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedP
 				parentPost: null,
 				post: null,
 				responses: [],
+				lv2Responses: [],
 			};
 		}
 
@@ -137,16 +139,21 @@ async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedP
 				[]
 		);
 
+		const responseIds = responses.map(p => p._id).filter(isTruthy);
+		const lv2Responses = await fetchTopChildPosts(responseIds, userId);
+
 		return {
 			parentPost: parentPost && postToBookmarkedPost(parentPost),
 			post: postToBookmarkedPost(post),
 			responses: responses.map(postToBookmarkedPost),
+			lv2Responses,
 		};
 	} catch {
 		return {
 			parentPost: null,
 			post: null,
 			responses: [],
+			lv2Responses: [],
 		};
 	}
 }

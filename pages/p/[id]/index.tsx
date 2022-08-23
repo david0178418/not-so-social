@@ -26,24 +26,6 @@ interface Props {
 	data: AsyncFnReturnType<typeof fetchFocusedPost>;
 }
 
-interface Params extends ParsedUrlQuery {
-	id?: string;
-}
-
-export
-const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
-	const { params: { id = '' } = {} } = ctx;
-	const session = await getServerSession(ctx.req, ctx.res);
-	const userId = session?.user.id || '';
-
-	return {
-		props: {
-			session,
-			data: await fetchFocusedPost(userId, id),
-		},
-	};
-};
-
 const PostPage: NextPage<Props> = (props) => {
 	const routeBack = useRouteBackDefault();
 	const {
@@ -51,6 +33,7 @@ const PostPage: NextPage<Props> = (props) => {
 			parentPost,
 			post,
 			responses,
+			lv2Responses,
 		},
 	} = props;
 
@@ -104,6 +87,7 @@ const PostPage: NextPage<Props> = (props) => {
 						<FeedPost
 							key={p?._id}
 							post={p}
+							topResponse={lv2Responses.find(r => p._id === r.parentId)}
 						/>
 					))}
 				</Box>
@@ -113,3 +97,21 @@ const PostPage: NextPage<Props> = (props) => {
 };
 
 export default PostPage;
+
+interface Params extends ParsedUrlQuery {
+	id?: string;
+}
+
+export
+const getServerSideProps: GetServerSideProps<Props, Params> = async (ctx) => {
+	const { params: { id = '' } = {} } = ctx;
+	const session = await getServerSession(ctx.req, ctx.res);
+	const userId = session?.user.id || '';
+
+	return {
+		props: {
+			session,
+			data: await fetchFocusedPost(userId, id),
+		},
+	};
+};
