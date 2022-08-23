@@ -6,6 +6,7 @@ import { FeedPostResponseForm } from './feed-post-response-form';
 import { useState } from 'react';
 import { useIsLoggedIn } from '@common/hooks';
 import { ParsedContentServer } from '@components/parsed-content.server';
+import { LinkPreviews } from '@components/link-previews';
 import {
 	getTimeSinceDate,
 	localizedDateFormat,
@@ -18,7 +19,6 @@ import {
 	Tooltip,
 	Typography,
 } from '@mui/material';
-import { LinkPreviews } from '@components/link-previews';
 
 interface Props {
 	parentPost?: Post | null;
@@ -87,8 +87,6 @@ function FeedPost(props: Props) {
 		...((!topResponse) ? hasNoResponseStyle : {}),
 		...((!parentPost) ? hasNoParentStyle : {}),
 	};
-
-	console.log('parentPost', parentPost);
 
 	return (
 		<Box sx={containerStyles}>
