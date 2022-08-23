@@ -9,6 +9,7 @@ import { grammit } from '@common/server/server-utils';
 import { LinkPreviewData } from '@common/types';
 import { z, ZodType } from 'zod';
 import { linkPreviewSchema, MongoObjectId } from '@common/server/validations';
+import { URL_PATTERN } from 'interweave-autolink';
 import {
 	DbCollections,
 	MaxPostBodyLength,
@@ -22,6 +23,8 @@ import {
 	PointTransactionTypes,
 	UserRoles,
 } from '@common/constants';
+
+const UrlRegex = new RegExp(URL_PATTERN, 'gi');
 
 interface Schema {
 	body: string;
@@ -136,7 +139,8 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 
 	const newPostGram: DbPostTextGram = {
 		postId: newPostId,
-		grams: grammit(`${newPostContent.title} ${newPostContent.body}`),
+		// clean urls before grams are created
+		grams: grammit(`${newPostContent.title} ${newPostContent.body}`.replaceAll(UrlRegex, '')),
 	};
 
 	if(parentId) {
