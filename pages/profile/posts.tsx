@@ -87,16 +87,8 @@ const ProfilePostsPage: NextPage<Props> = (props) => {
 					<FeedPost
 						key={p._id}
 						post={p}
-						parentPosts={
-							(p.parentId && parentPostMap[p.parentId]) ?
-								[parentPostMap[p.parentId]] :
-								[]
-						}
-						responses={
-							(p._id && responsePostMap[p._id]) ?
-								[responsePostMap[p._id]] :
-								[]
-						}
+						parentPost={parentPostMap[p.parentId || '']}
+						topResponse={responsePostMap[p._id || '']}
 					/>
 				))}
 				<LoadMoreButton

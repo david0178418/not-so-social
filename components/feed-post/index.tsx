@@ -21,9 +21,9 @@ import {
 import { LinkPreviews } from '@components/link-previews';
 
 interface Props {
-	parentPosts?: Post[];
+	parentPost?: Post | null;
 	post: Post;
-	responses?: Post[];
+	topResponse?: Post | null;
 }
 
 // TODO fix this style mess
@@ -76,44 +76,45 @@ export
 function FeedPost(props: Props) {
 	const {
 		post,
-		responses = [],
-		parentPosts = [],
+		topResponse,
+		parentPost,
 	} = props;
 	const [responseOpen, setResponseOpen] = useState(false);
 	const isLoggedIn = useIsLoggedIn();
 
 	const appliedStyles = {
 		...styles,
-		...((!responses.length) ? hasNoResponseStyle : {}),
-		...((!parentPosts.length) ? hasNoParentStyle : {}),
+		...((!topResponse) ? hasNoResponseStyle : {}),
+		...((!parentPost) ? hasNoParentStyle : {}),
 	};
+
+	console.log('parentPost', parentPost);
 
 	return (
 		<Box sx={containerStyles}>
-			{parentPosts.map(p => (
+			{parentPost && (
 				<Box
-					key={p._id}
 					sx={parentStyles}
 					padding={1}
 				>
 					<Typography>
 						Response To:
-						<Link href={urlJoin(Paths.Post, p._id)} passHref>
+						<Link href={urlJoin(Paths.Post, parentPost._id)} passHref>
 							<Typography
 								noWrap
 								component={MuiLink}
-								title={p.title}
+								title={parentPost.title}
 								sx={{
 									fontWeight: 'bold',
 									display: 'block',
 								}}
 							>
-								{p.title}
+								{parentPost.title}
 							</Typography>
 						</Link>
 					</Typography>
 				</Box>
-			))}
+			)}
 			<Box sx={appliedStyles}>
 				<div>
 					<Box
@@ -199,30 +200,29 @@ function FeedPost(props: Props) {
 					)}
 				</div>
 			</Box>
-			{responses.map(p => (
+			{topResponse && (
 				<Box
-					key={p._id}
 					sx={childStyles}
 					padding={1}
 				>
 					<Typography>
 						Top Response:
-						<Link href={urlJoin(Paths.Post, p._id)} passHref>
+						<Link href={urlJoin(Paths.Post, topResponse._id)} passHref>
 							<Typography
 								noWrap
 								component={MuiLink}
-								title={p.title}
+								title={topResponse.title}
 								sx={{
 									fontWeight: 'bold',
 									display: 'block',
 								}}
 							>
-								{p.title}
+								{topResponse.title}
 							</Typography>
 						</Link>
 					</Typography>
 				</Box>
-			))}
+			)}
 		</Box>
 	);
 }

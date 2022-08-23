@@ -96,10 +96,17 @@ const PostPage: NextPage<Props> = (props) => {
 				{post && (
 					<FeedPost
 						post={post}
-						parentPosts={parentPost ? [parentPost] : []}
-						responses={responses}
+						parentPost={parentPost}
 					/>
 				)}
+				<Box marginLeft={4}>
+					{responses.map(p => (
+						<FeedPost
+							key={p?._id}
+							post={p}
+						/>
+					))}
+				</Box>
 			</ScrollContent>
 		</>
 	);
