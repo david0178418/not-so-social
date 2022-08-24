@@ -1,4 +1,5 @@
 import { DbCollections, MongoDbName } from '@common/constants';
+import { setupDb } from './setup';
 import {
 	Collection,
 	Db,
@@ -15,7 +16,7 @@ import {
 	DbPostTextGram,
 	DbSettings,
 	DbNotification,
-} from './db-schema';
+} from '../db-schema';
 
 const uri = process.env.MONGODB_URI || '';
 const options: MongoClientOptions = {};
@@ -64,6 +65,10 @@ async function getCollection<T extends DbCollections>(collection: T): Promise<Co
 	const db = await dbClientPromise;
 
 	return db.collection<CollectionType<T>>(collection);
+}
+
+if(process.env.NODE_ENV === 'development') {
+	setupDb();
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a

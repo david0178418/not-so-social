@@ -74,6 +74,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	}
 }
 
+export
 async function createUser(username: string, password: string) {
 	const settings = await fetchSettings();
 	const usersCol = await getCollection(DbCollections.Users);
