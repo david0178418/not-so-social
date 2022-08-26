@@ -82,29 +82,37 @@ function LeftRail() {
 
 	return (
 		<>
-			<Box
-				textAlign="center"
-				width="100%"
-				sx={{
-					display: {
-						xs: 'none',
-						md: 'block',
-					},
-				}}
-			>
-				<Image src={NotSoSocialImg} />
-			</Box>
-			<Box
-				paddingLeft={1.5}
-				sx={{
-					display: {
-						xs: 'block',
-						md: 'none',
-					},
-				}}
-			>
-				<Image src={NotSoSocialSmallImg} />
-			</Box>
+			<Link passHref href={Paths.Home}>
+				<Box
+					component="a"
+					sx={{
+						textAlign: 'center',
+						width: '100%',
+						paddingLeft: 1.5,
+					}}
+				>
+					<Box
+						sx={{
+							display: {
+								xs: 'none',
+								md: 'block',
+							},
+						}}
+					>
+						<Image src={NotSoSocialImg} />
+					</Box>
+					<Box
+						sx={{
+							display: {
+								xs: 'block',
+								md: 'none',
+							},
+						}}
+					>
+						<Image src={NotSoSocialSmallImg} />
+					</Box>
+				</Box>
+			</Link>
 			<List>
 				<ListItem disablePadding>
 					<Link
