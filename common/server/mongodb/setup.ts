@@ -29,7 +29,7 @@ async function setupDb() {
 		await appMetadataCol.insertOne({
 			type: SettingTypes.AwardSettings,
 			data: {
-				awardSignup: 100,
+				awardSignup: 10000,
 				awardDailyPointBase: 10,
 				awardDailyStreakIncrement: 10,
 				awardDailyStreakCap: 10,
