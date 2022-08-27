@@ -24,13 +24,12 @@ module.exports = {
 		'react-hooks',
 	],
 	rules: {
+		'arrow-spacing': ERR,
 		'brace-style': [ERR, '1tbs' ],
 		'comma-dangle': [ERR, 'always-multiline'],
 		'comma-spacing': ERR,
 		'eol-last': ERR,
 		'jsx-quotes': ERR,
-		'jsx-a11y/alt-text': OFF,
-		'jsx-a11y/anchor-is-valid': OFF,
 		'key-spacing': ERR,
 		'no-multiple-empty-lines': [ERR, {
 			max: 1,
