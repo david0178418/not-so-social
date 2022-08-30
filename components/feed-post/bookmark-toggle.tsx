@@ -1,14 +1,12 @@
-import Link from 'next/link';
 import { Button, Tooltip } from '@mui/material';
 import { Post } from '@common/types';
 import { bookmarkPost, unbookmarkPost } from '@common/client/api-calls';
 import { useState } from 'react';
-import { ModalActions } from '@common/constants';
-import { useRouter } from 'next/router';
 import { BookmarkActiveIcon, BookmarkIcon } from '@components/icons';
 import { pushToastMsgAtom } from '@common/atoms';
 import { useSetAtom } from 'jotai';
 import { truncate } from '@common/utils';
+import { LoginFallbackLink } from '@components/common/login-fallback-link';
 
 interface Props {
 	post: Post;
@@ -25,10 +23,6 @@ function BookmarkToggle(props: Props) {
 	} = props;
 	const [isBookmarked, setIsBookmarked] = useState(!!post.bookmarkedDate);
 	const pushToastMsg = useSetAtom(pushToastMsgAtom);
-	const {
-		pathname,
-		query,
-	} = useRouter();
 
 	async function toggle() {
 		if(!(isLoggedIn && post._id)) {
@@ -56,31 +50,17 @@ function BookmarkToggle(props: Props) {
 		pushToastMsg(msg);
 	}
 
-	const body = (
-		<Tooltip title="Bookmark">
-			<Button size={size} onClick={toggle}>
-				{isBookmarked ? (
-					<BookmarkActiveIcon color="primary"/>
-				) : (
-					<BookmarkIcon color="primary"/>
-				)}
-			</Button>
-		</Tooltip>
-	);
-
-	return isLoggedIn ? body : (
-		<Link
-			shallow
-			passHref
-			href={{
-				pathname,
-				query: {
-					a: ModalActions.LoginRegister,
-					...query,
-				},
-			}}
-		>
-			{body}
-		</Link>
+	return (
+		<LoginFallbackLink>
+			<Tooltip title="Bookmark">
+				<Button size={size} onClick={toggle}>
+					{isBookmarked ? (
+						<BookmarkActiveIcon color="primary"/>
+					) : (
+						<BookmarkIcon color="primary"/>
+					)}
+				</Button>
+			</Tooltip>
+		</LoginFallbackLink>
 	);
 }
