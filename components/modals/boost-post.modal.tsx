@@ -7,12 +7,16 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ClampedNumberInput } from '@components/common/clamped-number-input';
 import { useEffect, useState } from 'react';
 import { Alert, TextField } from '@mui/material';
-import { useIsAdmin, useRefreshPage } from '@common/hooks';
 import { useAtom, useSetAtom } from 'jotai';
 import { OwnPostRatio } from '@common/constants';
 import { BoostIcon } from '@components/icons';
 import { getBalance, postBoost } from '@common/client/api-calls';
 import { exec } from '@common/utils';
+import {
+	useIsAdmin,
+	useIsLoggedIn,
+	useRefreshPage,
+} from '@common/hooks';
 import {
 	boostPostAtom,
 	loadingAtom,
@@ -28,14 +32,16 @@ function BoostPostModal() {
 	const [points, setPoints] = useState(10);
 	const setLoading = useSetAtom(loadingAtom);
 	const reload = useRefreshPage();
+	const isLoggedIn = useIsLoggedIn();
 
+	const isOpen = !!post && isLoggedIn;
 	const isOwner = !!post?.isOwner;
 	const pointSpend = isOwner ? points / OwnPostRatio : points;
 	const maxSpend = isOwner ? balance * OwnPostRatio : balance;
 	const noBalance = !balance;
 
 	useEffect(() => {
-		if(!post) {
+		if(!(isLoggedIn && post?._id)) {
 			return;
 		}
 
@@ -48,7 +54,7 @@ function BoostPostModal() {
 	}, [post]);
 
 	async function handleBoostPost() {
-		if(!post?._id) {
+		if(!(isLoggedIn && post?._id)) {
 			return;
 		}
 
@@ -76,7 +82,7 @@ function BoostPostModal() {
 	}
 
 	return (
-		<Dialog open={!!post} onClose={handleClose}>
+		<Dialog open={isOpen} onClose={handleClose}>
 			{noBalance && (
 				<Alert severity="error">
 					No points available.

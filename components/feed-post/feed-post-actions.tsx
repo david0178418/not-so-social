@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { DropdownMenu } from '@components/dropdown-menu';
 import { useSetAtom } from 'jotai';
 import { boostPostAtom } from '@common/atoms';
+import { LoginFallbackLink } from '@components/common/login-fallback-link';
 import {
 	BoostIcon,
 	CommentIcon,
@@ -52,31 +53,35 @@ function PostActions(props: Props) {
 				item
 				sx={{ textAlign: 'center' }}
 			>
-				<Tooltip title="Respond">
-					<Button
-						size={Size}
-						startIcon={<CommentIcon/>}
-						onClick={onCommentClick}
-					>
-						{formatCompactNumber(post.replyCount)}
-					</Button>
-				</Tooltip>
+				<LoginFallbackLink>
+					<Tooltip title="Respond">
+						<Button
+							size={Size}
+							startIcon={<CommentIcon/>}
+							onClick={onCommentClick}
+						>
+							{formatCompactNumber(post.replyCount)}
+						</Button>
+					</Tooltip>
+				</LoginFallbackLink>
 			</Grid>
 			<Grid
 				xs
 				item
 				sx={{ textAlign: 'center' }}
 			>
-				<Tooltip title="Boost">
-					<Button
-						size={Size}
-						color="success"
-						startIcon={<BoostIcon fontSize="inherit" />}
-						onClick={() => setBoostPost(post)}
-					>
-						{formatCompactNumber(post.points || post.totalPoints)}
-					</Button>
-				</Tooltip>
+				<LoginFallbackLink>
+					<Tooltip title="Boost">
+						<Button
+							size={Size}
+							color="success"
+							startIcon={<BoostIcon fontSize="inherit" />}
+							onClick={() => setBoostPost(post)}
+						>
+							{formatCompactNumber(post.points || post.totalPoints)}
+						</Button>
+					</Tooltip>
+				</LoginFallbackLink>
 			</Grid>
 			<Grid
 				xs
