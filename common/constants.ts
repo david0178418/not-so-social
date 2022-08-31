@@ -94,7 +94,7 @@ export
 const MinPostBodyLength = 10;
 
 export
-const MaxPostBodyLength = 500;
+const MaxPostBodyLength = 1000;
 
 export
 const MaxPostResponseLength = 200;
