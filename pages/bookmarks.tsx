@@ -44,7 +44,7 @@ const BookmarksPage: NextPage<Props> = (props) => {
 	return (
 		<>
 			<Head>
-				<title>{AppName}</title>
+				<title>{AppName} - Bookmarks</title>
 				<meta name="description" content={`${AppName} - Bookmarks`} />
 			</Head>
 			<ScrollContent

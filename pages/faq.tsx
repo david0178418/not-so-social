@@ -14,8 +14,8 @@ const FaqPage: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{AppName}</title>
-				<meta name="description" content={`${AppName} - Bookmarks`} />
+				<title>{AppName} - FAQ</title>
+				<meta name="description" content={`${AppName} - FAQ`} />
 			</Head>
 			<ScrollContent>
 				<Box padding={2} paddingBottom={10}>
