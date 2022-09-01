@@ -128,7 +128,7 @@ function BoostPostModal() {
 					color="error"
 					onClick={handleClose}
 				>
-						Cancel
+					Cancel
 				</Button>
 				<Button
 					disabled={noBalance || !points}
@@ -136,7 +136,7 @@ function BoostPostModal() {
 					endIcon={<BoostIcon/>}
 					onClick={handleBoostPost}
 				>
-						Boost
+					Boost
 				</Button>
 			</DialogActions>
 		</Dialog>

@@ -23,6 +23,8 @@ type SharedPostProps = Pick<Post,
 export
 interface DbPost extends SharedPostProps {
 	_id?: ObjectId;
+	attachedPostIds?: ObjectId[];
+	attachedToPostIds?: ObjectId[];
 	ownerId: ObjectId;
 	parentId?: ObjectId;
 }

@@ -6,6 +6,7 @@ import {
 	useState,
 	useRef,
 	useLayoutEffect,
+	useCallback,
 } from 'react';
 
 import {
@@ -71,6 +72,28 @@ function useDebounce<T>(value: T, delay: number) {
 	}, [value, delay]);
 
 	return debouncedValue;
+}
+
+export
+function useDebouncedCallback<T>(value: T, delay: number, callback: () => void,) {
+	const debouncedValue = useDebounce(value, delay);
+
+	useEffect(() => {
+		callback();
+	}, [debouncedValue]);
+}
+
+export
+// See: https://usehooks.com/useToggle/
+function useToggle(initialState = false) {
+	// Initialize the state
+	const [state, setState] = useState(initialState);
+
+	// Define and memorize toggler function in case we pass down the component,
+	// This function change the boolean value to it's opposite value
+	const toggle = useCallback(() => setState(s => !s), []);
+
+	return [state, toggle];
 }
 
 export

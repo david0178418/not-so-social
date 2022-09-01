@@ -144,6 +144,11 @@ function range(size: number, startValue = 0) {
 }
 
 export
+function removeItem<T>(arr: T[], removeIndex: number) {
+	return arr.filter((_, index) => index !== removeIndex);
+}
+
+export
 function truncate(input: string, maxLen = 50) {
 	return input.length > maxLen ?
 		`${input.substring(0, maxLen)}…` :

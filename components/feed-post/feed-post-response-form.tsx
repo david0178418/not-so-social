@@ -1,5 +1,4 @@
-import { CancelButton } from '@components/common/buttons/cancel.button';
-import { ConfirmButton } from '@components/common/buttons/confirm.button';
+import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { getLinkPreviewsFromContent, postSave } from '@common/client/api-calls';
@@ -8,6 +7,7 @@ import { LinkPreviewData } from '@common/types';
 import { LinkPreviews } from '@components/link-previews';
 import { MinPostBodyLength } from '@common/constants';
 import { exec } from '@common/utils';
+import { InfoIconButton } from '@components/common/info-icon-button';
 import {
 	useEffect,
 	useRef,
@@ -20,7 +20,6 @@ import {
 	Grid,
 	TextField,
 } from '@mui/material';
-import { InfoIconButton } from '@components/common/info-icon-button';
 
 interface Props {
 	parentId: string;

@@ -3,6 +3,7 @@ import type {
 	Feed,
 	LinkPreviewData,
 	Notification,
+	Post,
 } from '@common/types';
 
 import { signIn, signOut } from 'next-auth/react';
@@ -106,6 +107,13 @@ async function getNotificaitons(): Promise<Notification[]> {
 	const result = await apiGet<ApiResponse<{notifications: Notification[]}>>('/user/notifications');
 
 	return result?.data?.notifications || [];
+}
+
+export
+async function getPost(id: string): Promise<Post | null> {
+	const result = await apiGet<ApiResponse<{ post: Post}>>(`/post/${id}`);
+
+	return result?.data?.post || null;
 }
 
 export

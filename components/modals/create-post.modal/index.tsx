@@ -1,16 +1,24 @@
+import type { LinkPreviewData, Post } from '@common/types';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { useDebounce, useIsLoggedOut } from '@common/hooks';
 import { getLinkPreviewsFromContent, postSave } from '@common/client/api-calls';
-import { ConfirmButton } from '@components/common/buttons/confirm.button';
-import { CancelButton } from '@components/common/buttons/cancel.button';
-import { exec, formatCompactNumber } from '@common/utils';
+import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { LinkPreviews } from '@components/link-previews';
-import { CloseIcon, InfoIcon } from '@components/icons';
-import { LinkPreviewData } from '@common/types';
 import { InfoIconButton } from '@components/common/info-icon-button';
+import { CreatePostAttachmentDialog } from './create-post-attachment-dialog';
+import {
+	CloseIcon,
+	InfoIcon,
+} from '@components/icons';
+import {
+	exec,
+	formatCompactNumber,
+	urlJoin,
+} from '@common/utils';
 import {
 	useEffect,
 	useRef,
@@ -21,6 +29,7 @@ import {
 	MinPostCost,
 	ModalActions,
 	OwnPostRatio,
+	Paths,
 } from '@common/constants';
 import {
 	AppBar,
@@ -35,6 +44,7 @@ import {
 	FormControlLabel,
 	Grid,
 	IconButton,
+	Link as MuiLink,
 	TextField,
 	Toolbar,
 	Typography,
@@ -59,6 +69,7 @@ function CreatePostModal() {
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 	const [linkPreviews, setLinkPreviews] = useState<LinkPreviewData[]>([]);
 	const abortControllerRef = useRef<AbortController | null>(null);
+	const [attachments, setAttachments] = useState<Post[]>([]);
 	const {
 		a: action,
 		...newQuery
@@ -77,7 +88,6 @@ function CreatePostModal() {
 				query: newQuery,
 			}, undefined, { shallow: true });
 		}
-
 	}, [actionIsCreatePost, isLoggedOut]);
 
 	useEffect(() => {
@@ -153,6 +163,17 @@ function CreatePostModal() {
 		router.back();
 	}
 
+	function addAttachment(post: Post) {
+		setAttachments([
+			post,
+			...attachments.filter(p => p._id !== post._id),
+		]);
+	}
+
+	function removeAttachment(postId: string) {
+		setAttachments(attachments.filter(a => a._id !== postId));
+	}
+
 	return (
 		<Dialog
 			fullWidth
@@ -223,8 +244,11 @@ function CreatePostModal() {
 						onChange={e => setBody(e.target.value)}
 					/>
 				</Box>
-				<Grid container>
-					<Grid item>
+				<Grid container paddingY={2}>
+					<Grid item xs={8}>
+						<CreatePostAttachmentDialog onAttach={addAttachment}/>
+					</Grid>
+					<Grid item xs={2} textAlign="right">
 						<FormControlLabel
 							control={
 								<Checkbox
@@ -240,7 +264,7 @@ function CreatePostModal() {
 							}
 						/>
 					</Grid>
-					<Grid item>
+					<Grid item xs={2} textAlign="right">
 						<FormControlLabel
 							control={
 								<Checkbox
@@ -261,6 +285,31 @@ function CreatePostModal() {
 			{!!linkPreviews.length && (
 				<DialogContent>
 					<LinkPreviews linkPreviews={linkPreviews} />
+				</DialogContent>
+			)}
+			{!!attachments.length && (
+				<DialogContent>
+					{attachments.map(a => (
+						<Box key={a._id}>
+							<IconButton onClick={() => a._id && removeAttachment(a._id)}>
+								<CloseIcon/>
+							</IconButton>
+
+							<Link target="__blank" href={urlJoin(Paths.Post, a._id)} passHref>
+								<Typography
+									noWrap
+									component={MuiLink}
+									title={a.title}
+									sx={{
+										fontWeight: 'bold',
+										display: 'inline',
+									}}
+								>
+									{a.title}
+								</Typography>
+							</Link>
+						</Box>
+					))}
 				</DialogContent>
 			)}
 			<DialogActions sx={{
@@ -292,13 +341,12 @@ function CreatePostModal() {
 						color="inherit"
 						size="small"
 						// ADD INFO PAGE
-						href="/"
+						href="/faq#why-half-points"
 						target="__blank"
 						endIcon={<InfoIcon fontSize="small" />}
 					>
 						<em>
-						Why are only half of the spent points applied?
-
+							Why are only half of the spent points applied?
 						</em>
 					</Button>
 				</DialogContentText>
