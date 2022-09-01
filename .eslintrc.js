@@ -29,6 +29,7 @@ module.exports = {
 		'comma-dangle': [ERR, 'always-multiline'],
 		'comma-spacing': ERR,
 		'eol-last': ERR,
+		'jsx-a11y/alt-text': OFF,
 		'jsx-quotes': ERR,
 		'key-spacing': ERR,
 		'no-multiple-empty-lines': [ERR, {
