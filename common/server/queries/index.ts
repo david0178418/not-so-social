@@ -67,12 +67,17 @@ async function fetchPost(postId: string, userId = ''): Promise<Post | null> {
 
 export
 async function fetchPosts(postIds: string[], userId = ''): Promise<Post[]> {
-	const col = await getCollection(DbCollections.Posts);
-	const results = await col
-		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
-		.toArray();
+	const results = await fetchDbPosts(postIds);
 
 	return results.map(dbPostToPostFn(userId));
+}
+
+export
+async function fetchDbPosts(postIds: string[]): Promise<DbPost[]> {
+	const col = await getCollection(DbCollections.Posts);
+	return col
+		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
+		.toArray();
 }
 
 export

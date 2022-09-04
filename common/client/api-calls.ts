@@ -72,6 +72,7 @@ interface PostSaveArgs {
 	nsfl?: boolean;
 	parentId?: string;
 	linkPreviews?: LinkPreviewData[];
+	attachedPostIds?: string[];
 }
 
 export

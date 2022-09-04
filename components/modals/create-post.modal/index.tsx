@@ -137,6 +137,7 @@ function CreatePostModal() {
 	async function handleSave() {
 		try {
 			setLoading(true);
+			console.log(attachments);
 			console.log(await postSave({
 				title,
 				body,
@@ -144,6 +145,7 @@ function CreatePostModal() {
 				nsfl,
 				nsfw,
 				linkPreviews,
+				attachedPostIds: attachments.map(p => p._id || ''),
 			}));
 			close();
 		} catch(e: any) {
@@ -160,6 +162,8 @@ function CreatePostModal() {
 		setBody('');
 		setTitle('');
 		setPoints(MinPostCost);
+		setLinkPreviews([]);
+		setAttachments([]);
 		router.back();
 	}
 

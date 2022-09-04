@@ -4,7 +4,7 @@ import { getCollection } from '@common/server/mongodb';
 import { ObjectId } from 'mongodb';
 import { DbPost, DbPostTextGram } from '@common/server/db-schema';
 import { getServerSession } from '@common/server/auth-options';
-import { fetchUserBalance } from '@common/server/queries';
+import { fetchDbPosts, fetchUserBalance } from '@common/server/queries';
 import { grammit } from '@common/server/server-utils';
 import { LinkPreviewData } from '@common/types';
 import { z, ZodType } from 'zod';
@@ -27,6 +27,7 @@ import {
 const UrlRegex = new RegExp(URL_PATTERN, 'gi');
 
 interface Schema {
+	attachedPostIds?: string[];
 	body: string;
 	title: string;
 	points: number;
@@ -35,6 +36,9 @@ interface Schema {
 }
 
 const schema: ZodType<Schema> = z.object({
+	attachedPostIds: z
+		.array(MongoObjectId)
+		.optional(),
 	body: z
 		.string()
 		.min(MinPostBodyLength, { message: `Post body must be at least ${MinPostBodyLength} characters long.` })
@@ -102,14 +106,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	});
 }
 
-interface PostContent {
-	title: string;
-	body: string;
-	points: number;
-	parentId?: string;
-}
-
-async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = false) {
+async function createPost(content: Schema, ownerId: ObjectId, isAdmin = false) {
 	const [
 		gramCol,
 		postCol,
@@ -123,12 +120,19 @@ async function createPost(content: PostContent, ownerId: ObjectId, isAdmin = fal
 	const {
 		parentId,
 		points: spentPoints,
+		attachedPostIds,
 		...newPostContent
 	} = content;
 	const appliedPoints = Math.floor(OwnPostRatio * spentPoints);
 	const newPostId = new ObjectId();
+	// only attach valid posts
+	const attachedPosts = attachedPostIds ?
+		await fetchDbPosts(attachedPostIds) :
+		[];
+
 	const newPost: DbPost = {
 		...newPostContent,
+		attachedPostIds: attachedPosts.map(p => p._id as ObjectId),
 		created: nowIsoStr,
 		lastUpdated: nowIsoStr,
 		ownerId,
