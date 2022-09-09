@@ -88,14 +88,14 @@ function CreatePostAttachmentDialog(props: Props) {
 				endIcon={<AttachmentIcon/>}
 				onClick={() => setIsOpen(true)}
 			>
-				Add Attachment
+				Attach Post
 			</Button>
 			<Dialog
 				fullWidth
 				open={isOpen}
 				onClose={close}
 			>
-				<DialogTitle>Add Attachment</DialogTitle>
+				<DialogTitle>Attach Post</DialogTitle>
 				<DialogContent>
 					{error && (
 						<Box marginBottom={2}>

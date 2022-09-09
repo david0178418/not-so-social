@@ -5,6 +5,7 @@ import { DbNotification, DbPointTransaction } from './server/db-schema';
 export
 interface Post {
 	_id?: string;
+	attachedPostIds: string[];
 	body: string;
 	bookmarkedDate?: string;
 	created: string;

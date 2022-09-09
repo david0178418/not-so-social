@@ -17,6 +17,7 @@ function dbPostToPostFn(userId?: string) {
 		const {
 			ownerId,
 			parentId,
+			attachedPostIds = [],
 			...cleanedPost
 		} = post;
 
@@ -24,6 +25,7 @@ function dbPostToPostFn(userId?: string) {
 			...cleanedPost,
 			isOwner: userId === ownerId.toString(),
 			_id: post._id?.toString(),
+			attachedPostIds: attachedPostIds.map(a => a.toString()),
 		};
 
 		if(parentId) {
@@ -62,7 +64,6 @@ function postToBookmarkedPostFn(bookmarks: DbBookmark[]) {
 		bookmarkedDate: bookmarks.find(b => b.postId.toString() === p._id)?.date || '',
 	});
 }
-
 
 export
 function postListsToIdList(...postLists: Nullable<Post>[][]): string[] {
