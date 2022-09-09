@@ -3,11 +3,6 @@ const OFF = 0;
 const WARN = 1;
 const ERR = 2;
 
-/**
-* @typedef { import('eslint').Linter.Config } Configuration
-*
-* @type {Configuration}
-*/
 module.exports = {
 	parser: '@typescript-eslint/parser',
 	extends: [
@@ -47,6 +42,7 @@ module.exports = {
 		'react-hooks/exhaustive-deps': OFF,
 		'react/display-name': OFF,
 		'react/jsx-no-target-blank': OFF,
+		'react/no-unknown-property': [ERR, { ignore: ['jsx'] }],
 		'react/prop-types': OFF,
 		'react/react-in-jsx-scope': OFF,
 		'space-before-blocks': ERR,
