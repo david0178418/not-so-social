@@ -10,8 +10,10 @@ import Head from 'next/head';
 import { SessionProvider } from 'next-auth/react';
 import { Layout } from '@components/layout';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { Session } from 'next-auth';
 
 interface Props {
+	session: Session | null;
 	initialState: any;
 }
 
