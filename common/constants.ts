@@ -1,3 +1,7 @@
+import { DbAttachmentPostPartial } from './server/db-schema';
+import { AttachmentPostPartial } from './types';
+import { keys } from './utils';
+
 export
 const AppName = 'NotSo.Social (beta)';
 
@@ -15,6 +19,9 @@ const MinPostCost = 10;
 
 export
 const MaxPostCost = 1_00_000;
+
+export
+const MaxPostAttachmentAnnotationLength = 200;
 
 export
 const OwnPostRatio = 0.5;
@@ -117,6 +124,36 @@ const SpecialCharacterCodes = {
 	DOT: '\u2022',
 	QUOTE: '\u0022',
 };
+
+// TODO Wrap this in a utility function
+const FullAttachmentPost: Required<AttachmentPostPartial> = {
+	_id: '',
+	body: '',
+	created: '',
+	lastUpdated: '',
+	linkPreviews: [],
+	nsfl: false,
+	nsfw: false,
+	title: '',
+};
+
+export
+const AttachmentPostKeys = keys(FullAttachmentPost);
+
+// TODO Wrap this in a utility function
+const FullDbAttachmentPost: Required<DbAttachmentPostPartial> = {
+	_id: null as any, // ObjectID can't be used client side. Need a better way to get these props
+	body: '',
+	created: '',
+	lastUpdated: '',
+	linkPreviews: [],
+	nsfl: false,
+	nsfw: false,
+	title: '',
+};
+
+export
+const DbAttachmentPostKeys = keys(FullDbAttachmentPost);
 
 export
 const NotLoggedInErrMsg = {

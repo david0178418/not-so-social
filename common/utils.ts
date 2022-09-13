@@ -51,10 +51,10 @@ function sleep(ms: number) {
 }
 
 export
-function pick<T, K extends keyof T>(object: T, ...keys: K[]): Pick<T, K> {
+function pick<T, K extends keyof T>(object: T, ...ks: K[]): Pick<T, K> {
 	return Object.assign(
 		{},
-		...keys.map(key => {
+		...ks.map(key => {
 			if (object && Object.prototype.hasOwnProperty.call(object, key)) {
 				return { [key]: object[key] };
 			}
@@ -114,6 +114,11 @@ function objectToArgs(args: any) {
 		.keys(args)
 		.map(arg => `${arg}=${encodeURIComponent(args[arg])}`)
 		.join('&');
+}
+
+export
+function keys<T extends Record<any, unknown>>(obj: T): Array<keyof T> {
+	return Object.keys(obj);
 }
 
 export

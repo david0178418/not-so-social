@@ -21,9 +21,26 @@ type SharedPostProps = Pick<Post,
 >;
 
 export
+type DbAttachmentPostPartial = { _id: ObjectId } & Pick<DbPost,
+'body' |
+'title' |
+'created' |
+'lastUpdated' |
+'linkPreviews' |
+'nsfw' |
+'nsfl'
+>;
+
+export
+interface DbAttachment {
+	annotation: string;
+	post: DbAttachmentPostPartial;
+}
+
+export
 interface DbPost extends SharedPostProps {
 	_id?: ObjectId;
-	attachedPostIds?: ObjectId[];
+	attachedPosts?: DbAttachment[];
 	attachedToPostIds?: ObjectId[];
 	ownerId: ObjectId;
 	parentId?: ObjectId;

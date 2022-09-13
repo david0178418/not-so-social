@@ -1,11 +1,26 @@
 import type { ReactNode } from 'react';
 import { UserRoles } from './constants';
-import { DbNotification, DbPointTransaction } from './server/db-schema';
+import {
+	DbNotification,
+	DbPointTransaction,
+	DbAttachment,
+	DbAttachmentPostPartial,
+} from './server/db-schema';
+
+export
+interface AttachmentPostPartial extends Omit<DbAttachmentPostPartial, '_id'> {
+	_id: string;
+}
+
+export
+interface Attachment extends Omit<DbAttachment, 'post'> {
+	post: AttachmentPostPartial;
+}
 
 export
 interface Post {
 	_id?: string;
-	attachedPostIds: string[];
+	attachedPosts: Attachment[];
 	body: string;
 	bookmarkedDate?: string;
 	created: string;

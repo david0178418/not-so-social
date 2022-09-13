@@ -1,15 +1,30 @@
 import type {
-	DbBookmark, DbPointTransaction, DbPost,
+	DbBookmark,
+	DbPointTransaction,
+	DbPost,
+	DbAttachment,
+	DbAttachmentPostPartial,
 } from './db-schema';
-import { hash } from 'bcryptjs';
-import { isTruthy, unique } from '@common/utils';
-import { PasswordSaltLength } from '@common/constants';
 import type {
+	Attachment,
 	Nullable,
 	PointTransaction,
 	Post,
+	AttachmentPostPartial,
 	PostIdMap,
 } from '@common/types';
+
+import { hash } from 'bcryptjs';
+import { ObjectId } from 'mongodb';
+import {
+	DbAttachmentPostKeys,
+	PasswordSaltLength,
+} from '@common/constants';
+import {
+	isTruthy,
+	pick,
+	unique,
+} from '@common/utils';
 
 export
 function dbPostToPostFn(userId?: string) {
@@ -17,15 +32,15 @@ function dbPostToPostFn(userId?: string) {
 		const {
 			ownerId,
 			parentId,
-			attachedPostIds = [],
+			attachedPosts = [],
 			...cleanedPost
 		} = post;
 
 		const formattedPost: Post = {
 			...cleanedPost,
+			attachedPosts: attachedPosts.map(dbAttachmentToAttachment),
 			isOwner: userId === ownerId.toString(),
 			_id: post._id?.toString(),
-			attachedPostIds: attachedPostIds.map(a => a.toString()),
 		};
 
 		if(parentId) {
@@ -33,6 +48,32 @@ function dbPostToPostFn(userId?: string) {
 		}
 
 		return formattedPost;
+	};
+}
+
+export
+function dbAttachmentToAttachment(attachment: DbAttachment): Attachment {
+	return {
+		...attachment,
+		post: dbAttachmentPostPartialToAttachmentPostPartial(attachment.post),
+	};
+}
+
+export
+function dbPostToDbAttachmentPostPartial(post: DbPost): DbAttachmentPostPartial {
+	const attmentPostPartial = pick(post, ...DbAttachmentPostKeys);
+
+	return {
+		_id: new ObjectId(),
+		...attmentPostPartial,
+	};
+}
+
+export
+function dbAttachmentPostPartialToAttachmentPostPartial(attachmentPost: DbAttachmentPostPartial): AttachmentPostPartial {
+	return {
+		...attachmentPost,
+		_id: attachmentPost._id.toString(),
 	};
 }
 

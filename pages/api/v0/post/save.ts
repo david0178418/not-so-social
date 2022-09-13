@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { getCollection } from '@common/server/mongodb';
 import { ObjectId } from 'mongodb';
-import { DbPost, DbPostTextGram } from '@common/server/db-schema';
 import { getServerSession } from '@common/server/auth-options';
 import { fetchDbPosts, fetchUserBalance } from '@common/server/queries';
 import { grammit } from '@common/server/server-utils';
@@ -11,7 +10,13 @@ import { z, ZodType } from 'zod';
 import { linkPreviewSchema, MongoObjectId } from '@common/server/validations';
 import { URL_PATTERN } from 'interweave-autolink';
 import {
+	DbPost,
+	DbAttachment,
+	DbPostTextGram,
+} from '@common/server/db-schema';
+import {
 	DbCollections,
+	MaxPostAttachmentAnnotationLength,
 	MaxPostBodyLength,
 	MaxPostCost,
 	MaxPostTitleLength,
@@ -23,11 +28,17 @@ import {
 	PointTransactionTypes,
 	UserRoles,
 } from '@common/constants';
+import { dbPostToDbAttachmentPostPartial } from '@common/server/transforms';
 
 const UrlRegex = new RegExp(URL_PATTERN, 'gi');
 
+interface AttachmentIds {
+	annotation: string;
+	postId: string;
+}
+
 interface Schema {
-	attachedPostIds?: string[];
+	attachments?: AttachmentIds[];
 	body: string;
 	title: string;
 	points: number;
@@ -36,8 +47,15 @@ interface Schema {
 }
 
 const schema: ZodType<Schema> = z.object({
-	attachedPostIds: z
-		.array(MongoObjectId)
+	attachments: z
+		.array(
+			z.object({
+				annotation: z
+					.string()
+					.max(MaxPostAttachmentAnnotationLength, { message: `Annotation may not be more than ${MaxPostAttachmentAnnotationLength} characters long` }),
+				postId: MongoObjectId,
+			})
+		)
 		.optional(),
 	body: z
 		.string()
@@ -120,19 +138,24 @@ async function createPost(content: Schema, ownerId: ObjectId, isAdmin = false) {
 	const {
 		parentId,
 		points: spentPoints,
-		attachedPostIds,
+		attachments,
 		...newPostContent
 	} = content;
 	const appliedPoints = Math.floor(OwnPostRatio * spentPoints);
 	const newPostId = new ObjectId();
 	// only attach valid posts
-	const attachedPosts = attachedPostIds ?
-		await fetchDbPosts(attachedPostIds) :
+	const fetchedAttachedPosts = attachments ?
+		await fetchDbPosts(attachments.map(a => a.postId)) :
 		[];
+
+	const attachedPosts: DbAttachment[] = fetchedAttachedPosts.map(post => ({
+		annotation: attachments?.find(a => post._id?.equals(a.postId))?.annotation || '',
+		post: dbPostToDbAttachmentPostPartial(post),
+	}));
 
 	const newPost: DbPost = {
 		...newPostContent,
-		attachedPostIds: attachedPosts.map(p => p._id as ObjectId),
+		attachedPosts,
 		created: nowIsoStr,
 		lastUpdated: nowIsoStr,
 		ownerId,

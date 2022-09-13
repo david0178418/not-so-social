@@ -145,7 +145,10 @@ function CreatePostModal() {
 				nsfl,
 				nsfw,
 				linkPreviews,
-				attachedPostIds: attachments.map(p => p._id || ''),
+				attachments: attachments.map(p => ({
+					annotation: '',
+					postId: p._id || '',
+				})),
 			}));
 			close();
 		} catch(e: any) {
