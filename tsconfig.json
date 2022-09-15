@@ -21,7 +21,7 @@
 			"@components/*": ["src/components/*"],
 			"@public/*": ["public/*"],
 			"@server/*": ["src/server/*"],
-			"@styles/*": ["styles/*", "src/styles/*"],
+			"@styles/*": ["styles/*"],
 			"@/*": ["./*"]
 		}
 	},
