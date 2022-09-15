@@ -5,9 +5,6 @@ export
 const AppName = 'NotSo.Social (beta)';
 
 export
-const MongoDbName = 'pinboard';
-
-export
 const BaseUrl = 'https://notso.social';
 
 export
