@@ -4,13 +4,9 @@ import { NotLoggedInErrMsg } from '@common/constants';
 import { getServerSession } from '@server/auth-options';
 import { fetchPost } from '@server/queries';
 import { MongoObjectId } from '@server/validations';
-import { z, ZodType } from 'zod';
+import { z } from 'zod';
 
-interface Schema {
-	id: string;
-}
-
-const schema: ZodType<Schema> = z.object({ id: MongoObjectId });
+const schema = z.object({ id: MongoObjectId });
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse) {

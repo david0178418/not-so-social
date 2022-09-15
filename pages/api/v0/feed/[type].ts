@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { ZodType } from 'zod';
 
 import { z } from 'zod';
 import { getServerSession } from '@server/auth-options';
@@ -11,13 +10,7 @@ import {
 	MaxSearchTermSize,
 } from '@common/constants';
 
-interface Schema {
-	afterTimeISO?: string;
-	searchTerm?: string;
-	type: FeedTypes;
-}
-
-const schema: ZodType<Schema> = z.object({
+const schema = z.object({
 	fromIndex: z
 		.number()
 		.optional(),

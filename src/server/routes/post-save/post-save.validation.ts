@@ -11,14 +11,14 @@ import {
 	MinPostTitleLength,
 } from '@common/constants';
 
-interface AttachmentIds {
+interface Attachments {
 	annotation: string;
 	postId: string;
 }
 
 export
 interface PostSaveSchema {
-	attachments?: AttachmentIds[];
+	attachments?: Attachments[];
 	body: string;
 	title: string;
 	points: number;
