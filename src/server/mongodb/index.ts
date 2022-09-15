@@ -16,7 +16,7 @@ import {
 	DbPostTextGram,
 	DbSettings,
 	DbNotification,
-} from '../db-schema';
+} from '@server/db-schema';
 
 const MongoDbName = process.env.DB_NAME || 'awesome-default-db';
 
