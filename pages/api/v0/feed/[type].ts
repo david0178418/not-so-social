@@ -13,7 +13,6 @@ import {
 
 interface Schema {
 	afterTimeISO?: string;
-	bar?: string;
 	searchTerm?: string;
 	type: FeedTypes;
 }
