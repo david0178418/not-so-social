@@ -147,3 +147,15 @@ type AsyncFnReturnType<T extends (...args: any[]) => Promise<any>> = Awaited<Ret
 
 export
 type Nullable<T> = T | null;
+
+type Invalid<T> = ['Needs to be all of', T];
+
+export
+// Source https://stackoverflow.com/a/73457231
+function arrayOfAll<T extends keyof any>() {
+	return (
+		<U extends T[]>(
+			...array: U & ([T] extends [U[number]] ? unknown : Invalid<T>[])
+		) => array
+	);
+}

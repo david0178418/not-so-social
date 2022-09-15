@@ -1,6 +1,5 @@
 import { DbAttachmentPostPartial } from '@server/db-schema';
-import { AttachmentPostPartial } from './types';
-import { keys } from './utils';
+import { arrayOfAll, AttachmentPostPartial } from './types';
 
 export
 const AppName = 'NotSo.Social (beta)';
@@ -125,35 +124,30 @@ const SpecialCharacterCodes = {
 	QUOTE: '\u0022',
 };
 
-// TODO Wrap this in a utility function
-const FullAttachmentPost: Required<AttachmentPostPartial> = {
-	_id: '',
-	body: '',
-	created: '',
-	lastUpdated: '',
-	linkPreviews: [],
-	nsfl: false,
-	nsfw: false,
-	title: '',
-};
+export
+const AttachmentPostKeys = arrayOfAll<keyof AttachmentPostPartial>()(
+	'_id',
+	'body',
+	'created',
+	'lastUpdated',
+	'linkPreviews',
+	'nsfl',
+	'nsfw',
+	'title',
+);
 
 export
-const AttachmentPostKeys = keys(FullAttachmentPost);
-
-// TODO Wrap this in a utility function
-const FullDbAttachmentPost: Required<DbAttachmentPostPartial> = {
-	_id: null as any, // ObjectID can't be used client side. Need a better way to get these props
-	body: '',
-	created: '',
-	lastUpdated: '',
-	linkPreviews: [],
-	nsfl: false,
-	nsfw: false,
-	title: '',
-};
-
-export
-const DbAttachmentPostKeys = keys(FullDbAttachmentPost);
+const DbAttachmentPostKeys = arrayOfAll<keyof DbAttachmentPostPartial>()(
+	'_id',
+	'body',
+	'created',
+	'lastUpdated',
+	'linkPreviews',
+	'linkPreviews',
+	'nsfl',
+	'nsfw',
+	'title'
+);
 
 export
 const NotLoggedInErrMsg = {
