@@ -19,7 +19,6 @@ interface Schema {
 }
 
 const schema: ZodType<Schema> = z.object({
-	foo: z.string().optional(),
 	fromIndex: z
 		.number()
 		.optional(),
