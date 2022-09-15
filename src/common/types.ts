@@ -1,11 +1,19 @@
 import type { ReactNode } from 'react';
-import { UserRoles } from './constants';
-import {
-	DbNotification,
-	DbPointTransaction,
+import type {
 	DbAttachment,
 	DbAttachmentPostPartial,
+	DbLinkPreviewData,
+	DbNotification,
+	DbPointTransaction,
+	DbPost,
+	DbVideoLinkPreviewData,
 } from '@server/db-schema';
+import { UserRoles } from './constants';
+
+export {
+	DbLinkPreviewData as LinkPreviewData,
+	DbVideoLinkPreviewData as VideoLinkPreviewData,
+};
 
 export
 interface AttachmentPostPartial extends Omit<DbAttachmentPostPartial, '_id'> {
@@ -17,24 +25,27 @@ interface Attachment extends Omit<DbAttachment, 'post'> {
 	post: AttachmentPostPartial;
 }
 
+type SharedPostProps = Pick<DbPost,
+'body' |
+'created' |
+'lastUpdated' |
+'linkPreviews' |
+'nsfl' |
+'nsfw' |
+'replyCount' |
+'title' |
+'totalPoints'
+>;
+
 export
-interface Post {
+interface Post extends SharedPostProps {
 	_id?: string;
 	attachedPosts: Attachment[];
 	attachedToPosts: Attachment[];
-	body: string;
 	bookmarkedDate?: string;
-	created: string;
 	isOwner: boolean;
-	lastUpdated: string;
 	parentId?: string;
 	points?: number;
-	nsfw?: boolean;
-	nsfl?: boolean;
-	replyCount: number;
-	title: string;
-	totalPoints: number;
-	linkPreviews?: LinkPreviewData[];
 }
 
 export
@@ -99,31 +110,9 @@ interface Feed {
 }
 
 export
-interface LinkPreviewData {
-	url: string;
-	title: string;
-	siteName?: string;
-	description?: string;
-	mediaType?: string;
-	contentType?: string;
-	images: string[];
-	videos: VideoLinkPreviewData[];
-	favicons: string[];
-}
-
-export
 type Notification = Pick<DbNotification, 'message' | 'date'> & {
 	_id: string;
 };
-
-export
-interface VideoLinkPreviewData {
-	url?: string;
-	secureUrl?: string | null;
-	type?: string | null;
-	width?: string;
-	height?: string;
-}
 
 interface User {
 	id: string;

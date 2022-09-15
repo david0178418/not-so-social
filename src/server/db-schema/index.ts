@@ -1,4 +1,3 @@
-import { Post } from '@common/types';
 import { ObjectId } from 'mongodb';
 import {
 	SettingTypes,
@@ -7,18 +6,6 @@ import {
 } from '@common/constants';
 
 export * from './transactions-schema';
-
-type SharedPostProps = Pick<Post,
-'body' |
-'title' |
-'created' |
-'lastUpdated' |
-'linkPreviews' |
-'nsfl' |
-'nsfw' |
-'replyCount' |
-'totalPoints'
->;
 
 export
 type DbAttachmentPostPartial = { _id: ObjectId } & Pick<DbPost,
@@ -38,12 +25,43 @@ interface DbAttachment {
 }
 
 export
-interface DbPost extends SharedPostProps {
+interface DbVideoLinkPreviewData {
+	url?: string;
+	secureUrl?: string | null;
+	type?: string | null;
+	width?: string;
+	height?: string;
+}
+
+export
+interface DbLinkPreviewData {
+	url: string;
+	title: string;
+	siteName?: string;
+	description?: string;
+	mediaType?: string;
+	contentType?: string;
+	images: string[];
+	videos: DbVideoLinkPreviewData[];
+	favicons: string[];
+}
+
+export
+interface DbPost{
 	_id?: ObjectId;
 	attachedPosts?: DbAttachment[];
 	attachedToPosts?: DbAttachment[];
+	body: string;
+	created: string;
+	lastUpdated: string;
+	linkPreviews?: DbLinkPreviewData[];
+	nsfl?: boolean;
+	nsfw?: boolean;
 	ownerId: ObjectId;
 	parentId?: ObjectId;
+	replyCount: number;
+	title: string;
+	totalPoints: number;
 }
 
 export
