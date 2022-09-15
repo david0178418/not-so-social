@@ -1,8 +1,9 @@
-import { getCollection } from '@server/mongodb';
 import { ObjectId } from 'mongodb';
+import { URL_PATTERN } from 'interweave-autolink';
+
+import { getCollection } from '@server/mongodb';
 import { fetchDbPosts } from '@server/queries';
 import { grammit } from '@server/server-utils';
-import { URL_PATTERN } from 'interweave-autolink';
 import { dbPostToDbAttachmentPostPartial } from '@server/transforms';
 import { PostSaveSchema } from './post-save.validation';
 import {
