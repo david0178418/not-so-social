@@ -5,7 +5,7 @@ import {
 	DbPointTransaction,
 	DbAttachment,
 	DbAttachmentPostPartial,
-} from './server/db-schema';
+} from '@server/db-schema';
 
 export
 interface AttachmentPostPartial extends Omit<DbAttachmentPostPartial, '_id'> {

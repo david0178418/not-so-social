@@ -1,5 +1,5 @@
-import { getCollection } from '@common/server/mongodb';
-import { DbPost } from '@common/server/db-schema';
+import { getCollection } from '@server/mongodb';
+import { DbPost } from '@server/db-schema';
 import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';
 import {

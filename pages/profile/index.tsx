@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ModalActions, Paths } from '@common/constants';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { getServerSession } from '@common/server/auth-options';
+import { getServerSession } from '@server/auth-options';
 import { Box, Button } from '@mui/material';
 import { PasswordChangeForm } from '@components/password-change-form';
 

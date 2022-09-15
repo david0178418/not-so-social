@@ -3,11 +3,11 @@ import type { GetServerSideProps, NextPage } from 'next';
 
 import Head from 'next/head';
 import { FeedPost } from '@components/feed-post';
-import { getServerSession } from '@common/server/auth-options';
+import { getServerSession } from '@server/auth-options';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { ScrollContent } from '@components/scroll-content';
-import { fetchBookmarkedPosts } from '@common/server/queries';
+import { fetchBookmarkedPosts } from '@server/queries';
 import { LoadMoreButton } from '@components/load-more-button';
 import { useFeed } from '@common/hooks';
 import {

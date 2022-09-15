@@ -1,4 +1,4 @@
-import type { DbPost } from '@common/server/db-schema';
+import type { DbPost } from '@server/db-schema';
 import type { Feed } from '@common/types';
 
 import { isTruthy, unique } from '@common/utils';
@@ -7,7 +7,7 @@ import {
 	postListsToIdList,
 	postToBookmarkedPostFn,
 	rollupPostsToMapFn,
-} from '@common/server/transforms';
+} from '@server/transforms';
 import {
 	fetchBookmarksFromPostIds,
 	fetchPosts,

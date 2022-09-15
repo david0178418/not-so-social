@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { DbNotification } from '@common/server/db-schema';
+import type { DbNotification } from '@server/db-schema';
 
 import { DbCollections, NotLoggedInErrMsg } from '@common/constants';
-import { getServerSession } from '@common/server/auth-options';
+import { getServerSession } from '@server/auth-options';
 import { ObjectId } from 'mongodb';
-import { getCollection } from '@common/server/mongodb';
+import { getCollection } from '@server/mongodb';
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse) {

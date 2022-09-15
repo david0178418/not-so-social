@@ -6,8 +6,8 @@ import Head from 'next/head';
 import { BackIcon } from '@components/icons';
 import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
-import { getServerSession } from '@common/server/auth-options';
-import { fetchPost, fetchPostTransactions } from '@common/server/queries';
+import { getServerSession } from '@server/auth-options';
+import { fetchPost, fetchPostTransactions } from '@server/queries';
 import { formatDate } from '@common/utils';
 import {
 	AppName,

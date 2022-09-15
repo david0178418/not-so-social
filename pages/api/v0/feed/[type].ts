@@ -3,8 +3,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import type { ZodType } from 'zod';
 
 import { z } from 'zod';
-import { getServerSession } from '@common/server/auth-options';
-import { FeedTypeQueryMap } from '@common/server/queries';
+import { getServerSession } from '@server/auth-options';
+import { FeedTypeQueryMap } from '@server/queries';
 import {
 	FeedTypes,
 	ISODateStringLength,

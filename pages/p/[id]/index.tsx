@@ -3,12 +3,12 @@ import type { ParsedUrlQuery } from 'querystring';
 import type { AsyncFnReturnType } from '@common/types';
 
 import Head from 'next/head';
-import { fetchFocusedPost } from '@common/server/queries';
+import { fetchFocusedPost } from '@server/queries';
 import { BackIcon } from '@components/icons';
 import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
-import { getServerSession } from '@common/server/auth-options';
+import { getServerSession } from '@server/auth-options';
 import { NextSeo } from 'next-seo';
 import {
 	AppName,

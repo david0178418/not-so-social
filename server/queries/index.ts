@@ -1,5 +1,5 @@
 import { Feed, Post } from '@common/types';
-import { getCollection } from '@common/server/mongodb';
+import { getCollection } from '@server/mongodb';
 import { isTruthy, nowISOString } from '@common/utils';
 import { fetchSettings } from './fetch-settings';
 import { differenceInDays } from 'date-fns';
@@ -17,13 +17,13 @@ import {
 	DbUserActivity,
 	DbPointTransaction,
 	DbNotification,
-} from '@common/server/db-schema';
+} from '@server/db-schema';
 import {
 	dbPostToPostFn,
 	postToBookmarkedPostFn,
 	postListsToIdList,
 	dbPointTransactionToPointTransaction,
-} from '@common/server/transforms';
+} from '@server/transforms';
 import {
 	fetchBookmarkedPosts,
 	fetchHotPosts,
@@ -31,7 +31,7 @@ import {
 	fetchNewPosts,
 	fetchSearchFeed,
 	fetchTopPosts,
-} from '@common/server/queries';
+} from '@server/queries';
 
 export { fetchRelatedPostsAndPrepareForClient } from './fetch-related-posts';
 export { fetchBookmarkedPosts } from './feed/bookmarks.feed';

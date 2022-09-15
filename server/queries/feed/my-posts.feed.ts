@@ -1,8 +1,8 @@
-import type { DbPost } from '@common/server/db-schema';
+import type { DbPost } from '@server/db-schema';
 
 import { ObjectId } from 'mongodb';
-import { getCollection } from '@common/server/mongodb';
-import { grammit } from '@common/server/server-utils';
+import { getCollection } from '@server/mongodb';
+import { grammit } from '@server/server-utils';
 import { DbCollections, PageSize } from '@common/constants';
 import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';

@@ -19,6 +19,7 @@
 			"@common/*": ["common/*"],
 			"@components/*": ["components/*"],
 			"@public/*": ["public/*"],
+			"@server/*": ["server/*"],
 			"@styles/*": ["styles/*"],
 			"@/*": ["./*"]
 		}

@@ -1,19 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { getCollection } from '@common/server/mongodb';
+import { getCollection } from '@server/mongodb';
 import { ObjectId } from 'mongodb';
-import { getServerSession } from '@common/server/auth-options';
-import { fetchDbPosts, fetchUserBalance } from '@common/server/queries';
-import { grammit } from '@common/server/server-utils';
+import { getServerSession } from '@server/auth-options';
+import { fetchDbPosts, fetchUserBalance } from '@server/queries';
+import { grammit } from '@server/server-utils';
 import { LinkPreviewData } from '@common/types';
 import { z, ZodType } from 'zod';
-import { linkPreviewSchema, MongoObjectId } from '@common/server/validations';
+import { linkPreviewSchema, MongoObjectId } from '@server/validations';
 import { URL_PATTERN } from 'interweave-autolink';
 import {
 	DbPost,
 	DbAttachment,
 	DbPostTextGram,
-} from '@common/server/db-schema';
+} from '@server/db-schema';
 import {
 	DbCollections,
 	MaxPostAttachmentAnnotationLength,
@@ -28,7 +28,7 @@ import {
 	PointTransactionTypes,
 	UserRoles,
 } from '@common/constants';
-import { dbPostToDbAttachmentPostPartial } from '@common/server/transforms';
+import { dbPostToDbAttachmentPostPartial } from '@server/transforms';
 
 const UrlRegex = new RegExp(URL_PATTERN, 'gi');
 

@@ -3,11 +3,11 @@ import type { AsyncFnReturnType } from '@common/types';
 
 import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
-import { getServerSession } from '@common/server/auth-options';
+import { getServerSession } from '@server/auth-options';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
-import { fetchSearchFeed } from '@common/server/queries';
+import { fetchSearchFeed } from '@server/queries';
 import { LoadMoreButton } from '@components/load-more-button';
 import { useFeed } from '@common/hooks';
 import {

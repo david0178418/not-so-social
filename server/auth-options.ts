@@ -15,7 +15,7 @@ import {
 	checkAwards,
 	fetchUser,
 	recordActivity,
-} from '@common/server/queries';
+} from '@server/queries';
 
 const {
 	JWT_SECRET,

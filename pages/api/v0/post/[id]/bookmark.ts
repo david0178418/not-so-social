@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { getCollection } from '@common/server/mongodb';
+import { getCollection } from '@server/mongodb';
 import { DbCollections, NotLoggedInErrMsg } from '@common/constants';
 import { ObjectId } from 'mongodb';
 import { nowISOString } from '@common/utils';
-import { getServerSession } from '@common/server/auth-options';
+import { getServerSession } from '@server/auth-options';
 
 export default
 async function handler(req: NextApiRequest, res: NextApiResponse) {

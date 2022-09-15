@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { NotLoggedInErrMsg } from '@common/constants';
-import { getServerSession } from '@common/server/auth-options';
-import { fetchPost } from '@common/server/queries';
-import { MongoObjectId } from '@common/server/validations';
+import { getServerSession } from '@server/auth-options';
+import { fetchPost } from '@server/queries';
+import { MongoObjectId } from '@server/validations';
 import { z, ZodType } from 'zod';
 
 interface Schema {

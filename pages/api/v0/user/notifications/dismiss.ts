@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { DbCollections, NotLoggedInErrMsg } from '@common/constants';
-import { getServerSession } from '@common/server/auth-options';
+import { getServerSession } from '@server/auth-options';
 import { ObjectId } from 'mongodb';
-import { MongoObjectId } from '@common/server/validations';
+import { MongoObjectId } from '@server/validations';
 import { z, ZodType } from 'zod';
-import { getCollection } from '@common/server/mongodb';
+import { getCollection } from '@server/mongodb';
 import { nowISOString } from '@common/utils';
 
 interface Schema {

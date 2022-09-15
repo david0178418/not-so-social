@@ -1,4 +1,4 @@
-import { DbAttachmentPostPartial } from './server/db-schema';
+import { DbAttachmentPostPartial } from '@server/db-schema';
 import { AttachmentPostPartial } from './types';
 import { keys } from './utils';
 

@@ -3,13 +3,13 @@ import type { Feed } from '@common/types';
 
 import { ScrollContent } from '@components/scroll-content';
 import { FeedPost } from '@components/feed-post';
-import { getServerSession } from '@common/server/auth-options';
+import { getServerSession } from '@server/auth-options';
 import { HomeSortTabs } from '@components/home-sort-tabs';
 import { SearchForm } from '@components/search-form';
 import { NextSeo } from 'next-seo';
 import { Box } from '@mui/material';
 import { LoadMoreButton } from '@components/load-more-button';
-import { FeedTypeQueryMap } from '@common/server/queries';
+import { FeedTypeQueryMap } from '@server/queries';
 import { ReactNode } from 'react';
 import { useFeed } from '@common/hooks';
 import { last } from '@common/utils';

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getServerSession } from '@common/server/auth-options';
-import { DbPointTransaction } from '@common/server/db-schema';
-import { getCollection } from '@common/server/mongodb';
+import { getServerSession } from '@server/auth-options';
+import { DbPointTransaction } from '@server/db-schema';
+import { getCollection } from '@server/mongodb';
 import Joi, { ValidationError } from 'joi';
 import { ObjectId } from 'mongodb';
 import {
@@ -11,7 +11,7 @@ import {
 	PointTransactionTypes,
 	UserRoles,
 } from '@common/constants';
-import { fetchUserBalance } from '@common/server/queries';
+import { fetchUserBalance } from '@server/queries';
 
 interface Schema {
 	id: string;

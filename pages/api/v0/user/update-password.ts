@@ -2,9 +2,9 @@ import type { ValidationError } from 'joi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import Joi from 'joi';
-import { getCollection } from '@common/server/mongodb';
-import { getServerSession } from '@common/server/auth-options';
-import { passwordToHash } from '@common/server/transforms';
+import { getCollection } from '@server/mongodb';
+import { getServerSession } from '@server/auth-options';
+import { passwordToHash } from '@server/transforms';
 import { ObjectId } from 'mongodb';
 import {
 	DbCollections,

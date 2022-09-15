@@ -1,7 +1,7 @@
-import { getCollection } from '@common/server/mongodb';
-import { DbPost } from '@common/server/db-schema';
+import { getCollection } from '@server/mongodb';
+import { DbPost } from '@server/db-schema';
 import { DbCollections, PageSize } from '@common/constants';
-import { grammit } from '@common/server/server-utils';
+import { grammit } from '@server/server-utils';
 import { fetchRelatedPostsAndPrepareForClient } from '..';
 import { Feed } from '@common/types';
 

@@ -2,11 +2,11 @@ import type { ValidationError } from 'joi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import Joi from 'joi';
-import { getCollection } from '@common/server/mongodb';
-import { getServerSession } from '@common/server/auth-options';
-import { fetchUser } from '@common/server/queries';
-import { passwordToHash } from '@common/server/transforms';
-import { fetchSettings } from '@common/server/queries/fetch-settings';
+import { getCollection } from '@server/mongodb';
+import { getServerSession } from '@server/auth-options';
+import { fetchUser } from '@server/queries';
+import { passwordToHash } from '@server/transforms';
+import { fetchSettings } from '@server/queries/fetch-settings';
 import {
 	AwardTypes,
 	DbCollections,
