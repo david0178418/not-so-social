@@ -16,12 +16,12 @@
 		"jsx": "preserve",
 		"incremental": true,
 		"paths": {
-			"@client/*": ["client/*"],
-			"@common/*": ["common/*"],
-			"@components/*": ["components/*"],
+			"@client/*": ["client/*", "src/client/*"],
+			"@common/*": ["common/*", "src/common/*"],
+			"@components/*": ["components/*", "src/components/*"],
 			"@public/*": ["public/*"],
-			"@server/*": ["server/*"],
-			"@styles/*": ["styles/*"],
+			"@server/*": ["server/*", "src/server/*"],
+			"@styles/*": ["styles/*", "src/styles/*"],
 			"@/*": ["./*"]
 		}
 	},
