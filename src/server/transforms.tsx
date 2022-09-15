@@ -33,12 +33,14 @@ function dbPostToPostFn(userId?: string) {
 			ownerId,
 			parentId,
 			attachedPosts = [],
+			attachedToPosts = [],
 			...cleanedPost
 		} = post;
 
 		const formattedPost: Post = {
 			...cleanedPost,
 			attachedPosts: attachedPosts.map(dbAttachmentToAttachment),
+			attachedToPosts: attachedToPosts.map(dbAttachmentToAttachment),
 			isOwner: userId === ownerId.toString(),
 			_id: post._id?.toString(),
 		};

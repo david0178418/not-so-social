@@ -21,6 +21,7 @@ export
 interface Post {
 	_id?: string;
 	attachedPosts: Attachment[];
+	attachedToPosts: Attachment[];
 	body: string;
 	bookmarkedDate?: string;
 	created: string;

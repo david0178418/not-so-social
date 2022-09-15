@@ -92,6 +92,19 @@ async function createPost(content: PostSaveSchema, ownerId: ObjectId, isAdmin = 
 				date: nowDate,
 				points: appliedPoints,
 			}),
+		...attachedPosts.map(a => (
+			postCol.updateOne(
+				{ _id: a.post._id },
+				{
+					$push: {
+						attachedToPosts: {
+							...a,
+							post: dbPostToDbAttachmentPostPartial(newPost),
+						},
+					},
+				}
+			)
+		)),
 	];
 
 	if(!isAdmin) {

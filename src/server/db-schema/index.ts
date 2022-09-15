@@ -41,7 +41,7 @@ export
 interface DbPost extends SharedPostProps {
 	_id?: ObjectId;
 	attachedPosts?: DbAttachment[];
-	attachedToPostIds?: ObjectId[];
+	attachedToPosts?: DbAttachment[];
 	ownerId: ObjectId;
 	parentId?: ObjectId;
 }
