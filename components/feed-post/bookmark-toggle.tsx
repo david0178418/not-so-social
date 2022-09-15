@@ -1,6 +1,6 @@
 import { Button, Tooltip } from '@mui/material';
 import { Post } from '@common/types';
-import { bookmarkPost, unbookmarkPost } from '@common/client/api-calls';
+import { bookmarkPost, unbookmarkPost } from '@client/api-calls';
 import { useState } from 'react';
 import { BookmarkActiveIcon, BookmarkIcon } from '@components/icons';
 import { pushToastMsgAtom } from '@common/atoms';

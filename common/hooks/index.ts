@@ -123,7 +123,7 @@ function useTimeout(callback: () => void, delay: number | null) {
 // TODO Put business logic hooks elsewhere
 
 import { Feed } from '@common/types';
-import { getBalance, getFeed } from '@common/client/api-calls';
+import { getBalance, getFeed } from '@client/api-calls';
 
 export
 function useFeed(initialFeed: Feed) {

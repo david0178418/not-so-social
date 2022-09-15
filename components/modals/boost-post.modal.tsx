@@ -10,7 +10,7 @@ import { Alert, TextField } from '@mui/material';
 import { useAtom, useSetAtom } from 'jotai';
 import { OwnPostRatio } from '@common/constants';
 import { BoostIcon } from '@components/icons';
-import { getBalance, postBoost } from '@common/client/api-calls';
+import { getBalance, postBoost } from '@client/api-calls';
 import { exec } from '@common/utils';
 import {
 	useIsAdmin,

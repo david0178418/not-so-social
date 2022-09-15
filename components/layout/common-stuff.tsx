@@ -4,7 +4,7 @@ import { CreatePostModal } from '@components/modals/create-post.modal';
 import { BoostPostModal } from '@components/modals/boost-post.modal';
 import { Loader } from '@components/loader';
 import { Toast } from '@components/toast';
-import { dismissNotification, getNotificaitons } from '@common/client/api-calls';
+import { dismissNotification, getNotificaitons } from '@client/api-calls';
 import { pushToastMsgAtom } from '@common/atoms';
 import { useSetAtom } from 'jotai';
 import { useIsLoggedIn, useTimeout } from '@common/hooks';

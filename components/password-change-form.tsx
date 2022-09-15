@@ -1,4 +1,4 @@
-import { updatePassword } from '@common/client/api-calls';
+import { updatePassword } from '@client/api-calls';
 import { PasswordMaxLength, PasswordMinLength } from '@common/constants';
 import { useState } from 'react';
 import { useSetAtom } from 'jotai';

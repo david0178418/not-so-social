@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { ModalActions } from '@common/constants';
-import { logout } from '@common/client/api-calls';
+import { logout } from '@client/api-calls';
 import { useAtom } from 'jotai';
 import { pushToastMsgAtom } from '@common/atoms';
 import { useIsLoggedOut } from '@common/hooks';

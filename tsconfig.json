@@ -16,6 +16,7 @@
 		"jsx": "preserve",
 		"incremental": true,
 		"paths": {
+			"@client/*": ["client/*"],
 			"@common/*": ["common/*"],
 			"@components/*": ["components/*"],
 			"@public/*": ["public/*"],

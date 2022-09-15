@@ -7,7 +7,7 @@ import type {
 } from '@common/types';
 
 import { signIn, signOut } from 'next-auth/react';
-import { get, post } from '@common/client/client-utils';
+import { get, post } from '@client/client-utils';
 import { urlJoin } from '@common/utils';
 import { API_URL, FeedTypes } from '@common/constants';
 

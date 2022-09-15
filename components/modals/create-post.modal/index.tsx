@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { useDebounce, useIsLoggedOut } from '@common/hooks';
-import { getLinkPreviewsFromContent, postSave } from '@common/client/api-calls';
+import { getLinkPreviewsFromContent, postSave } from '@client/api-calls';
 import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { LinkPreviews } from '@components/link-previews';
 import { InfoIconButton } from '@components/common/info-icon-button';

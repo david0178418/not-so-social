@@ -4,7 +4,7 @@ import type { Post } from '@common/types';
 import { useState } from 'react';
 import { MongoIdLength, Paths } from '@common/constants';
 import { last } from '@common/utils';
-import { getPost } from '@common/client/api-calls';
+import { getPost } from '@client/api-calls';
 import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { AttachmentIcon } from '@components/icons';
 import { FeedPost } from '@components/feed-post';

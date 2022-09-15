@@ -1,7 +1,7 @@
 import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
-import { getLinkPreviewsFromContent, postSave } from '@common/client/api-calls';
+import { getLinkPreviewsFromContent, postSave } from '@client/api-calls';
 import { useDebounce, useRefreshPage } from '@common/hooks';
 import { LinkPreviewData } from '@common/types';
 import { LinkPreviews } from '@components/link-previews';
