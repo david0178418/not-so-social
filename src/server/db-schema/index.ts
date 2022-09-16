@@ -47,7 +47,7 @@ interface DbLinkPreviewData {
 }
 
 export
-interface DbPost{
+interface DbPost {
 	_id?: ObjectId;
 	attachedPosts?: DbAttachment[];
 	attachedToPosts?: DbAttachment[];

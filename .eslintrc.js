@@ -45,7 +45,7 @@ module.exports = {
 		'react/no-unknown-property': [ERR, { ignore: ['jsx'] }],
 		'react/prop-types': OFF,
 		'react/react-in-jsx-scope': OFF,
-		'space-before-blocks': ERR,
+		'space-before-blocks': OFF, // favor @typescript-eslint/space-before-blocks
 		'space-in-parens': [ERR, 'never'],
 		'space-infix-ops': [ERR, { int32Hint: true }],
 		indent: OFF,
@@ -58,6 +58,7 @@ module.exports = {
 		'@typescript-eslint/no-explicit-any': OFF,
 		'@typescript-eslint/no-shadow': ERR,
 		'@typescript-eslint/no-use-before-define': OFF,
+		'@typescript-eslint/space-before-blocks': ERR,
 		'object-curly-newline': [ERR, {
 			ObjectExpression: {
 				multiline: true,
