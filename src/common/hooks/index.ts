@@ -155,10 +155,6 @@ function useFeed(initialFeed: Feed) {
 				...feed.posts,
 				...newFeedItems.posts,
 			],
-			parentPostMap: {
-				...feed.parentPostMap,
-				...newFeedItems.parentPostMap,
-			},
 			responsePostMap: {
 				...feed.responsePostMap,
 				...newFeedItems.responsePostMap,

@@ -1,18 +1,17 @@
 import type { DbPost } from '@server/db-schema';
-import type { Feed } from '@common/types';
+import type {
+	Feed, Post, PostIdMap,
+} from '@common/types';
 
-import { isTruthy, unique } from '@common/utils';
+import {
+	fetchBookmarksFromPostIds,
+	fetchTopChildPosts,
+} from '.';
 import {
 	dbPostToPostFn,
 	postListsToIdList,
 	postToBookmarkedPostFn,
-	rollupPostsToMapFn,
 } from '@server/transforms';
-import {
-	fetchBookmarksFromPostIds,
-	fetchPosts,
-	fetchTopChildPosts,
-} from '.';
 
 type RelatedPosts = Omit<Feed, 'cutoffISO'>
 
@@ -22,12 +21,10 @@ export
 async function fetchRelatedPostsAndPrepareForClient(results: DbPost[], userId?: string): Promise<RelatedPosts> {
 	const posts = results.map(dbPostToPostFn(userId));
 
-	const parentIds = unique(posts.map(p => p.parentId).filter(isTruthy));
 	const postIds = posts.map(p => p._id) as string[];
 
-	const parentPosts = await fetchPosts(parentIds, userId);
 	const responsePosts = await fetchTopChildPosts(postIds, userId);
-	const allIds = postListsToIdList(posts, parentPosts, responsePosts);
+	const allIds = postListsToIdList(posts, responsePosts);
 
 	const postToBookmarkedPost = postToBookmarkedPostFn(
 		userId ?
@@ -37,11 +34,15 @@ async function fetchRelatedPostsAndPrepareForClient(results: DbPost[], userId?: 
 
 	return {
 		posts: posts.map(postToBookmarkedPost),
-		parentPostMap: parentPosts
-			.map(postToBookmarkedPost)
-			.reduce(rollupPostsToMapFn(), {}),
 		responsePostMap: responsePosts
 			.map(postToBookmarkedPost)
-			.reduce(rollupPostsToMapFn('parentId'), {}),
+			.reduce(rollupResponsePostsToMap, {}),
 	};
+}
+
+function rollupResponsePostsToMap(rollup: PostIdMap, p: Post): PostIdMap {
+	if(p.parent?._id) {
+		rollup[p.parent._id] = p;
+	}
+	return rollup;
 }

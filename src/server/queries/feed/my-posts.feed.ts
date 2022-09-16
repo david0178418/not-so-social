@@ -28,7 +28,6 @@ async function fetchMyPosts(params: Params): Promise<Feed> {
 	if(!userId) {
 		return {
 			posts: [],
-			parentPostMap: {},
 			responsePostMap: {},
 		};
 	}

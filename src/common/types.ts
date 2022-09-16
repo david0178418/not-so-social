@@ -4,6 +4,7 @@ import type {
 	DbAttachmentPostPartial,
 	DbLinkPreviewData,
 	DbNotification,
+	DbParentPostPartial,
 	DbPointTransaction,
 	DbPost,
 	DbVideoLinkPreviewData,
@@ -25,6 +26,11 @@ interface Attachment extends Omit<DbAttachment, 'post'> {
 	post: AttachmentPostPartial;
 }
 
+export
+interface ParentPostPartial extends Omit<DbParentPostPartial, '_id' | 'ownerId'> {
+	_id: string;
+}
+
 type SharedPostProps = Pick<DbPost,
 'body' |
 'created' |
@@ -44,7 +50,7 @@ interface Post extends SharedPostProps {
 	attachedToPosts: Attachment[];
 	bookmarkedDate?: string;
 	isOwner: boolean;
-	parentId?: string;
+	parent?: ParentPostPartial;
 	points?: number;
 }
 
@@ -104,7 +110,6 @@ export
 // TODO break this up?
 interface Feed {
 	posts: Post[];
-	parentPostMap: PostIdMap;
 	responsePostMap: PostIdMap;
 	cutoffISO?: string;
 }

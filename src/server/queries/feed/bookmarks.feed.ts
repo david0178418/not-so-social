@@ -28,7 +28,6 @@ async function fetchBookmarkedPosts(params: Params): Promise<Feed> {
 	if(!userId) {
 		return {
 			posts: [],
-			parentPostMap: {},
 			responsePostMap: {},
 		};
 	}

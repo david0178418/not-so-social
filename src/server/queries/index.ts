@@ -73,6 +73,12 @@ async function fetchPosts(postIds: string[], userId = ''): Promise<Post[]> {
 }
 
 export
+async function fetchDbPost(postId: string): Promise<DbPost | null> {
+	const col = await getCollection(DbCollections.Posts);
+	return col.findOne<DbPost>({ _id: new ObjectId(postId) });
+}
+
+export
 async function fetchDbPosts(postIds: string[]): Promise<DbPost[]> {
 	const col = await getCollection(DbCollections.Posts);
 	return col
@@ -102,7 +108,7 @@ async function fetchTopChildPosts(postIds: string[], userId?: string): Promise<P
 async function fetchChildPosts(postId: string, userId: string): Promise<Post[]> {
 	const col = await getCollection(DbCollections.Posts);
 	const results = await col
-		.find<DbPost>({ parentId: new ObjectId(postId) })
+		.find<DbPost>({ 'parent._id': new ObjectId(postId) })
 		.sort({ totalPoints: -1 })
 		.limit(100)	// TODO paging
 		.toArray();
@@ -111,7 +117,6 @@ async function fetchChildPosts(postId: string, userId: string): Promise<Post[]> 
 }
 
 interface getFocusedPostProps {
-	parentPost: Post | null;
 	post: Post | null;
 	responses: Post[];
 	lv2Responses: Post[];
@@ -124,19 +129,15 @@ async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedP
 
 		if(!post) {
 			return {
-				parentPost: null,
 				post: null,
 				responses: [],
 				lv2Responses: [],
 			};
 		}
 
-		const parentPost = post.parentId ?
-			await fetchPost(post.parentId, userId) :
-			null;
 		const responses = await fetchChildPosts(id, userId);
 
-		const allIds = postListsToIdList([post, parentPost], responses);
+		const allIds = postListsToIdList([post], responses);
 
 		const postToBookmarkedPost = postToBookmarkedPostFn(
 			userId ?
@@ -148,14 +149,12 @@ async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedP
 		const lv2Responses = await fetchTopChildPosts(responseIds, userId);
 
 		return {
-			parentPost: parentPost && postToBookmarkedPost(parentPost),
 			post: postToBookmarkedPost(post),
 			responses: responses.map(postToBookmarkedPost),
 			lv2Responses,
 		};
 	} catch {
 		return {
-			parentPost: null,
 			post: null,
 			responses: [],
 			lv2Responses: [],

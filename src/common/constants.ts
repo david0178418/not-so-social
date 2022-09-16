@@ -1,5 +1,7 @@
-import { DbAttachmentPostPartial } from '@server/db-schema';
-import { arrayOfAll, AttachmentPostPartial } from './types';
+import { DbAttachmentPostPartial, DbParentPostPartial } from '@server/db-schema';
+import {
+	arrayOfAll, AttachmentPostPartial, ParentPostPartial,
+} from './types';
 
 export
 const AppName = 'NotSo.Social (beta)';
@@ -141,6 +143,27 @@ const DbAttachmentPostKeys = arrayOfAll<keyof DbAttachmentPostPartial>()(
 	'lastUpdated',
 	'linkPreviews',
 	'linkPreviews',
+	'nsfl',
+	'nsfw',
+	'title'
+);
+
+export
+const DbParentPostPartialKeys = arrayOfAll<keyof DbParentPostPartial>()(
+	'_id',
+	'created',
+	'lastUpdated',
+	'nsfl',
+	'nsfw',
+	'ownerId',
+	'title'
+);
+
+export
+const ParentPostPartialKeys = arrayOfAll<keyof ParentPostPartial>()(
+	'_id',
+	'created',
+	'lastUpdated',
 	'nsfl',
 	'nsfw',
 	'title'

@@ -4,19 +4,6 @@ import {
 	PointTransactionTypes,
 } from '@common/constants';
 
-// export
-// interface DbPointTransaction<T extends AwardTransactionMetadataTypes> {
-// 	_id?: ObjectId;
-// 	type: PointTransactionTypes;
-// 	spentPoints?: number;
-// 	appliedPoints: number;
-// 	postId?: ObjectId;
-// 	userId?: ObjectId;
-// 	date: string;
-// 	fromUserId?: ObjectId;
-// 	data?: T;
-// }
-
 export
 type DbPointTransaction = DbTxn & {
 	_id?: ObjectId;

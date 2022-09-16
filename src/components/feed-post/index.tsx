@@ -77,8 +77,8 @@ function FeedPost(props: Props) {
 	const {
 		post,
 		topResponse,
-		parentPost,
 	} = props;
+	const parentPost = post.parent;
 	const [responseOpen, setResponseOpen] = useState(false);
 	const isLoggedIn = useIsLoggedIn();
 

@@ -37,7 +37,6 @@ const HomePage: NextPage<Props> = (props) => {
 	const [feed, isDone, loadMore] = useFeed(initialFeed);
 	const {
 		cutoffISO,
-		parentPostMap,
 		posts,
 		responsePostMap,
 	} = feed;
@@ -94,7 +93,6 @@ const HomePage: NextPage<Props> = (props) => {
 					<FeedPost
 						key={`${p._id}+${i}`}
 						post={p}
-						parentPost={parentPostMap[p.parentId || '']}
 						topResponse={responsePostMap[p._id || '']}
 					/>
 				))}

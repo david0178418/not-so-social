@@ -24,7 +24,6 @@ async function fetchSearchFeed(params: Params): Promise<Feed> {
 	if(!searchTerm) {
 		return {
 			posts: [],
-			parentPostMap: {},
 			responsePostMap: {},
 		};
 	}

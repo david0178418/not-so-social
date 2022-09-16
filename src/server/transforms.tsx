@@ -4,20 +4,22 @@ import type {
 	DbPost,
 	DbAttachment,
 	DbAttachmentPostPartial,
+	DbParentPostPartial,
 } from './db-schema';
 import type {
 	Attachment,
+	AttachmentPostPartial,
 	Nullable,
+	ParentPostPartial,
 	PointTransaction,
 	Post,
-	AttachmentPostPartial,
-	PostIdMap,
 } from '@common/types';
 
 import { hash } from 'bcryptjs';
 import { ObjectId } from 'mongodb';
 import {
 	DbAttachmentPostKeys,
+	ParentPostPartialKeys,
 	PasswordSaltLength,
 } from '@common/constants';
 import {
@@ -31,7 +33,7 @@ function dbPostToPostFn(userId?: string) {
 	return (post: DbPost): Post => {
 		const {
 			ownerId,
-			parentId,
+			parent,
 			attachedPosts = [],
 			attachedToPosts = [],
 			...cleanedPost
@@ -45,8 +47,8 @@ function dbPostToPostFn(userId?: string) {
 			_id: post._id?.toString(),
 		};
 
-		if(parentId) {
-			formattedPost.parentId = parentId.toString();
+		if(parent) {
+			formattedPost.parent = dbParentPostPartialToParentPostPartial(parent);
 		}
 
 		return formattedPost;
@@ -58,6 +60,14 @@ function dbAttachmentToAttachment(attachment: DbAttachment): Attachment {
 	return {
 		...attachment,
 		post: dbAttachmentPostPartialToAttachmentPostPartial(attachment.post),
+	};
+}
+
+export
+function dbParentPostPartialToParentPostPartial(post: DbParentPostPartial): ParentPostPartial {
+	return {
+		...pick(post, ...ParentPostPartialKeys),
+		_id: post._id?.toString() || '',
 	};
 }
 
@@ -116,16 +126,6 @@ function postListsToIdList(...postLists: Nullable<Post>[][]): string[] {
 			.filter(isTruthy)
 			.map(p => p._id as string),
 	);
-}
-
-export
-function rollupPostsToMapFn(prop: keyof Pick<Post, '_id' | 'parentId'> = '_id') {
-	return (rollup: PostIdMap, p: Post): PostIdMap => {
-		if(p[prop]) {
-			rollup[p[prop] || ''] = p;
-		}
-		return rollup;
-	};
 }
 
 export

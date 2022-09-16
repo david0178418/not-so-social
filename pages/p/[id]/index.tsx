@@ -30,7 +30,6 @@ const PostPage: NextPage<Props> = (props) => {
 	const routeBack = useRouteBackDefault();
 	const {
 		data: {
-			parentPost,
 			post,
 			responses,
 			lv2Responses,
@@ -79,7 +78,6 @@ const PostPage: NextPage<Props> = (props) => {
 				{post && (
 					<FeedPost
 						post={post}
-						parentPost={parentPost}
 					/>
 				)}
 				<Box marginLeft={4}>
@@ -87,7 +85,7 @@ const PostPage: NextPage<Props> = (props) => {
 						<FeedPost
 							key={p?._id}
 							post={p}
-							topResponse={lv2Responses.find(r => p._id === r.parentId)}
+							topResponse={lv2Responses.find(r => p._id === r.parent)}
 						/>
 					))}
 				</Box>

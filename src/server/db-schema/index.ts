@@ -47,6 +47,17 @@ interface DbLinkPreviewData {
 }
 
 export
+type DbParentPostPartial = Pick<DbPost,
+'_id' |
+'created' |
+'lastUpdated' |
+'nsfl' |
+'nsfw' |
+'ownerId' |
+'title'
+>;
+
+export
 interface DbPost {
 	_id?: ObjectId;
 	attachedPosts?: DbAttachment[];
@@ -58,7 +69,7 @@ interface DbPost {
 	nsfl?: boolean;
 	nsfw?: boolean;
 	ownerId: ObjectId;
-	parentId?: ObjectId;
+	parent?: DbParentPostPartial;
 	replyCount: number;
 	title: string;
 	totalPoints: number;
