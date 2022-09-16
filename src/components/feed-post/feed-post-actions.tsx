@@ -47,7 +47,7 @@ function PostActions(props: Props) {
 	const isLoggedIn = useIsLoggedIn();
 
 	return (
-		<>
+		<Grid container columns={4} alignItems="flex-end">
 			<Grid
 				xs
 				item
@@ -140,6 +140,6 @@ function PostActions(props: Props) {
 					)}
 				</DropdownMenu>
 			</Grid>
-		</>
+		</Grid>
 	);
 }

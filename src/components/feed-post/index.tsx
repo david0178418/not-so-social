@@ -184,12 +184,10 @@ function FeedPost(props: Props) {
 					{!!post.linkPreviews?.length && (
 						<LinkPreviews linkPreviews={post.linkPreviews} />
 					)}
-					<Grid container columns={4} alignItems="flex-end">
-						<PostActions
-							post={post}
-							onCommentClick={() => isLoggedIn && setResponseOpen(!responseOpen)}
-						/>
-					</Grid>
+					<PostActions
+						post={post}
+						onCommentClick={() => isLoggedIn && setResponseOpen(!responseOpen)}
+					/>
 					{responseOpen && (
 						<FeedPostResponseForm
 							parentId={post._id as string}
