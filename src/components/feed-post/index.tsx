@@ -182,7 +182,9 @@ function FeedPost(props: Props) {
 						</ParsedContentServer>
 					</Typography>
 					{!!post.linkPreviews?.length && (
-						<LinkPreviews linkPreviews={post.linkPreviews} />
+						<Box marginBottom={2}>
+							<LinkPreviews linkPreviews={post.linkPreviews} />
+						</Box>
 					)}
 					<PostActions
 						post={post}

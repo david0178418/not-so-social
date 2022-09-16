@@ -35,7 +35,7 @@ function LinkPreviews(props: Props) {
 	}
 
 	return (
-		<div>
+		<>
 			{(linkPreviews.length > 1) && (
 				<ButtonGroup
 					disableElevation
@@ -56,6 +56,6 @@ function LinkPreviews(props: Props) {
 				key={activePreview.url}
 				linkPreview={activePreview}
 			/>
-		</div>
+		</>
 	);
 }
