@@ -19,6 +19,7 @@ import { hash } from 'bcryptjs';
 import { ObjectId } from 'mongodb';
 import {
 	DbAttachmentPostKeys,
+	DbParentPostPartialKeys,
 	ParentPostPartialKeys,
 	PasswordSaltLength,
 } from '@common/constants';
@@ -69,6 +70,11 @@ function dbParentPostPartialToParentPostPartial(post: DbParentPostPartial): Pare
 		...pick(post, ...ParentPostPartialKeys),
 		_id: post._id?.toString() || '',
 	};
+}
+
+export
+function dbPostToDbParentPostPartial(post: DbPost) {
+	return pick(post, ...DbParentPostPartialKeys);
 }
 
 export

@@ -3,9 +3,8 @@ import { URL_PATTERN } from 'interweave-autolink';
 
 import { getCollection } from '@server/mongodb';
 import { grammit } from '@server/server-utils';
-import { dbPostToDbAttachmentPostPartial } from '@server/transforms';
 import { PostSaveSchema } from './post-save.validation';
-import { pick } from '@common/utils';
+import { dbPostToDbAttachmentPostPartial, dbPostToDbParentPostPartial } from '@server/transforms';
 import { fetchDbPost, fetchDbPosts } from '@server/queries';
 import {
 	DbPost,
@@ -14,7 +13,6 @@ import {
 } from '@server/db-schema';
 import {
 	DbCollections,
-	DbParentPostPartialKeys,
 	OwnPostRatio,
 	PointTransactionTypes,
 } from '@common/constants';
@@ -71,7 +69,7 @@ async function createPost(content: PostSaveSchema, ownerId: ObjectId, isAdmin = 
 	if(parentId) {
 		const parent = await fetchDbPost(parentId);
 		if(parent) {
-			newPost.parent = pick(parent, ...DbParentPostPartialKeys);
+			newPost.parent = dbPostToDbParentPostPartial(parent);
 		}
 	}
 
