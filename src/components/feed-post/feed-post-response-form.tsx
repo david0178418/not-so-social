@@ -3,7 +3,7 @@ import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { getLinkPreviewsFromContent, postSave } from '@client/api-calls';
 import { useDebounce, useRefreshPage } from '@common/hooks';
-import { LinkPreviewData } from '@common/types';
+import { LinkPreview, LinkPreviewSaveType } from '@common/types';
 import { LinkPreviews } from '@components/link-previews';
 import { MinPostBodyLength } from '@common/constants';
 import { exec } from '@common/utils';
@@ -43,7 +43,7 @@ function FeedPostResponseForm(props: Props) {
 	const [nsfl, setNsfl] = useState(false);
 	const debouncedBody = useDebounce(body, 750);
 	const [points, setPoints] = useState(0);
-	const [linkPreviews, setLinkPreviews] = useState<LinkPreviewData[]>([]);
+	const [linkPreviews, setLinkPreviews] = useState<LinkPreview[]>([]);
 	const abortControllerRef = useRef<AbortController | null>(null);
 
 	// TODO Clean this mess up. Probably factor out into a hook or something
@@ -80,7 +80,7 @@ function FeedPostResponseForm(props: Props) {
 				parentId,
 				nsfl,
 				nsfw,
-				linkPreviews,
+				linkPreviews: formatPreviews(linkPreviews),
 			}));
 			onClose();
 		} catch(e: any) {
@@ -186,4 +186,22 @@ function FeedPostResponseForm(props: Props) {
 			</Box>
 		</>
 	);
+}
+
+function formatPreviews(linkPreviews: LinkPreview[]): LinkPreviewSaveType[] {
+	return linkPreviews.map(link => {
+		if(link.type === 'link') {
+			return link;
+		}
+
+		const {
+			post,
+			...savedProps
+		} = link;
+
+		return {
+			...savedProps,
+			postId: post._id.toString(),
+		};
+	});
 }

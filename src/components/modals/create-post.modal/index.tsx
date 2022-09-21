@@ -1,4 +1,4 @@
-import type { LinkPreviewData, Post } from '@common/types';
+import type { LinkPreview } from '@common/types';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -9,7 +9,6 @@ import { getLinkPreviewsFromContent, postSave } from '@client/api-calls';
 import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { LinkPreviews } from '@components/link-previews';
 import { InfoIconButton } from '@components/common/info-icon-button';
-import { CreatePostAttachmentDialog } from './create-post-attachment-dialog';
 import {
 	CloseIcon,
 	InfoIcon,
@@ -17,7 +16,6 @@ import {
 import {
 	exec,
 	formatCompactNumber,
-	urlJoin,
 } from '@common/utils';
 import {
 	useEffect,
@@ -29,7 +27,6 @@ import {
 	MinPostCost,
 	ModalActions,
 	OwnPostRatio,
-	Paths,
 } from '@common/constants';
 import {
 	AppBar,
@@ -44,7 +41,6 @@ import {
 	FormControlLabel,
 	Grid,
 	IconButton,
-	Link as MuiLink,
 	TextField,
 	Toolbar,
 	Typography,
@@ -67,9 +63,8 @@ function CreatePostModal() {
 	const debouncedBody = useDebounce(body, 750);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-	const [linkPreviews, setLinkPreviews] = useState<LinkPreviewData[]>([]);
+	const [linkPreviews, setLinkPreviews] = useState<LinkPreview[]>([]);
 	const abortControllerRef = useRef<AbortController | null>(null);
-	const [attachments, setAttachments] = useState<Post[]>([]);
 	const {
 		a: action,
 		...newQuery
@@ -137,17 +132,15 @@ function CreatePostModal() {
 	async function handleSave() {
 		try {
 			setLoading(true);
-			console.log(attachments);
 			console.log(await postSave({
 				title,
 				body,
 				points,
 				nsfl,
 				nsfw,
-				linkPreviews,
-				attachments: attachments.map(p => ({
-					annotation: '',
-					postId: p._id || '',
+				linkPreviews: linkPreviews.map(a => ({
+					...a,
+					postId: (a as any).post?._id,
 				})),
 			}));
 			close();
@@ -166,19 +159,7 @@ function CreatePostModal() {
 		setTitle('');
 		setPoints(MinPostCost);
 		setLinkPreviews([]);
-		setAttachments([]);
 		router.back();
-	}
-
-	function addAttachment(post: Post) {
-		setAttachments([
-			post,
-			...attachments.filter(p => p._id !== post._id),
-		]);
-	}
-
-	function removeAttachment(postId: string) {
-		setAttachments(attachments.filter(a => a._id !== postId));
 	}
 
 	return (
@@ -252,9 +233,6 @@ function CreatePostModal() {
 					/>
 				</Box>
 				<Grid container paddingY={2}>
-					<Grid item xs={8}>
-						<CreatePostAttachmentDialog onAttach={addAttachment}/>
-					</Grid>
 					<Grid item xs={2} textAlign="right">
 						<FormControlLabel
 							control={
@@ -292,31 +270,6 @@ function CreatePostModal() {
 			{!!linkPreviews.length && (
 				<DialogContent>
 					<LinkPreviews linkPreviews={linkPreviews} />
-				</DialogContent>
-			)}
-			{!!attachments.length && (
-				<DialogContent>
-					{attachments.map(a => (
-						<Box key={a._id}>
-							<IconButton onClick={() => a._id && removeAttachment(a._id)}>
-								<CloseIcon/>
-							</IconButton>
-
-							<Link target="__blank" href={urlJoin(Paths.Post, a._id)} passHref>
-								<Typography
-									noWrap
-									component={MuiLink}
-									title={a.title}
-									sx={{
-										fontWeight: 'bold',
-										display: 'inline',
-									}}
-								>
-									{a.title}
-								</Typography>
-							</Link>
-						</Box>
-					))}
 				</DialogContent>
 			)}
 			<DialogActions sx={{

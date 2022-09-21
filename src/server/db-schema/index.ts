@@ -13,16 +13,9 @@ type DbAttachmentPostPartial = { _id: ObjectId } & Pick<DbPost,
 'title' |
 'created' |
 'lastUpdated' |
-'linkPreviews' |
 'nsfw' |
 'nsfl'
 >;
-
-export
-interface DbAttachment {
-	annotation: string;
-	post: DbAttachmentPostPartial;
-}
 
 export
 interface DbVideoLinkPreviewData {
@@ -34,7 +27,7 @@ interface DbVideoLinkPreviewData {
 }
 
 export
-interface DbLinkPreviewData {
+interface DbExternalLinkPreviewData {
 	url: string;
 	title: string;
 	siteName?: string;
@@ -44,6 +37,26 @@ interface DbLinkPreviewData {
 	images: string[];
 	videos: DbVideoLinkPreviewData[];
 	favicons: string[];
+}
+
+// TODO Clean up this type mess
+export
+interface DbPostLinkPreviewType {
+	type: 'post',
+	post: DbAttachmentPostPartial;
+}
+
+export
+interface DbExternalLinkPreviewType {
+	type: 'link';
+	link: DbExternalLinkPreviewData;
+}
+
+type DbLinkPreviewType = DbPostLinkPreviewType | DbExternalLinkPreviewType;
+
+export
+type DbLinkPreview = DbLinkPreviewType & {
+	annotation?: string,
 }
 
 export
@@ -60,12 +73,11 @@ type DbParentPostPartial = Pick<DbPost,
 export
 interface DbPost {
 	_id?: ObjectId;
-	attachedPosts?: DbAttachment[];
-	attachedToPosts?: DbAttachment[];
+	attachedToPosts?: DbParentPostPartial[];
 	body: string;
 	created: string;
 	lastUpdated: string;
-	linkPreviews?: DbLinkPreviewData[];
+	linkPreviews?: DbLinkPreview[];
 	nsfl?: boolean;
 	nsfw?: boolean;
 	ownerId: ObjectId;

@@ -1,15 +1,16 @@
-import { LinkPreviewData } from '@common/types';
+import type { LinkPreview as LinkPreviewType } from '@common/types';
 import { ArrowLeftIcon, ArrowRightIcon } from '@components/icons';
 import { useState } from 'react';
-import { LinkPreview } from './link-preview';
+import { LinkPreviewExternal } from './link-preview-external';
 import {
 	ButtonGroup,
 	IconButton,
 	Typography,
 } from '@mui/material';
+import { LinkPreviewInternalPost } from '@components/link-previews/link-preview-internal-post';
 
 interface Props {
-	linkPreviews: LinkPreviewData[];
+	linkPreviews: LinkPreviewType[];
 }
 
 export
@@ -52,10 +53,18 @@ function LinkPreviews(props: Props) {
 					</IconButton>
 				</ButtonGroup>
 			)}
-			<LinkPreview
-				key={activePreview.url}
-				linkPreview={activePreview}
-			/>
+			{activePreview.type === 'link' && (
+				<LinkPreviewExternal
+					key={activePreview.link.url}
+					linkPreview={activePreview.link}
+				/>
+			)}
+			{activePreview.type === 'post' && (
+				<LinkPreviewInternalPost
+					key={activePreview.post._id}
+					post={activePreview.post}
+				/>
+			)}
 		</>
 	);
 }

@@ -1,3 +1,4 @@
+
 import type { GetServerSideProps, NextPage } from 'next';
 import type { ParsedUrlQuery } from 'querystring';
 import type { AsyncFnReturnType } from '@common/types';
@@ -78,8 +79,8 @@ const PostPointsPage: NextPage<Props> = (props) => {
 							<BackIcon />
 						</IconButton>{SpecialCharacterCodes.NBSP}
 						<Typography
-							variant="h5"
 							gutterBottom
+							variant="h5"
 							sx={{
 								overflow: 'hidden',
 								whiteSpace: 'nowrap',

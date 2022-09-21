@@ -2,13 +2,11 @@ import type {
 	DbBookmark,
 	DbPointTransaction,
 	DbPost,
-	DbAttachment,
 	DbAttachmentPostPartial,
 	DbParentPostPartial,
+	DbLinkPreview,
 } from './db-schema';
 import type {
-	Attachment,
-	AttachmentPostPartial,
 	Nullable,
 	ParentPostPartial,
 	PointTransaction,
@@ -16,8 +14,9 @@ import type {
 } from '@common/types';
 
 import { hash } from 'bcryptjs';
-import { ObjectId } from 'mongodb';
+import { ArrayElement, ObjectId } from 'mongodb';
 import {
+	AttachmentPostKeys,
 	DbAttachmentPostKeys,
 	DbParentPostPartialKeys,
 	ParentPostPartialKeys,
@@ -35,17 +34,17 @@ function dbPostToPostFn(userId?: string) {
 		const {
 			ownerId,
 			parent,
-			attachedPosts = [],
+			linkPreviews,
 			attachedToPosts = [],
 			...cleanedPost
 		} = post;
 
 		const formattedPost: Post = {
 			...cleanedPost,
-			attachedPosts: attachedPosts.map(dbAttachmentToAttachment),
-			attachedToPosts: attachedToPosts.map(dbAttachmentToAttachment),
+			attachedToPosts: attachedToPosts.map(dbParentPostPartialToParentPostPartial),
 			isOwner: userId === ownerId.toString(),
 			_id: post._id?.toString(),
+			linkPreviews: linkPreviews?.map(dbLinkPreviewToLinkPreview),
 		};
 
 		if(parent) {
@@ -56,11 +55,17 @@ function dbPostToPostFn(userId?: string) {
 	};
 }
 
-export
-function dbAttachmentToAttachment(attachment: DbAttachment): Attachment {
+function dbLinkPreviewToLinkPreview(linkPreview: DbLinkPreview): ArrayElement<Post['linkPreviews']> {
+	if(linkPreview.type === 'link') {
+		return linkPreview;
+	}
+
 	return {
-		...attachment,
-		post: dbAttachmentPostPartialToAttachmentPostPartial(attachment.post),
+		...linkPreview,
+		post: {
+			...linkPreview.post,
+			_id: linkPreview.post._id.toString(),
+		},
 	};
 }
 
@@ -88,10 +93,10 @@ function dbPostToDbAttachmentPostPartial(post: DbPost): DbAttachmentPostPartial 
 }
 
 export
-function dbAttachmentPostPartialToAttachmentPostPartial(attachmentPost: DbAttachmentPostPartial): AttachmentPostPartial {
+function postToDbAttachmentPostPartial(post: Post) {
 	return {
-		...attachmentPost,
-		_id: attachmentPost._id.toString(),
+		...pick(post, ...AttachmentPostKeys),
+		_id: new ObjectId(post._id),
 	};
 }
 

@@ -1,9 +1,10 @@
 import type {
 	ApiResponse,
 	Feed,
-	LinkPreviewData,
+	LinkPreview,
 	Notification,
 	Post,
+	PostSaveSchema,
 } from '@common/types';
 
 import { signIn, signOut } from 'next-auth/react';
@@ -44,13 +45,13 @@ async function logout() {
 	await signOut();
 }
 
-interface Foo {
-	previews: LinkPreviewData[];
+interface LinkPreviewsFromContentReturn {
+	previews: LinkPreview[];
 }
 
 export
 async function getLinkPreviewsFromContent(content: string, signal?: AbortSignal) {
-	return apiGet<ApiResponse<Foo>>('/link-previews-from-content', { content }, signal);
+	return apiGet<ApiResponse<LinkPreviewsFromContentReturn>>('/link-previews-from-content', { content }, signal);
 }
 
 interface FetchFeedParams {
@@ -64,19 +65,8 @@ async function getFeed(type: FeedTypes, params?: FetchFeedParams) {
 	return apiGet<ApiResponse<{feed: Feed}>>(`/feed/${type}`, params);
 }
 
-interface PostSaveArgs {
-	title: string;
-	body: string;
-	points: number;
-	nsfw?: boolean;
-	nsfl?: boolean;
-	parentId?: string;
-	linkPreviews?: LinkPreviewData[];
-	attachments?: { annotation: string; postId: string; }[];
-}
-
 export
-async function postSave(args: PostSaveArgs) {
+async function postSave(args: PostSaveSchema) {
 	const { data } = await apiPost<ApiResponse>('/post/save', args);
 
 	return data;

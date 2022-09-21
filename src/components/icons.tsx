@@ -25,6 +25,7 @@ export { default as ProfileActiveIcon } from '@mui/icons-material/Person';
 export { default as PostIcon } from '@mui/icons-material/ArticleOutlined';
 export { default as PostActiveIcon } from '@mui/icons-material/Article';
 export { default as PostOutlinedIcon } from '@mui/icons-material/ArticleOutlined';
+export { default as RepostIcon } from '@mui/icons-material/Repeat';
 export { default as SearchIcon } from '@mui/icons-material/Search';
 export { default as SettingsIcon } from '@mui/icons-material/Settings';
 export { default as SettingsOutlinedIcon } from '@mui/icons-material/SettingsOutlined';

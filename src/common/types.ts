@@ -1,29 +1,46 @@
 import type { ReactNode } from 'react';
+import { UserRoles } from './constants';
 import type {
-	DbAttachment,
 	DbAttachmentPostPartial,
-	DbLinkPreviewData,
+	DbExternalLinkPreviewData,
+	DbExternalLinkPreviewType,
+	DbLinkPreview,
 	DbNotification,
 	DbParentPostPartial,
 	DbPointTransaction,
 	DbPost,
 	DbVideoLinkPreviewData,
 } from '@server/db-schema';
-import { UserRoles } from './constants';
 
-export {
-	DbLinkPreviewData as LinkPreviewData,
-	DbVideoLinkPreviewData as VideoLinkPreviewData,
+type VideoLinkPreviewData = DbVideoLinkPreviewData
+type LinkPreviewData = DbExternalLinkPreviewData;
+
+export type {
+	DbLinkPreview as LinkPreview,
+	LinkPreviewData,
+	VideoLinkPreviewData,
 };
 
 export
-interface AttachmentPostPartial extends Omit<DbAttachmentPostPartial, '_id'> {
-	_id: string;
+type AttachmentPostPartial = { _id: string } & Omit<DbAttachmentPostPartial, '_id'>;
+
+export
+interface PostLinkPreviewType {
+	type: 'post',
+	post: AttachmentPostPartial;
 }
 
 export
-interface Attachment extends Omit<DbAttachment, 'post'> {
-	post: AttachmentPostPartial;
+interface AttachmentSave {
+	annotation: string;
+	postId: string;
+}
+
+type Foo = PostLinkPreviewType | DbExternalLinkPreviewType;
+
+export
+type LinkPreviewType = Foo & {
+	annotation?: string,
 }
 
 export
@@ -35,7 +52,6 @@ type SharedPostProps = Pick<DbPost,
 'body' |
 'created' |
 'lastUpdated' |
-'linkPreviews' |
 'nsfl' |
 'nsfw' |
 'replyCount' |
@@ -46,9 +62,9 @@ type SharedPostProps = Pick<DbPost,
 export
 interface Post extends SharedPostProps {
 	_id?: string;
-	attachedPosts: Attachment[];
-	attachedToPosts: Attachment[];
+	attachedToPosts: ParentPostPartial[];
 	bookmarkedDate?: string;
+	linkPreviews?: LinkPreviewType[];
 	isOwner: boolean;
 	parent?: ParentPostPartial;
 	points?: number;
@@ -123,6 +139,26 @@ interface User {
 	id: string;
 	username: string;
 	role: UserRoles;
+}
+
+export
+// TODO Fix this typing mess, probably with better naming convention
+interface LinkPreviewSaveType {
+	type: 'link' | 'post';
+	annotation?: string;
+	link?: LinkPreviewData;
+	postId?: string;
+}
+
+export
+interface PostSaveSchema {
+	title: string;
+	body: string;
+	points: number;
+	nsfw?: boolean;
+	nsfl?: boolean;
+	parentId?: string;
+	linkPreviews?: LinkPreviewSaveType[];
 }
 
 declare module 'next-auth' {

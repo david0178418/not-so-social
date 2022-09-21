@@ -13,7 +13,7 @@ interface Props {
 }
 
 export
-function LinkPreview(props: Props) {
+function LinkPreviewExternal(props: Props) {
 	const {
 		linkPreview: {
 			url,
@@ -27,8 +27,8 @@ function LinkPreview(props: Props) {
 	return (
 		<Card variant="outlined">
 			<CardActionArea
-				target="__target"
 				href={url}
+				target="__blank"
 				sx={{
 					display: 'flex',
 					flexDirection: {

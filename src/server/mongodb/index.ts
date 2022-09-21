@@ -19,7 +19,6 @@ import {
 } from '@server/db-schema';
 
 const MongoDbName = process.env.DB_NAME || 'awesome-default-db';
-
 const uri = process.env.MONGODB_URI || '';
 const options: MongoClientOptions = {};
 

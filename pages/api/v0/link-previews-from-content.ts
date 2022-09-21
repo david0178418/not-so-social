@@ -1,18 +1,25 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { LinkPreviewData } from '@common/types';
+import type { LinkPreview, LinkPreviewData } from '@common/types';
 
 import { lookup } from 'node:dns';
 import { getLinkPreview } from 'link-preview-js';
 import Joi, { ValidationError } from 'joi';
-import { MaxPostBodyLength, MinPostBodyLength } from '@common/constants';
 import getUrls from 'get-urls';
+import { urlJoin } from '@common/utils';
+import { fetchPost } from '@server/queries';
+import { postToDbAttachmentPostPartial } from '@server/transforms';
+import {
+	MaxPostBodyLength,
+	MinPostBodyLength,
+	MongoIdLength,
+	Paths,
+} from '@common/constants';
 
-interface Schema {
-	content: string;
-}
+const { HOST = '' } = process.env;
+const PostUrlPrefixRegex = new RegExp(`^${urlJoin(HOST, Paths.Post, '/')}`);
 
-const schema = Joi.object<Schema>({
+const schema = Joi.object({
 	content: Joi
 		.string()
 		.min(MinPostBodyLength)
@@ -25,7 +32,7 @@ export default async function handler(
 	res: NextApiResponse
 ) {
 	const urls: string[] = [];
-	const previews: LinkPreviewData[] = [];
+	const previews: LinkPreview[] = [];
 
 	try {
 		const { content } = await schema.validateAsync(req.query);
@@ -43,23 +50,37 @@ export default async function handler(
 	}
 
 	for(const url of urls) {
-		try {
-			const response = await getLinkPreview(url, {
-				resolveDNSHost,
-				followRedirects: 'manual',
-				handleRedirects,
-			});
+		const potentialId = url.replace(PostUrlPrefixRegex, '');
 
-			// @ts-ignore
-			if(!(response?.title || response?.description)) {
-				return;
+		if(potentialId.length === MongoIdLength) {
+			const post = await fetchPost(potentialId);
+
+			if(post) {
+				previews.push({
+					type: 'post',
+					post: postToDbAttachmentPostPartial(post),
+				});
 			}
+		} else {
+			try {
+				const response = await getLinkPreview(url, {
+					resolveDNSHost,
+					followRedirects: 'manual',
+					handleRedirects,
+				});
 
-			// TODO Clean up the type mess from getLinkPreview
-			// w/ either PR or potentially another tool
-			previews.push(response as LinkPreviewData);
-		} catch(e) {
-			console.error(e);
+				// @ts-ignore
+				if(!(response?.title || response?.description)) {
+					return;
+				}
+
+				previews.push({
+					type: 'link',
+					link: response as LinkPreviewData,
+				});
+			} catch(e) {
+				console.error(e);
+			}
 		}
 	}
 

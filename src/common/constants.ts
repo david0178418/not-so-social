@@ -1,6 +1,8 @@
 import { DbAttachmentPostPartial, DbParentPostPartial } from '@server/db-schema';
 import {
-	arrayOfAll, AttachmentPostPartial, ParentPostPartial,
+	arrayOfAll,
+	AttachmentPostPartial,
+	ParentPostPartial,
 } from './types';
 
 export
@@ -129,7 +131,6 @@ const AttachmentPostKeys = arrayOfAll<keyof AttachmentPostPartial>()(
 	'body',
 	'created',
 	'lastUpdated',
-	'linkPreviews',
 	'nsfl',
 	'nsfw',
 	'title',
@@ -141,8 +142,6 @@ const DbAttachmentPostKeys = arrayOfAll<keyof DbAttachmentPostPartial>()(
 	'body',
 	'created',
 	'lastUpdated',
-	'linkPreviews',
-	'linkPreviews',
 	'nsfl',
 	'nsfw',
 	'title'

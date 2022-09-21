@@ -1,15 +1,17 @@
 import { ObjectId } from 'mongodb';
 import { URL_PATTERN } from 'interweave-autolink';
 
+import { PostSaveSchema } from '@common/types';
 import { getCollection } from '@server/mongodb';
 import { grammit } from '@server/server-utils';
-import { PostSaveSchema } from './post-save.validation';
 import { dbPostToDbAttachmentPostPartial, dbPostToDbParentPostPartial } from '@server/transforms';
 import { fetchDbPost, fetchDbPosts } from '@server/queries';
+import { isTruthy } from '@common/utils';
 import {
 	DbPost,
-	DbAttachment,
 	DbPostTextGram,
+	DbExternalLinkPreviewData,
+	DbLinkPreview,
 } from '@server/db-schema';
 import {
 	DbCollections,
@@ -34,26 +36,48 @@ async function createPost(content: PostSaveSchema, ownerId: ObjectId, isAdmin = 
 	const {
 		parentId,
 		points: spentPoints,
-		attachments,
+		linkPreviews = [],
 		...newPostContent
 	} = content;
 	const appliedPoints = Math.floor(OwnPostRatio * spentPoints);
 	const newPostId = new ObjectId();
 	// only attach valid posts
-	const fetchedAttachedPosts = attachments ?
-		await fetchDbPosts(attachments.map(a => a.postId)) :
+	const postPreviewIds = linkPreviews
+		.map(l => l.postId)
+		.filter(isTruthy);
+
+	const fetchedPostPreviews = postPreviewIds.length ?
+		await fetchDbPosts(postPreviewIds) :
 		[];
 
-	const attachedPosts: DbAttachment[] = fetchedAttachedPosts.map(post => ({
-		annotation: attachments?.find(a => post._id?.equals(a.postId))?.annotation || '',
-		post: dbPostToDbAttachmentPostPartial(post),
-	}));
+	const completeLinkPreviews: DbLinkPreview[] = linkPreviews
+		.map((p): DbLinkPreview | null => {
+			if(p.type === 'link') {
+				return {
+					link: p.link as DbExternalLinkPreviewData,
+					type: p.type,
+					annotation: p.annotation,
+				};
+			}
+			const foundPost = fetchedPostPreviews?.find(post => post._id?.equals(p.postId || ''));
+
+			if(!foundPost) {
+				return null;
+			}
+
+			return {
+				post: dbPostToDbAttachmentPostPartial(foundPost),
+				type: p.type,
+				annotation: p.annotation,
+			};
+		})
+		.filter(isTruthy);
 
 	const newPost: DbPost = {
 		...newPostContent,
-		attachedPosts,
 		created: nowIsoStr,
 		lastUpdated: nowIsoStr,
+		linkPreviews: completeLinkPreviews,
 		ownerId,
 		replyCount: 0,
 		totalPoints: appliedPoints,
@@ -95,19 +119,18 @@ async function createPost(content: PostSaveSchema, ownerId: ObjectId, isAdmin = 
 				date: nowDate,
 				points: appliedPoints,
 			}),
-		...attachedPosts.map(a => (
-			postCol.updateOne(
-				{ _id: a.post._id },
-				{
-					$push: {
-						attachedToPosts: {
-							...a,
-							post: dbPostToDbAttachmentPostPartial(newPost),
-						},
-					},
+		...completeLinkPreviews
+			.map(a => {
+				if(a.type === 'link') {
+					return null;
 				}
-			)
-		)),
+
+				return postCol.updateOne(
+					{ _id: a.post._id },
+					{ $push: { attachedToPosts: dbPostToDbParentPostPartial(newPost) } }
+				);
+			})
+			.filter(isTruthy),
 	];
 
 	if(!isAdmin) {
