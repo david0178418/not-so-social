@@ -1,7 +1,7 @@
 import type {
 	ApiResponse,
 	Feed,
-	LinkPreview,
+	LinkPreviewType,
 	Notification,
 	Post,
 	PostSaveSchema,
@@ -46,7 +46,7 @@ async function logout() {
 }
 
 interface LinkPreviewsFromContentReturn {
-	previews: LinkPreview[];
+	previews: LinkPreviewType[];
 }
 
 export

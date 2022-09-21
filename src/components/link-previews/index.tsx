@@ -1,13 +1,13 @@
-import type { LinkPreview as LinkPreviewType } from '@common/types';
+import type { LinkPreviewType } from '@common/types';
 import { ArrowLeftIcon, ArrowRightIcon } from '@components/icons';
 import { useState } from 'react';
 import { LinkPreviewExternal } from './link-preview-external';
+import { LinkPreviewInternalPost } from '@components/link-previews/link-preview-internal-post';
 import {
 	ButtonGroup,
 	IconButton,
 	Typography,
 } from '@mui/material';
-import { LinkPreviewInternalPost } from '@components/link-previews/link-preview-internal-post';
 
 interface Props {
 	linkPreviews: LinkPreviewType[];

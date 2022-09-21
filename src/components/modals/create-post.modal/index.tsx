@@ -1,4 +1,4 @@
-import type { LinkPreview } from '@common/types';
+import type { LinkPreviewType } from '@common/types';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -63,7 +63,7 @@ function CreatePostModal() {
 	const debouncedBody = useDebounce(body, 750);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-	const [linkPreviews, setLinkPreviews] = useState<LinkPreview[]>([]);
+	const [linkPreviews, setLinkPreviews] = useState<LinkPreviewType[]>([]);
 	const abortControllerRef = useRef<AbortController | null>(null);
 	const {
 		a: action,
