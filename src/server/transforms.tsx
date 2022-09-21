@@ -34,7 +34,7 @@ function dbPostToPostFn(userId?: string) {
 		const {
 			ownerId,
 			parent,
-			linkPreviews,
+			linkPreviews = [], // Should this be a required filed on Post?
 			attachedToPosts = [],
 			...cleanedPost
 		} = post;
