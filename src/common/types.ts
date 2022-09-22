@@ -143,7 +143,7 @@ interface User {
 
 export
 // TODO Fix this typing mess, probably with better naming convention
-interface LinkPreviewSaveType {
+interface LinkPreviewSave {
 	type: 'link' | 'post';
 	annotation?: string;
 	link?: LinkPreviewData;
@@ -151,14 +151,14 @@ interface LinkPreviewSaveType {
 }
 
 export
-interface PostSaveSchema {
+interface PostSave {
 	title: string;
 	body: string;
 	points: number;
 	nsfw?: boolean;
 	nsfl?: boolean;
 	parentId?: string;
-	linkPreviews?: LinkPreviewSaveType[];
+	linkPreviews?: LinkPreviewSave[];
 }
 
 declare module 'next-auth' {

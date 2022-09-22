@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { URL_PATTERN } from 'interweave-autolink';
 
-import { PostSaveSchema } from '@common/types';
+import { PostSave } from '@common/types';
 import { getCollection } from '@server/mongodb';
 import { grammit } from '@server/server-utils';
 import { dbPostToDbAttachmentPostPartial, dbPostToDbParentPostPartial } from '@server/transforms';
@@ -22,7 +22,7 @@ import {
 const UrlRegex = new RegExp(URL_PATTERN, 'gi');
 
 export
-async function createPost(content: PostSaveSchema, ownerId: ObjectId, isAdmin = false) {
+async function createPost(content: PostSave, ownerId: ObjectId, isAdmin = false) {
 	const [
 		gramCol,
 		postCol,

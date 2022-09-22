@@ -2,8 +2,8 @@ import { z, ZodType } from 'zod';
 import { MongoObjectId } from '@server/validations';
 import {
 	LinkPreviewData,
-	LinkPreviewSaveType,
-	PostSaveSchema,
+	LinkPreviewSave,
+	PostSave,
 	VideoLinkPreviewData,
 } from '@common/types';
 import {
@@ -74,7 +74,7 @@ const ExternalLinkPreviewSchema: ZodType<LinkPreviewData> = z.object({
 		),
 });
 
-const LinkPreviewSchema: ZodType<LinkPreviewSaveType> = z.object({
+const LinkPreviewSchema: ZodType<LinkPreviewSave> = z.object({
 	type: z.union([z.literal('link'), z.literal('post')]),
 	annotation: z
 		.string()
@@ -85,7 +85,7 @@ const LinkPreviewSchema: ZodType<LinkPreviewSaveType> = z.object({
 });
 
 export
-const PostSaveValidation: ZodType<PostSaveSchema> = z.object({
+const PostSaveValidation: ZodType<PostSave> = z.object({
 	body: z
 		.string()
 		.min(MinPostBodyLength, { message: `Post body must be at least ${MinPostBodyLength} characters long.` })

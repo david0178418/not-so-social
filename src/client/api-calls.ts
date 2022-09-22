@@ -4,7 +4,7 @@ import type {
 	LinkPreviewType,
 	Notification,
 	Post,
-	PostSaveSchema,
+	PostSave,
 } from '@common/types';
 
 import { signIn, signOut } from 'next-auth/react';
@@ -66,7 +66,7 @@ async function getFeed(type: FeedTypes, params?: FetchFeedParams) {
 }
 
 export
-async function postSave(args: PostSaveSchema) {
+async function postSave(args: PostSave) {
 	const { data } = await apiPost<ApiResponse>('/post/save', args);
 
 	return data;

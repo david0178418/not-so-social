@@ -3,7 +3,7 @@ import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { getLinkPreviewsFromContent, postSave } from '@client/api-calls';
 import { useDebounce, useRefreshPage } from '@common/hooks';
-import { LinkPreviewType, LinkPreviewSaveType } from '@common/types';
+import { LinkPreviewType, LinkPreviewSave } from '@common/types';
 import { LinkPreviews } from '@components/link-previews';
 import { MinPostBodyLength } from '@common/constants';
 import { exec } from '@common/utils';
@@ -188,7 +188,7 @@ function FeedPostResponseForm(props: Props) {
 	);
 }
 
-function formatPreviews(linkPreviews: LinkPreviewType[]): LinkPreviewSaveType[] {
+function formatPreviews(linkPreviews: LinkPreviewType[]): LinkPreviewSave[] {
 	return linkPreviews.map(link => {
 		if(link.type === 'link') {
 			return link;
