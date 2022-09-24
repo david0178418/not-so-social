@@ -24,7 +24,7 @@ function ParsedContentServer(props: Props) {
 	return (
 		<Interweave
 			content={children}
-			matchers={[new UrlMatcher('url', {}, Url), new HashtagMatcher('hashtag', {}, Hashtag)]}
+			matchers={[new UrlMatcher('url', { validateTLD: false }, Url), new HashtagMatcher('hashtag', {}, Hashtag)]}
 		/>
 	);
 }
