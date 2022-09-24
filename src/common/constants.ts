@@ -6,49 +6,196 @@ import {
 } from './types';
 
 export
+const ApiUrl = '/api/v0';
+
+export
 const AppName = 'NotSo.Social (beta)';
 
 export
 const BaseUrl = 'https://notso.social';
 
 export
+const CookieName = AppName;
+
+export
+const AuthUser_tokensCookieName = `${CookieName}.AuthUserTokens`;
+
+export
+const AuthUserCookieName = `${CookieName}.AuthUser`;
+
+export
 const DefaultToastMsgDelay = 4000;
 
 export
-const MinPostCost = 10;
+const IsDev = process.env.NODE_ENV !== 'production';
 
 export
-const MaxPostCost = 1_00_000;
+const ISODateStringLength = 24;
+
+export
+const IsSsr = typeof window === 'undefined';
 
 export
 const MaxPostAttachmentAnnotationLength = 200;
 
 export
-const OwnPostRatio = 0.5;
+const MaxPostBodyLength = 1000;
 
 export
-const UsernameMinLength = 3;
+const MaxPostCost = 1_00_000;
 
 export
-const UsernameMaxLength = 24;
-
-export
-const PasswordMinLength = 6;
-
-export
-const PasswordMaxLength = 128;
-
-export
-const PasswordSaltLength = 10;
+const MaxPostTitleLength = 100;
 
 export
 const MaxSearchTermSize = 100;
 
 export
+const MinPostBodyLength = 10;
+
+export
+const MinPostCost = 10;
+
+export
+const MinPostPoints = 10;
+
+export
+const MinPostTitleLength = 3;
+
+export
+const MongoIdLength = 24;
+
+export
+const OwnPostRatio = 0.5;
+
+export
 const PageSize = 10;
 
 export
-const ISODateStringLength = 24;
+const PasswordMaxLength = 128;
+
+export
+const PasswordMinLength = 6;
+
+export
+const PasswordSaltLength = 10;
+
+export
+// Source: https://stackoverflow.com/questions/4328500/how-can-i-strip-all-punctuation-from-a-string-in-javascript-using-regex
+const PunctuationRegex = /[^\p{L}\s]/gu;
+// Not sure if this should be used or the other const PunctuationRegex = /[.,-/#!$%^&*;:{}""=\-_`~()@+?><[\]+]/g;
+
+export
+const UsernameMaxLength = 24;
+
+export
+const UsernameMinLength = 3;
+
+export
+enum AppSettings {
+	AwardSignup = 'award-signup',
+	AwardDailyPointBase = 'award-daily-point-base',
+	AwardDailyStreakIncrement = 'award-daily-streak-increment',
+	AwardDailyStreakCap = 'award-daily-streak-cap',
+}
+
+export
+enum AwardTypes {
+	Daily = 'daily',
+	Signup = 'signup',
+}
+
+export
+const AttachmentPostKeys = arrayOfAll<keyof AttachmentPostPartial>()(
+	'_id',
+	'body',
+	'created',
+	'lastUpdated',
+	'nsfl',
+	'nsfw',
+	'title',
+);
+
+export
+const BaseReq: RequestInit = {
+	credentials: 'include',
+	headers: {
+		Accept: 'application/json, text/plain, */*',
+		'Content-Type': 'application/json',
+	},
+};
+
+export
+const DbAttachmentPostKeys = arrayOfAll<keyof DbAttachmentPostPartial>()(
+	'_id',
+	'body',
+	'created',
+	'lastUpdated',
+	'nsfl',
+	'nsfw',
+	'title'
+);
+
+export
+enum DbCollections {
+	AppMetadata = 'app-metadata',
+	Grams = 'grams',
+	Notifications = 'notifications',
+	PointTransactions = 'point-transactions',
+	PostBookmarks = 'post-bookmarks',
+	PostEditHistory = 'post-edit-history',
+	Posts = 'posts',
+	UserActivity = 'user-activity',
+	Users = 'users',
+	UsersMeta = 'users-meta',
+}
+
+export
+const DbParentPostPartialKeys = arrayOfAll<keyof DbParentPostPartial>()(
+	'_id',
+	'created',
+	'lastUpdated',
+	'nsfl',
+	'nsfw',
+	'ownerId',
+	'title'
+);
+
+export
+const ExtendedWhitespaceRegex = /\s{2,}/g;
+
+export
+enum FeedTypes {
+	Bookmarks = 'bookmarks',
+	Hot = 'hot',
+	MyPosts = 'my-posts',
+	New = 'new',
+	Search = 'search',
+	Top = 'top',
+}
+
+export
+enum ModalActions {
+	CreatePost = 'create-post',
+	LoginRegister = 'login-register',
+	Logout = 'logout',
+}
+
+export
+const NotLoggedInErrMsg = {
+	ok: false,
+	msg: 'Not logged in',
+};
+
+export
+const ParentPostPartialKeys = arrayOfAll<keyof ParentPostPartial>()(
+	'_id',
+	'created',
+	'lastUpdated',
+	'nsfl',
+	'nsfw',
+	'title'
+);
 
 export
 enum Paths {
@@ -66,13 +213,6 @@ enum Paths {
 }
 
 export
-const HomePaths = [
-	Paths.Home,
-	Paths.HomeTop,
-	Paths.HomeNew,
-];
-
-export
 const ProfilePaths = [
 	Paths.Profile,
 	Paths.ProfileBoosts,
@@ -80,151 +220,11 @@ const ProfilePaths = [
 ];
 
 export
-const IsSsr = typeof window === 'undefined';
-
-export
-const ApiUrl = '/api/v0';
-
-export
-const CookieName = AppName;
-
-export
-const AuthUserCookieName = `${CookieName}.AuthUser`;
-
-export
-const AuthUser_tokensCookieName = `${CookieName}.AuthUserTokens`;
-
-export
-const IsDev = process.env.NODE_ENV !== 'production';
-
-export
-const MinPostBodyLength = 10;
-
-export
-const MaxPostBodyLength = 1000;
-
-export
-const MinPostTitleLength = 3;
-
-export
-const MaxPostTitleLength = 100;
-
-export
-const MinPostPoints = 10;
-
-export
-const MongoIdLength = 24;
-
-export
-const SpecialCharacterCodes = {
-	NBSP: '\u00A0',
-	DOT: '\u2022',
-	QUOTE: '\u0022',
-};
-
-export
-const AttachmentPostKeys = arrayOfAll<keyof AttachmentPostPartial>()(
-	'_id',
-	'body',
-	'created',
-	'lastUpdated',
-	'nsfl',
-	'nsfw',
-	'title',
-);
-
-export
-const DbAttachmentPostKeys = arrayOfAll<keyof DbAttachmentPostPartial>()(
-	'_id',
-	'body',
-	'created',
-	'lastUpdated',
-	'nsfl',
-	'nsfw',
-	'title'
-);
-
-export
-const DbParentPostPartialKeys = arrayOfAll<keyof DbParentPostPartial>()(
-	'_id',
-	'created',
-	'lastUpdated',
-	'nsfl',
-	'nsfw',
-	'ownerId',
-	'title'
-);
-
-export
-const ParentPostPartialKeys = arrayOfAll<keyof ParentPostPartial>()(
-	'_id',
-	'created',
-	'lastUpdated',
-	'nsfl',
-	'nsfw',
-	'title'
-);
-
-export
-const NotLoggedInErrMsg = {
-	ok: false,
-	msg: 'Not logged in',
-};
-
-export
-const BaseReq: RequestInit = {
-	credentials: 'include',
-	headers: {
-		Accept: 'application/json, text/plain, */*',
-		'Content-Type': 'application/json',
-	},
-};
-
-export
-enum UserActivityTypes {
-	Navigate = 'navigate',
-	BookmarkItem = 'bookmark-item',
-}
-
-export
-enum DbCollections {
-	AppMetadata = 'app-metadata',
-	Grams = 'grams',
-	Notifications = 'notifications',
-	PointTransactions = 'point-transactions',
-	PostBookmarks = 'post-bookmarks',
-	PostEditHistory = 'post-edit-history',
-	Posts = 'posts',
-	UserActivity = 'user-activity',
-	Users = 'users',
-	UsersMeta = 'users-meta',
-}
-
-export
-enum SettingTypes {
-	AwardSettings ='award-settings',
-}
-
-export
-enum AppSettings {
-	AwardSignup = 'award-signup',
-	AwardDailyPointBase = 'award-daily-point-base',
-	AwardDailyStreakIncrement = 'award-daily-streak-increment',
-	AwardDailyStreakCap = 'award-daily-streak-cap',
-}
-
-export
-enum AwardTypes {
-	Daily = 'daily',
-	Signup = 'signup',
-}
-
-export
-enum ModalActions {
-	CreatePost = 'create-post',
-	LoginRegister = 'login-register',
-	Logout = 'logout',
-}
+const HomePaths = [
+	Paths.Home,
+	Paths.HomeTop,
+	Paths.HomeNew,
+];
 
 export
 enum PointTransactionTypes {
@@ -235,28 +235,16 @@ enum PointTransactionTypes {
 }
 
 export
-enum FeedTypes {
-	Bookmarks = 'bookmarks',
-	Hot = 'hot',
-	MyPosts = 'my-posts',
-	New = 'new',
-	Search = 'search',
-	Top = 'top',
+enum SettingTypes {
+	AwardSettings ='award-settings',
 }
 
 export
-enum UserRoles {
-	Admin = 'admin',
-	User = 'user'
-}
-
-export
-const ExtendedWhitespaceRegex = /\s{2,}/g;
-
-export
-// Source: https://stackoverflow.com/questions/4328500/how-can-i-strip-all-punctuation-from-a-string-in-javascript-using-regex
-const PunctuationRegex = /[^\p{L}\s]/gu;
-// Not sure if this should be used or the other const PunctuationRegex = /[.,-/#!$%^&*;:{}""=\-_`~()@+?><[\]+]/g;
+const SpecialCharacterCodes = {
+	NBSP: '\u00A0',
+	DOT: '\u2022',
+	QUOTE: '\u0022',
+};
 
 export
 // Source: https://99webtools.com/blog/list-of-english-stop-words/
@@ -284,3 +272,15 @@ const StopWords = [
 	'who\'d', 'who\'ll', 'who\'s', 'why\'d', 'why\'ll', 'why\'s', 'won\'t',
 	'would\'ve', 'wouldn\'t', 'you\'d', 'you\'ll', 'you\'re', 'you\'ve',
 ];
+
+export
+enum UserActivityTypes {
+	Navigate = 'navigate',
+	BookmarkItem = 'bookmark-item',
+}
+
+export
+enum UserRoles {
+	Admin = 'admin',
+	User = 'user'
+}
