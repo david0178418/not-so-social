@@ -9,24 +9,23 @@ import { getLinkPreviewsFromContent, postSave } from '@client/api-calls';
 import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { LinkPreviews } from '@components/link-previews';
 import { InfoIconButton } from '@components/common/info-icon-button';
+import { exec, inRange } from '@common/utils';
 import {
 	CloseIcon,
 	InfoIcon,
 } from '@components/icons';
-import {
-	exec,
-	formatCompactNumber,
-} from '@common/utils';
 import {
 	useEffect,
 	useRef,
 	useState,
 } from 'react';
 import {
+	MaxPostBodyLength,
+	MaxPostTitleLength,
 	MinPostBodyLength,
 	MinPostCost,
+	MinPostTitleLength,
 	ModalActions,
-	OwnPostRatio,
 } from '@common/constants';
 import {
 	AppBar,
@@ -71,6 +70,10 @@ function CreatePostModal() {
 	} = router.query;
 	const actionIsCreatePost = action === ModalActions.CreatePost;
 	const isOpen = actionIsCreatePost && !isLoggedOut;
+	const isValid = (
+		inRange(body.length, MinPostBodyLength, MaxPostBodyLength) &&
+		inRange(title.length, MinPostTitleLength, MaxPostTitleLength)
+	);
 
 	useEffect(() => {
 		if(!actionIsCreatePost) {
@@ -198,7 +201,9 @@ function CreatePostModal() {
 				>
 					<Grid container>
 						<Grid item xs>
-							<TextField
+							<Foo
+								minLength={MinPostTitleLength}
+								maxLength={MaxPostTitleLength}
 								autoFocus
 								fullWidth
 								label="Title"
@@ -220,7 +225,9 @@ function CreatePostModal() {
 							/>
 						</Grid>
 					</Grid>
-					<TextField
+					<Foo
+						minLength={MinPostBodyLength}
+						maxLength={MaxPostBodyLength}
 						fullWidth
 						multiline
 						label="Post"
@@ -290,9 +297,12 @@ function CreatePostModal() {
 				>
 					<CancelButton fullWidth={fullScreen} />
 				</Link>
-				<ConfirmButton onClick={handleSave} fullWidth={fullScreen}>
-					Post for {points}pts
-					(rank with {formatCompactNumber(Math.floor(points * OwnPostRatio))}pts)
+				<ConfirmButton
+					onClick={handleSave}
+					fullWidth={fullScreen}
+					disabled={!isValid}
+				>
+					Spend {points}pts to Post
 				</ConfirmButton>
 			</DialogActions>
 			<DialogContent>
@@ -312,5 +322,54 @@ function CreatePostModal() {
 				</DialogContentText>
 			</DialogContent>
 		</Dialog>
+	);
+}
+
+type FooProps = Parameters<typeof TextField>[0] & {
+	label: string;
+	minLength?: number;
+	maxLength?: number;
+	value: string;
+};
+
+function Foo(props: FooProps) {
+	const {
+		label,
+		maxLength = null,
+		minLength = null,
+		value,
+		onBlur,
+		...textFieldProps
+	} = props;
+	const [touched, setTouched] = useState(false);
+	const longEnough = minLength === null || minLength < value.length;
+	const shortEnough = maxLength === null || value.length < maxLength;
+	const isValid = (!touched || longEnough) && shortEnough;
+	let errorMsg = '';
+
+	if(touched && !longEnough) {
+		errorMsg = `${label} must be at least ${minLength} characters long`;
+	} else if(!shortEnough) {
+		errorMsg = `${label} must be no more than ${maxLength} characters long`;
+	}
+
+	useEffect(() => {
+		if(value === '') {
+			setTouched(false);
+		}
+	}, [value]);
+
+	return (
+		<TextField
+			label={label}
+			error={!isValid}
+			value={value}
+			helperText={errorMsg}
+			onBlur={(e) => {
+				setTouched(true);
+				onBlur?.(e);
+			}}
+			{...textFieldProps}
+		/>
 	);
 }

@@ -81,7 +81,6 @@ function FeedPost(props: Props) {
 	const parentPost = post.parent;
 	const [responseOpen, setResponseOpen] = useState(false);
 	const isLoggedIn = useIsLoggedIn();
-
 	const appliedStyles = {
 		...styles,
 		...((!topResponse) ? hasNoResponseStyle : {}),
