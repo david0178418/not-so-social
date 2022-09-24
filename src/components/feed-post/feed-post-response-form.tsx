@@ -5,8 +5,7 @@ import { getLinkPreviewsFromContent, postSave } from '@client/api-calls';
 import { useDebounce, useRefreshPage } from '@common/hooks';
 import { LinkPreviewType, LinkPreviewSave } from '@common/types';
 import { LinkPreviews } from '@components/link-previews';
-import { MinPostBodyLength } from '@common/constants';
-import { exec } from '@common/utils';
+import { exec, inRange } from '@common/utils';
 import { InfoIconButton } from '@components/common/info-icon-button';
 import {
 	useEffect,
@@ -14,12 +13,21 @@ import {
 	useState,
 } from 'react';
 import {
+	MaxPostBodyLength,
+	MaxPostTitleLength,
+	MinPostBodyLength,
+	MinPostCost,
+	MinPostTitleLength,
+} from '@common/constants';
+import {
 	Box,
 	Checkbox,
+	DialogActions,
 	FormControlLabel,
 	Grid,
 	TextField,
 } from '@mui/material';
+import { TextFieldLengthValidation } from '@components/common/text-field-length-validation';
 
 interface Props {
 	parentId: string;
@@ -27,7 +35,7 @@ interface Props {
 }
 
 export
-// TODO Unify this in some way with creation and eventual edit forms
+// TODO Unify this in with creation and eventual edit forms
 // perhaps just abstracting logic into a hook, a shared component or some combo
 function FeedPostResponseForm(props: Props) {
 	const {
@@ -42,9 +50,14 @@ function FeedPostResponseForm(props: Props) {
 	const [nsfw, setNsfw] = useState(false);
 	const [nsfl, setNsfl] = useState(false);
 	const debouncedBody = useDebounce(body, 750);
-	const [points, setPoints] = useState(0);
+	const [points, setPoints] = useState(MinPostCost);
 	const [linkPreviews, setLinkPreviews] = useState<LinkPreviewType[]>([]);
 	const abortControllerRef = useRef<AbortController | null>(null);
+	const isValid = (
+		points >= MinPostCost &&
+		inRange(body.length, MinPostBodyLength, MaxPostBodyLength) &&
+		inRange(title.length, MinPostTitleLength, MaxPostTitleLength)
+	);
 
 	// TODO Clean this mess up. Probably factor out into a hook or something
 	useEffect(() => {
@@ -105,13 +118,15 @@ function FeedPostResponseForm(props: Props) {
 			>
 				<Grid container>
 					<Grid item xs>
-						<TextField
+						<TextFieldLengthValidation
 							autoFocus
 							fullWidth
 							label="Title"
 							variant="standard"
 							placeholder="Post title"
 							type="text"
+							maxLength={MaxPostTitleLength}
+							minLength={MinPostTitleLength}
 							value={title}
 							onChange={e => setTitle(e.target.value)}
 						/>
@@ -127,13 +142,15 @@ function FeedPostResponseForm(props: Props) {
 						/>
 					</Grid>
 				</Grid>
-				<TextField
+				<TextFieldLengthValidation
 					fullWidth
 					multiline
 					label="Post"
 					variant="standard"
 					placeholder="Post title"
 					type="text"
+					maxLength={MaxPostBodyLength}
+					minLength={MinPostBodyLength}
 					minRows={3}
 					value={body}
 					onChange={e => setBody(e.target.value)}
@@ -178,12 +195,23 @@ function FeedPostResponseForm(props: Props) {
 					<LinkPreviews linkPreviews={linkPreviews} />
 				</Box>
 			)}
-			<Box sx={{ textAlign: 'right' }}>
+			<DialogActions
+				sx={{
+					gap: 2,
+					flexDirection: {
+						xs: 'column',
+						sm: 'row',
+					},
+				}}
+			>
 				<CancelButton onClick={onClose}/>
-				<ConfirmButton onClick={handleSave}>
+				<ConfirmButton
+					onClick={handleSave}
+					disabled={!isValid}
+				>
 					Respond
 				</ConfirmButton>
-			</Box>
+			</DialogActions>
 		</>
 	);
 }

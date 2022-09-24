@@ -10,6 +10,7 @@ import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { LinkPreviews } from '@components/link-previews';
 import { InfoIconButton } from '@components/common/info-icon-button';
 import { exec, inRange } from '@common/utils';
+import { TextFieldLengthValidation } from '@components/common/text-field-length-validation';
 import {
 	CloseIcon,
 	InfoIcon,
@@ -71,6 +72,7 @@ function CreatePostModal() {
 	const actionIsCreatePost = action === ModalActions.CreatePost;
 	const isOpen = actionIsCreatePost && !isLoggedOut;
 	const isValid = (
+		points >= MinPostCost &&
 		inRange(body.length, MinPostBodyLength, MaxPostBodyLength) &&
 		inRange(title.length, MinPostTitleLength, MaxPostTitleLength)
 	);
@@ -201,15 +203,15 @@ function CreatePostModal() {
 				>
 					<Grid container>
 						<Grid item xs>
-							<Foo
-								minLength={MinPostTitleLength}
-								maxLength={MaxPostTitleLength}
+							<TextFieldLengthValidation
 								autoFocus
 								fullWidth
 								label="Title"
 								variant="standard"
 								placeholder="Post title"
 								type="text"
+								maxLength={MaxPostTitleLength}
+								minLength={MinPostTitleLength}
 								value={title}
 								onChange={e => setTitle(e.target.value)}
 							/>
@@ -225,15 +227,15 @@ function CreatePostModal() {
 							/>
 						</Grid>
 					</Grid>
-					<Foo
-						minLength={MinPostBodyLength}
-						maxLength={MaxPostBodyLength}
+					<TextFieldLengthValidation
 						fullWidth
 						multiline
 						label="Post"
 						variant="standard"
 						placeholder="Post title"
 						type="text"
+						maxLength={MaxPostBodyLength}
+						minLength={MinPostBodyLength}
 						minRows={3}
 						value={body}
 						onChange={e => setBody(e.target.value)}
@@ -322,54 +324,5 @@ function CreatePostModal() {
 				</DialogContentText>
 			</DialogContent>
 		</Dialog>
-	);
-}
-
-type FooProps = Parameters<typeof TextField>[0] & {
-	label: string;
-	minLength?: number;
-	maxLength?: number;
-	value: string;
-};
-
-function Foo(props: FooProps) {
-	const {
-		label,
-		maxLength = null,
-		minLength = null,
-		value,
-		onBlur,
-		...textFieldProps
-	} = props;
-	const [touched, setTouched] = useState(false);
-	const longEnough = minLength === null || minLength < value.length;
-	const shortEnough = maxLength === null || value.length < maxLength;
-	const isValid = (!touched || longEnough) && shortEnough;
-	let errorMsg = '';
-
-	if(touched && !longEnough) {
-		errorMsg = `${label} must be at least ${minLength} characters long`;
-	} else if(!shortEnough) {
-		errorMsg = `${label} must be no more than ${maxLength} characters long`;
-	}
-
-	useEffect(() => {
-		if(value === '') {
-			setTouched(false);
-		}
-	}, [value]);
-
-	return (
-		<TextField
-			label={label}
-			error={!isValid}
-			value={value}
-			helperText={errorMsg}
-			onBlur={(e) => {
-				setTouched(true);
-				onBlur?.(e);
-			}}
-			{...textFieldProps}
-		/>
 	);
 }
