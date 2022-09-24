@@ -1,4 +1,4 @@
-import { DbAttachmentPostPartial, DbParentPostPartial } from '@server/db-schema';
+import type { DbAttachmentPostPartial, DbParentPostPartial } from '@server/db-schema';
 import {
 	arrayOfAll,
 	AttachmentPostPartial,
@@ -80,10 +80,10 @@ const ProfilePaths = [
 ];
 
 export
-const IS_SSR = typeof window === 'undefined';
+const IsSsr = typeof window === 'undefined';
 
 export
-const API_URL = '/api/v0';
+const ApiUrl = '/api/v0';
 
 export
 const CookieName = AppName;
@@ -104,10 +104,7 @@ export
 const MaxPostBodyLength = 1000;
 
 export
-const MaxPostResponseLength = 200;
-
-export
-const MinPostTitleLength = 6;
+const MinPostTitleLength = 3;
 
 export
 const MaxPostTitleLength = 100;

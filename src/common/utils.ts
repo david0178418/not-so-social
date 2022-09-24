@@ -1,5 +1,5 @@
 import { format, formatDistanceToNow } from 'date-fns';
-import { IS_SSR } from './constants';
+import { IsSsr } from './constants';
 
 export
 function formatDate(dateStr: string | Date) {
@@ -128,7 +128,7 @@ function last<T>(arr: T[]): T | null {
 
 export
 function localizedDateFormat(date: string) {
-	return IS_SSR ?
+	return IsSsr ?
 		'-' :
 		format(new Date(date), 'p · PP');
 }

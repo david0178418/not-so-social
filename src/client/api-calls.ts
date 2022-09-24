@@ -10,7 +10,7 @@ import type {
 import { signIn, signOut } from 'next-auth/react';
 import { get, post } from '@client/client-utils';
 import { urlJoin } from '@common/utils';
-import { API_URL, FeedTypes } from '@common/constants';
+import { ApiUrl, FeedTypes } from '@common/constants';
 
 export
 async function login(username: string, password: string) {
@@ -113,9 +113,9 @@ async function dismissNotification(id: string): Promise<void> {
 }
 
 function apiPost<T = any>(path: string, requestBody?: any) {
-	return post<T>(urlJoin(API_URL, path), requestBody);
+	return post<T>(urlJoin(ApiUrl, path), requestBody);
 }
 
 function apiGet<T = any>(path: string, params?: any, signal?: AbortSignal) {
-	return get<T>(urlJoin(API_URL, path), params, signal);
+	return get<T>(urlJoin(ApiUrl, path), params, signal);
 }
