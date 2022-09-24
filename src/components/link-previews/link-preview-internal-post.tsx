@@ -26,7 +26,6 @@ function LinkPreviewInternalPost(props: Props) {
 	return (
 		<Card variant="outlined">
 			<CardActionArea
-				target="__blank"
 				href={urlJoin(Paths.Post, post._id)}
 			>
 				<CardContent>
