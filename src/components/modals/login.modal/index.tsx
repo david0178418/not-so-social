@@ -43,11 +43,17 @@ function LoginModal() {
 		}
 	}, [actionIsLoginRegister, isLoggedIn]);
 
+	if(!isOpen) {
+		// TODO Figure out weird issue with background overlay persisting in
+		// some instances. May be related to the "shallow" prop on NextJS Link
+		return null;
+	}
+
 	return (
 		<>
 			<Dialog
+				open
 				fullScreen={fullScreen}
-				open={isOpen}
 			>
 				{isRegister && (
 					<RegistrationForm urlObj={urlObj} />

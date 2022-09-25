@@ -167,10 +167,16 @@ function CreatePostModal() {
 		router.back();
 	}
 
+	if(!isOpen) {
+		// TODO Figure out weird issue with background overlay persisting in
+		// some instances. May be related to the "shallow" prop on NextJS Link
+		return null;
+	}
+
 	return (
 		<Dialog
 			fullWidth
-			open={isOpen}
+			open
 			fullScreen={fullScreen}
 			maxWidth="md"
 		>
