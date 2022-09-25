@@ -147,7 +147,7 @@ function FeedPostResponseForm(props: Props) {
 					multiline
 					label="Post"
 					variant="standard"
-					placeholder="Post title"
+					placeholder="Post"
 					type="text"
 					maxLength={MaxPostBodyLength}
 					minLength={MinPostBodyLength}

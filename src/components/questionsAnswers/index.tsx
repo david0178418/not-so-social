@@ -305,7 +305,7 @@ const questionsAnswers = [
 				<Typography paddingBottom={2}>
 					As with anything else in life, sometimes things are not black
 					and white. For those shades of grey, judgement calls will need
-					to be made. But when in doubt, the biase will be toward
+					to be made. But when in doubt, the bias will be toward
 					leaving posts in place. The offensiveness of the ideas are not
 					part of the equation.
 				</Typography>
