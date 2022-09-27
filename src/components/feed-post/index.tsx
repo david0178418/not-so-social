@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 
 interface Props {
+	hideParent?: boolean;
 	parentPost?: Post | null;
 	post: Post;
 	topResponse?: Post | null;
@@ -75,6 +76,7 @@ const hasNoParentStyle = {
 export
 function FeedPost(props: Props) {
 	const {
+		hideParent,
 		post,
 		topResponse,
 	} = props;
@@ -89,7 +91,7 @@ function FeedPost(props: Props) {
 
 	return (
 		<Box sx={containerStyles}>
-			{parentPost && (
+			{parentPost && !hideParent && (
 				<Box
 					sx={parentStyles}
 					padding={1}

@@ -83,6 +83,7 @@ const PostPage: NextPage<Props> = (props) => {
 				<Box marginLeft={4}>
 					{responses.map(p => (
 						<FeedPost
+							hideParent
 							key={p?._id}
 							post={p}
 							topResponse={lv2Responses.find(r => p._id === r.parent)}
