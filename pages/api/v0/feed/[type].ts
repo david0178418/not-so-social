@@ -25,10 +25,7 @@ const schema = z.object({
 	type: z.nativeEnum(FeedTypes),
 });
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const result = await schema.safeParseAsync({
 		...req.query,
 		// @ts-ignore
