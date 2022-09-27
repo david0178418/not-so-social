@@ -19,18 +19,28 @@ import {
 import {
 	Box,
 	IconButton,
+	Tab,
+	Tabs,
 	Typography,
 } from '@mui/material';
+import { useState } from 'react';
+
+enum Section {
+	Reposts,
+	Responses,
+}
 
 interface Props {
 	data: AsyncFnReturnType<typeof fetchFocusedPost>;
 }
 
 const PostPage: NextPage<Props> = (props) => {
+	const [activeSection, setActiveSection] = useState(Section.Responses);
 	const routeBack = useRouteBackDefault();
 	const {
 		data: {
 			post,
+			attachedToPosts,
 			responses,
 			lv2Responses,
 		},
@@ -80,16 +90,51 @@ const PostPage: NextPage<Props> = (props) => {
 						post={post}
 					/>
 				)}
-				<Box marginLeft={4}>
-					{responses.map(p => (
-						<FeedPost
-							hideParent
-							key={p?._id}
-							post={p}
-							topResponse={lv2Responses.find(r => p._id === r.parent)}
+				<Box sx={{
+					paddingTop: 1,
+					borderBottom: 1,
+					borderColor: 'divider',
+				}}>
+					<Tabs
+						variant="fullWidth"
+						value={activeSection}
+						onChange={(e, newSection) => setActiveSection(newSection)}
+					>
+						<Tab
+							label="Responses"
+							value={Section.Responses}
 						/>
-					))}
+						<Tab
+							label="Reposts"
+							value={Section.Reposts}
+						/>
+					</Tabs>
 				</Box>
+				{activeSection === Section.Responses && (
+					<Box>
+						{responses.map(p => (
+							<FeedPost
+								hideParent
+								key={p?._id}
+								post={p}
+								topResponse={lv2Responses.find(r => p._id === r.parent)}
+							/>
+						))}
+						{!responses.length && 'No Responses'}
+					</Box>
+				)}
+				{activeSection === Section.Reposts && (
+					<Box>
+						{attachedToPosts.map(p => (
+							<FeedPost
+								hideParent
+								key={p?._id}
+								post={p as any}
+							/>
+						))}
+					</Box>
+				)}
+				{!attachedToPosts.length && 'No reposts'}
 			</ScrollContent>
 		</>
 	);

@@ -80,6 +80,10 @@ async function fetchDbPost(postId: string): Promise<DbPost | null> {
 
 export
 async function fetchDbPosts(postIds: string[]): Promise<DbPost[]> {
+	if(!postIds.length) {
+		return [];
+	}
+
 	const col = await getCollection(DbCollections.Posts);
 	return col
 		.find<DbPost>({ _id: { $in: postIds.map(i => new ObjectId(i)) } })
@@ -117,9 +121,10 @@ async function fetchChildPosts(postId: string, userId: string): Promise<Post[]> 
 }
 
 interface getFocusedPostProps {
-	post: Post | null;
-	responses: Post[];
 	lv2Responses: Post[];
+	post: Post | null;
+	attachedToPosts: Post[];
+	responses: Post[];
 }
 
 export
@@ -129,15 +134,18 @@ async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedP
 
 		if(!post) {
 			return {
+				attachedToPosts: [],
 				post: null,
 				responses: [],
 				lv2Responses: [],
 			};
 		}
 
+		const attachedPosts = await fetchPosts(post.attachedToPosts.map(p => p._id));
+
 		const responses = await fetchChildPosts(id, userId);
 
-		const allIds = postListsToIdList([post], responses);
+		const allIds = postListsToIdList([post], responses, attachedPosts);
 
 		const postToBookmarkedPost = postToBookmarkedPostFn(
 			userId ?
@@ -149,15 +157,17 @@ async function fetchFocusedPost(userId: string, id: string): Promise<getFocusedP
 		const lv2Responses = await fetchTopChildPosts(responseIds, userId);
 
 		return {
+			attachedToPosts: attachedPosts.map(postToBookmarkedPost),
+			lv2Responses,
 			post: postToBookmarkedPost(post),
 			responses: responses.map(postToBookmarkedPost),
-			lv2Responses,
 		};
 	} catch {
 		return {
+			attachedToPosts: [],
+			lv2Responses: [],
 			post: null,
 			responses: [],
-			lv2Responses: [],
 		};
 	}
 }
