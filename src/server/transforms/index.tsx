@@ -5,7 +5,7 @@ import type {
 	DbAttachmentPostPartial,
 	DbParentPostPartial,
 	DbLinkPreview,
-} from './db-schema';
+} from '../db-schema';
 import type {
 	Nullable,
 	ParentPostPartial,
@@ -16,7 +16,6 @@ import type {
 import { hash } from 'bcryptjs';
 import { ArrayElement, ObjectId } from 'mongodb';
 import {
-	AttachmentPostKeys,
 	DbAttachmentPostKeys,
 	DbParentPostPartialKeys,
 	ParentPostPartialKeys,
@@ -27,6 +26,9 @@ import {
 	pick,
 	unique,
 } from '@common/utils';
+import { postToAttachmentPostPartial } from './client';
+
+export { postToAttachmentPostPartial };
 
 export
 function dbPostToPostFn(userId?: string) {
@@ -93,9 +95,9 @@ function dbPostToDbAttachmentPostPartial(post: DbPost): DbAttachmentPostPartial 
 }
 
 export
-function postToDbAttachmentPostPartial(post: Post) {
+function postToDbAttachmentPostPartial(post: Post): DbAttachmentPostPartial {
 	return {
-		...pick(post, ...AttachmentPostKeys),
+		...postToAttachmentPostPartial(post),
 		_id: new ObjectId(post._id),
 	};
 }

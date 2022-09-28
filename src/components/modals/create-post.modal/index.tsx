@@ -5,12 +5,17 @@ import { useRouter } from 'next/router';
 import { useSetAtom } from 'jotai';
 import { loadingAtom, pushToastMsgAtom } from '@common/atoms';
 import { useDebounce, useIsLoggedOut } from '@common/hooks';
-import { getLinkPreviewsFromContent, postSave } from '@client/api-calls';
 import { CancelButton, ConfirmButton } from '@components/common/buttons';
 import { LinkPreviews } from '@components/link-previews';
 import { InfoIconButton } from '@components/common/info-icon-button';
 import { exec, inRange } from '@common/utils';
 import { TextFieldLengthValidation } from '@components/common/text-field-length-validation';
+import { postToAttachmentPostPartial } from '@server/transforms/client';
+import {
+	getLinkPreviewsFromContent,
+	getPost,
+	postSave,
+} from '@client/api-calls';
 import {
 	CloseIcon,
 	InfoIcon,
@@ -59,16 +64,31 @@ function CreatePostModal() {
 	const [nsfw, setNsfw] = useState(false);
 	const [nsfl, setNsfl] = useState(false);
 	const [points, setPoints] = useState(MinPostCost);
+	const [textLinkPreviews, setTextLinkPreviews] = useState<LinkPreviewType[]>([]);
+	const [manualLinkPreviews, setManualLinkPreviews] = useState<LinkPreviewType[]>([]);
 	const debouncedPoints = useDebounce(points, 750);
 	const debouncedBody = useDebounce(body, 750);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-	const [linkPreviews, setLinkPreviews] = useState<LinkPreviewType[]>([]);
 	const abortControllerRef = useRef<AbortController | null>(null);
 	const {
 		a: action,
+		r: reposts,
 		...newQuery
 	} = router.query;
+
+	// TODO Clean up this hideous dedupe
+	const linkPreviews = manualLinkPreviews
+		.concat(textLinkPreviews)
+		.filter((i, index, arr) => {
+			if(i.type === 'link') {
+				return i;
+			}
+
+			return !arr
+				.slice(index + 1)
+				.find(i2 => i2.type === 'post' && i2.post._id === i.post._id);
+		});
 	const actionIsCreatePost = action === ModalActions.CreatePost;
 	const isOpen = actionIsCreatePost && !isLoggedOut;
 	const isValid = (
@@ -76,6 +96,27 @@ function CreatePostModal() {
 		inRange(body.length, MinPostBodyLength, MaxPostBodyLength) &&
 		inRange(title.length, MinPostTitleLength, MaxPostTitleLength)
 	);
+
+	useEffect(() => {
+		exec(async () => {
+			if(!reposts || Array.isArray(reposts)) {
+				setManualLinkPreviews([]);
+				return;
+			}
+
+			const repost = await getPost(reposts);
+
+			if(!repost) {
+				return;
+			}
+
+			setManualLinkPreviews([{
+				annotation: '',
+				post: postToAttachmentPostPartial(repost),
+				type: 'post',
+			}]);
+		});
+	}, [reposts]);
 
 	useEffect(() => {
 		if(!actionIsCreatePost) {
@@ -102,7 +143,7 @@ function CreatePostModal() {
 	// TODO Clean this mess up
 	useEffect(() => {
 		if(debouncedBody.length < MinPostBodyLength) {
-			setLinkPreviews([]);
+			setTextLinkPreviews([]);
 			return;
 		}
 
@@ -112,9 +153,9 @@ function CreatePostModal() {
 			const result = await getLinkPreviewsFromContent(debouncedBody, controller.signal);
 
 			if(result?.ok && result.data?.previews.length) {
-				setLinkPreviews(result.data.previews);
+				setTextLinkPreviews(result.data.previews);
 			} else {
-				setLinkPreviews([]);
+				setTextLinkPreviews([]);
 			}
 
 			if(abortControllerRef.current === controller) {
@@ -163,7 +204,8 @@ function CreatePostModal() {
 		setBody('');
 		setTitle('');
 		setPoints(MinPostCost);
-		setLinkPreviews([]);
+		setManualLinkPreviews([]);
+		setTextLinkPreviews([]);
 		router.back();
 	}
 

@@ -88,6 +88,17 @@ function unique<T>(arr: T[]) {
 }
 
 export
+function uniqueBy<T>(arr: T[], key: keyof T) {
+	return [
+		...new Map(
+			arr.map(
+				item => [item[key], item]
+			)
+		).values(),
+	];
+}
+
+export
 function uuid() {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
 		// eslint-disable-next-line eqeqeq, no-mixed-operators
