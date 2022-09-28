@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 
 interface Props {
+	borderless?: boolean;
 	hideParent?: boolean;
 	parentPost?: Post | null;
 	post: Post;
@@ -36,7 +37,7 @@ const styles = {
 	padding: 1,
 	marginX: 1,
 };
-const containerStyles = {
+const containerPaddingStyles = {
 	backgroundColor: '#e4e4e4',
 	borderBottomLeftRadius: RADIUS,
 	borderBottomRightRadius: RADIUS,
@@ -76,6 +77,7 @@ const hasNoParentStyle = {
 export
 function FeedPost(props: Props) {
 	const {
+		borderless,
 		hideParent,
 		post,
 		topResponse,
@@ -90,7 +92,7 @@ function FeedPost(props: Props) {
 	};
 
 	return (
-		<Box sx={containerStyles}>
+		<Box sx={!borderless ? containerPaddingStyles : null}>
 			{parentPost && !hideParent && (
 				<Box
 					sx={parentStyles}

@@ -87,6 +87,7 @@ const PostPage: NextPage<Props> = (props) => {
 			>
 				{post && (
 					<FeedPost
+						borderless
 						post={post}
 					/>
 				)}
