@@ -110,31 +110,33 @@ const PostPage: NextPage<Props> = (props) => {
 						/>
 					</Tabs>
 				</Box>
-				{activeSection === Section.Responses && (
-					<Box>
-						{responses.map(p => (
-							<FeedPost
-								hideParent
-								key={p?._id}
-								post={p}
-								topResponse={lv2Responses.find(r => p._id === r.parent)}
-							/>
-						))}
-						{!responses.length && 'No Responses'}
-					</Box>
-				)}
-				{activeSection === Section.Reposts && (
-					<Box>
-						{attachedToPosts.map(p => (
-							<FeedPost
-								hideParent
-								key={p?._id}
-								post={p as any}
-							/>
-						))}
-						{!attachedToPosts.length && 'No reposts'}
-					</Box>
-				)}
+				<Box paddingTop={2}>
+					{activeSection === Section.Responses && (
+						<>
+							{responses.map(p => (
+								<FeedPost
+									hideParent
+									key={p?._id}
+									post={p}
+									topResponse={lv2Responses.find(r => p._id === r.parent)}
+								/>
+							))}
+							{!responses.length && 'No Responses'}
+						</>
+					)}
+					{activeSection === Section.Reposts && (
+						<>
+							{attachedToPosts.map(p => (
+								<FeedPost
+									hideParent
+									key={p?._id}
+									post={p as any}
+								/>
+							))}
+							{!attachedToPosts.length && 'No reposts'}
+						</>
+					)}
+				</Box>
 			</ScrollContent>
 		</>
 	);
