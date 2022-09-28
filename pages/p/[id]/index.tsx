@@ -132,9 +132,9 @@ const PostPage: NextPage<Props> = (props) => {
 								post={p as any}
 							/>
 						))}
+						{!attachedToPosts.length && 'No reposts'}
 					</Box>
 				)}
-				{!attachedToPosts.length && 'No reposts'}
 			</ScrollContent>
 		</>
 	);
