@@ -5,7 +5,7 @@ const nextConfig = {
 		browsersListForSwc: true,
 		legacyBrowsers: false,
 		// Enabled in preperation of release of canary feature.
-		serverComponents: true,
+		// serverComponents: true,
 	},
 };
 
