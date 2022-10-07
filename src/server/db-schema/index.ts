@@ -52,7 +52,17 @@ interface DbExternalLinkPreviewType {
 	link: DbExternalLinkPreviewData;
 }
 
-type DbLinkPreviewType = DbPostLinkPreviewType | DbExternalLinkPreviewType;
+// Todo clean this up. Probably make "data" general
+export
+interface DbEmbedLinkPreviewType {
+	type: 'embed';
+	data: {
+		source: 'twitter';
+		id: string;
+	};
+}
+
+type DbLinkPreviewType = DbPostLinkPreviewType | DbExternalLinkPreviewType | DbEmbedLinkPreviewType;
 
 export
 type DbLinkPreview = DbLinkPreviewType & {

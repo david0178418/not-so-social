@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { UserRoles } from './constants';
 import type {
 	DbAttachmentPostPartial,
+	DbEmbedLinkPreviewType,
 	DbExternalLinkPreviewData,
 	DbExternalLinkPreviewType,
 	DbLinkPreview,
@@ -36,7 +37,7 @@ interface AttachmentSave {
 	postId: string;
 }
 
-type Foo = PostLinkPreviewType | DbExternalLinkPreviewType;
+type Foo = PostLinkPreviewType | DbExternalLinkPreviewType | DbEmbedLinkPreviewType;
 
 export
 type LinkPreviewType = Foo & {
@@ -144,10 +145,11 @@ interface User {
 export
 // TODO Fix this typing mess, probably with better naming convention
 interface LinkPreviewSave {
-	type: 'link' | 'post';
+	type: 'link' | 'post' | 'embed';
 	annotation?: string;
 	link?: LinkPreviewData;
 	postId?: string;
+	data?: DbEmbedLinkPreviewType['data'];
 }
 
 export

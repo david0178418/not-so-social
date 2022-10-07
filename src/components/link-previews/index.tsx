@@ -3,6 +3,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@components/icons';
 import { useState } from 'react';
 import { LinkPreviewExternal } from './link-preview-external';
 import { LinkPreviewInternalPost } from '@components/link-previews/link-preview-internal-post';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 import {
 	ButtonGroup,
 	IconButton,
@@ -52,6 +53,16 @@ function LinkPreviews(props: Props) {
 						<ArrowRightIcon />
 					</IconButton>
 				</ButtonGroup>
+			)}
+			{activePreview.type === 'embed' && (
+				<TwitterTweetEmbed
+					key={`${activePreview.data.source}-${activePreview.data.id}`}
+					tweetId={activePreview.data.id}
+					options={{
+						conversation: 'none',
+						align: 'center',
+					}}
+				/>
 			)}
 			{activePreview.type === 'link' && (
 				<LinkPreviewExternal

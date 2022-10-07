@@ -218,7 +218,7 @@ function FeedPostResponseForm(props: Props) {
 
 function formatPreviews(linkPreviews: LinkPreviewType[]): LinkPreviewSave[] {
 	return linkPreviews.map(link => {
-		if(link.type === 'link') {
+		if(link.type !== 'post') {
 			return link;
 		}
 

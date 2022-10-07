@@ -81,7 +81,7 @@ function CreatePostModal() {
 	const linkPreviews = manualLinkPreviews
 		.concat(textLinkPreviews)
 		.filter((i, index, arr) => {
-			if(i.type === 'link') {
+			if(i.type !== 'post') {
 				return i;
 			}
 

@@ -18,6 +18,7 @@ import {
 
 const { HOST = '' } = process.env;
 const PostUrlPrefixRegex = new RegExp(`^${urlJoin(HOST, Paths.Post, '/')}`);
+const TweetRegex = /(?<=(^(?:https?:\/\/)?(?:[^.]+\.)?twitter\.com\/.+?\/status\/))[0-9]+/i;
 
 const schema = Joi.object({
 	content: Joi
@@ -50,10 +51,20 @@ export default async function handler(
 	}
 
 	for(const url of urls) {
-		const potentialId = url.replace(PostUrlPrefixRegex, '');
 
-		if(potentialId.length === MongoIdLength) {
-			const post = await fetchPost(potentialId);
+		const potentialTweetId = url.match(TweetRegex)?.[0];
+		const potentialPostId = url.replace(PostUrlPrefixRegex, '');
+
+		if(potentialTweetId) {
+			previews.push({
+				type: 'embed',
+				data: {
+					source: 'twitter',
+					id: potentialTweetId,
+				},
+			});
+		} else if(potentialPostId.length === MongoIdLength) {
+			const post = await fetchPost(potentialPostId);
 
 			if(post) {
 				previews.push({

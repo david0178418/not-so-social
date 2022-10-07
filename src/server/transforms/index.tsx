@@ -58,7 +58,7 @@ function dbPostToPostFn(userId?: string) {
 }
 
 function dbLinkPreviewToLinkPreview(linkPreview: DbLinkPreview): ArrayElement<Post['linkPreviews']> {
-	if(linkPreview.type === 'link') {
+	if(linkPreview.type !== 'post') {
 		return linkPreview;
 	}
 

@@ -12,6 +12,7 @@ import {
 	DbPostTextGram,
 	DbExternalLinkPreviewData,
 	DbLinkPreview,
+	DbEmbedLinkPreviewType,
 } from '@server/db-schema';
 import {
 	DbCollections,
@@ -52,7 +53,14 @@ async function createPost(content: PostSave, ownerId: ObjectId, isAdmin = false)
 
 	const completeLinkPreviews: DbLinkPreview[] = linkPreviews
 		.map((p): DbLinkPreview | null => {
-			if(p.type === 'link') {
+			// Todo clean this up. Probably make "data" general
+			if(p.type === 'embed') {
+				return {
+					data: p.data as DbEmbedLinkPreviewType['data'],
+					type: 'embed',
+					annotation: p.annotation,
+				};
+			} else if(p.type === 'link') {
 				return {
 					link: p.link as DbExternalLinkPreviewData,
 					type: p.type,
@@ -121,7 +129,7 @@ async function createPost(content: PostSave, ownerId: ObjectId, isAdmin = false)
 			}),
 		...completeLinkPreviews
 			.map(a => {
-				if(a.type === 'link') {
+				if(a.type !== 'post') {
 					return null;
 				}
 

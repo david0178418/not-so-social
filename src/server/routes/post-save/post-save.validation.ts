@@ -75,13 +75,17 @@ const ExternalLinkPreviewSchema: ZodType<LinkPreviewData> = z.object({
 });
 
 const LinkPreviewSchema: ZodType<LinkPreviewSave> = z.object({
-	type: z.union([z.literal('link'), z.literal('post')]),
+	type: z.union([z.literal('link'), z.literal('post'), z.literal('embed')]),
 	annotation: z
 		.string()
 		.max(MaxPostAttachmentAnnotationLength, { message: `Annotation may not be more than ${MaxPostAttachmentAnnotationLength} characters long` })
 		.optional(),
 	link: ExternalLinkPreviewSchema.optional(),
 	postId: MongoObjectId.optional(),
+	data: z.object({
+		source: z.literal('twitter'),
+		id: z.string(),
+	}).optional(),
 });
 
 export
