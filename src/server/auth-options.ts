@@ -63,12 +63,12 @@ const authOptions: NextAuthOptions = {
 
 				const user = await fetchUser(username);
 
-				if(!(user && await compare(password, user.hash))) {
+				if(!(user?._id && await compare(password, user.hash))) {
 					return null;
 				}
 
 				return {
-					id: user._id,
+					id: user._id?.toString(),
 					username: user.username,
 					role: user.role || UserRoles.User,
 				};
