@@ -10,7 +10,7 @@ import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
 import { getServerSession } from '@server/auth-options';
 import { NextSeo } from 'next-seo';
-import NotSoSocialImg from './NotSo.Social.png';
+import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
 import {
 	AppName,
 	BaseUrl,

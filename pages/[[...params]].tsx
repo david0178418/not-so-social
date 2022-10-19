@@ -13,7 +13,7 @@ import { FeedTypeQueryMap } from '@server/queries';
 import { ReactNode } from 'react';
 import { useFeed } from '@common/hooks';
 import { last } from '@common/utils';
-import NotSoSocialImg from './NotSo.Social.png';
+import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
 import {
 	AppName,
 	BaseUrl,

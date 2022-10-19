@@ -10,7 +10,7 @@ import { NextSeo } from 'next-seo';
 import { fetchSearchFeed } from '@server/queries';
 import { LoadMoreButton } from '@components/load-more-button';
 import { useFeed } from '@common/hooks';
-import NotSoSocialImg from './NotSo.Social.png';
+import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
 import {
 	AppName,
 	BaseUrl,

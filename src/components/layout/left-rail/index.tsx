@@ -5,7 +5,7 @@ import { formatCompactNumber } from '@common/utils';
 import { ReactNode } from 'react';
 import { useBalance } from '@common/hooks';
 import Image from 'next/image';
-import NotSoSocialImg from './NotSo.Social.png';
+import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
 import NotSoSocialSmallImg from './NotSo.Social-small.png';
 import {
 	HomePaths,
