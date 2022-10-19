@@ -13,6 +13,7 @@ import { FeedTypeQueryMap } from '@server/queries';
 import { ReactNode } from 'react';
 import { useFeed } from '@common/hooks';
 import { last } from '@common/utils';
+import NotSoSocialImg from './NotSo.Social.png';
 import {
 	AppName,
 	BaseUrl,
@@ -62,6 +63,13 @@ const HomePage: NextPage<Props> = (props) => {
 					title: AppName,
 					description: AppName,
 					site_name: AppName,
+					images: [{
+						url: NotSoSocialImg.src,
+						width: NotSoSocialImg.width,
+						height: NotSoSocialImg.height,
+						alt: 'NoSo.Social',
+						type: 'image/png',
+					}],
 				}}
 			/>
 			<ScrollContent

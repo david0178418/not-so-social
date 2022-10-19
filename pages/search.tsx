@@ -10,6 +10,7 @@ import { NextSeo } from 'next-seo';
 import { fetchSearchFeed } from '@server/queries';
 import { LoadMoreButton } from '@components/load-more-button';
 import { useFeed } from '@common/hooks';
+import NotSoSocialImg from './NotSo.Social.png';
 import {
 	AppName,
 	BaseUrl,
@@ -90,6 +91,13 @@ const SearchPage: NextPage<Props> = (props) => {
 					title: title,
 					description: description,
 					site_name: AppName,
+					images: [{
+						url: NotSoSocialImg.src,
+						width: NotSoSocialImg.width,
+						height: NotSoSocialImg.height,
+						alt: 'NoSo.Social',
+						type: 'image/png',
+					}],
 				}}
 			/>
 			<ScrollContent
