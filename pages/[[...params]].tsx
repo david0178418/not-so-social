@@ -53,6 +53,10 @@ const HomePage: NextPage<Props> = (props) => {
 			<NextSeo
 				title={AppName}
 				description={AppName}
+				twitter={{
+					site: '@NotSoSocialApp',
+					cardType: 'summary',
+				}}
 				openGraph={{
 					url: BaseUrl,
 					title: AppName,

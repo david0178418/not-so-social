@@ -59,6 +59,10 @@ const PostPage: NextPage<Props> = (props) => {
 			<NextSeo
 				title={title}
 				description={description}
+				twitter={{
+					site: '@NotSoSocialApp',
+					cardType: 'summary',
+				}}
 				openGraph={{
 					url: `${BaseUrl}${Paths.Post}/${post?._id}`,
 					title,
