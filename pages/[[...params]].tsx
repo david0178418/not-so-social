@@ -55,7 +55,7 @@ const HomePage: NextPage<Props> = (props) => {
 				description={AppName}
 				twitter={{
 					site: '@NotSoSocialApp',
-					cardType: 'summary',
+					cardType: 'summary_large_image',
 				}}
 				openGraph={{
 					url: BaseUrl,

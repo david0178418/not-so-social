@@ -61,7 +61,7 @@ const PostPage: NextPage<Props> = (props) => {
 				description={description}
 				twitter={{
 					site: '@NotSoSocialApp',
-					cardType: 'summary',
+					cardType: 'summary_large_image',
 				}}
 				openGraph={{
 					url: `${BaseUrl}${Paths.Post}/${post?._id}`,

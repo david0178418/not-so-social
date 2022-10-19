@@ -83,7 +83,7 @@ const SearchPage: NextPage<Props> = (props) => {
 				description={description}
 				twitter={{
 					site: '@NotSoSocialApp',
-					cardType: 'summary',
+					cardType: 'summary_large_image',
 				}}
 				openGraph={{
 					url: `${BaseUrl}${Paths.Search}?q=${searchTerm}`,
