@@ -16,7 +16,7 @@ interface Props {
 }
 
 const NotSoSocialImgSrc = urlJoin(BaseUrl, NotSoSocialImg.src);
-const NotSoSocialStackedImgSrc = urlJoin(BaseUrl, NotSoSocialImg.src);
+const NotSoSocialStackedImgSrc = urlJoin(BaseUrl, NotSoSocialStackedImg.src);
 const NotSoSocialMedImgSrc = urlJoin(BaseUrl, NotSoSocialMedImg.src);
 const NotSoSocialMedJpegImgSrc = urlJoin(BaseUrl, NotSoSocialMedJpegImg.src);
 
