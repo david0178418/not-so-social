@@ -15,6 +15,7 @@ import { useFeed } from '@common/hooks';
 import { last } from '@common/utils';
 import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
 import NotSoSocialMedImg from '@components/layout/left-rail/NotSo.Social-med.png';
+import NotSoSocialMedJpegImg from '@components/layout/left-rail/NotSo.Social-med.jpg';
 import {
 	AppName,
 	BaseUrl,
@@ -76,6 +77,12 @@ const HomePage: NextPage<Props> = (props) => {
 						height: NotSoSocialMedImg.height,
 						alt: 'NoSo.Social',
 						type: 'image/png',
+					}, {
+						url: NotSoSocialMedJpegImg.src,
+						width: NotSoSocialMedJpegImg.width,
+						height: NotSoSocialMedJpegImg.height,
+						alt: 'NoSo.Social',
+						type: 'image/jpeg',
 					}],
 				}}
 			/>
