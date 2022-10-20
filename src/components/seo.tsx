@@ -39,7 +39,13 @@ function Seo(props: Props) {
 					url: urlJoin(BaseUrl, path),
 					title,
 					site_name: AppName,
-					images: [{
+					images: [ {
+						url: NotSoSocialMedJpegImgSrc,
+						width: NotSoSocialMedJpegImg.width,
+						height: NotSoSocialMedJpegImg.height,
+						alt: 'NoSo.Social',
+						type: 'image/jpeg',
+					}, {
 						url: NotSoSocialImgSrc,
 						width: NotSoSocialImg.width,
 						height: NotSoSocialImg.height,
@@ -51,12 +57,6 @@ function Seo(props: Props) {
 						height: NotSoSocialMedImg.height,
 						alt: 'NoSo.Social',
 						type: 'image/png',
-					}, {
-						url: NotSoSocialMedJpegImgSrc,
-						width: NotSoSocialMedJpegImg.width,
-						height: NotSoSocialMedJpegImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/jpeg',
 					}],
 				}}
 			/>
