@@ -6,16 +6,12 @@ import { ScrollContent } from '@components/scroll-content';
 import { getServerSession } from '@server/auth-options';
 import { Box, Typography } from '@mui/material';
 import { SearchForm } from '@components/search-form';
-import { NextSeo } from 'next-seo';
 import { fetchSearchFeed } from '@server/queries';
 import { LoadMoreButton } from '@components/load-more-button';
 import { useFeed } from '@common/hooks';
-import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
-import NotSoSocialMedImg from '@components/layout/left-rail/NotSo.Social-med.png';
-import NotSoSocialMedJpegImg from '@components/layout/left-rail/NotSo.Social-med.jpg';
+import { Seo } from '@components/seo';
 import {
 	AppName,
-	BaseUrl,
 	FeedTypes,
 	MaxSearchTermSize,
 	Paths,
@@ -81,38 +77,10 @@ const SearchPage: NextPage<Props> = (props) => {
 
 	return (
 		<>
-			<NextSeo
+			<Seo
 				title={title}
 				description={description}
-				twitter={{
-					site: '@NotSoSocialApp',
-					cardType: 'summary_large_image',
-				}}
-				openGraph={{
-					url: `${BaseUrl}${Paths.Search}?q=${searchTerm}`,
-					title: title,
-					description: description,
-					site_name: AppName,
-					images: [{
-						url: NotSoSocialImg.src,
-						width: NotSoSocialImg.width,
-						height: NotSoSocialImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
-					}, {
-						url: NotSoSocialMedImg.src,
-						width: NotSoSocialMedImg.width,
-						height: NotSoSocialMedImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
-					}, {
-						url: NotSoSocialMedJpegImg.src,
-						width: NotSoSocialMedJpegImg.width,
-						height: NotSoSocialMedJpegImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/jpeg',
-					}],
-				}}
+				path={`${Paths.Search}?q=${searchTerm}`}
 			/>
 			<ScrollContent
 				header={

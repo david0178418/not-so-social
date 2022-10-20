@@ -13,12 +13,7 @@ import { FeedTypeQueryMap } from '@server/queries';
 import { ReactNode } from 'react';
 import { useFeed } from '@common/hooks';
 import { last } from '@common/utils';
-import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
-import NotSoSocialMedImg from '@components/layout/left-rail/NotSo.Social-med.png';
-import NotSoSocialMedJpegImg from '@components/layout/left-rail/NotSo.Social-med.jpg';
 import {
-	AppName,
-	BaseUrl,
 	FeedTypes,
 	Paths,
 } from '@common/constants';
@@ -53,39 +48,7 @@ const HomePage: NextPage<Props> = (props) => {
 
 	return (
 		<>
-			<NextSeo
-				title={AppName}
-				description={AppName}
-				twitter={{
-					site: '@NotSoSocialApp',
-					cardType: 'summary_large_image',
-				}}
-				openGraph={{
-					url: BaseUrl,
-					title: AppName,
-					description: AppName,
-					site_name: AppName,
-					images: [{
-						url: NotSoSocialImg.src,
-						width: NotSoSocialImg.width,
-						height: NotSoSocialImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
-					}, {
-						url: NotSoSocialMedImg.src,
-						width: NotSoSocialMedImg.width,
-						height: NotSoSocialMedImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
-					}, {
-						url: NotSoSocialMedJpegImg.src,
-						width: NotSoSocialMedJpegImg.width,
-						height: NotSoSocialMedJpegImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/jpeg',
-					}],
-				}}
-			/>
+			<NextSeo />
 			<ScrollContent
 				header={
 					<Box sx={{

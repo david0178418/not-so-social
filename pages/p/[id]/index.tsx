@@ -9,13 +9,10 @@ import { FeedPost } from '@components/feed-post';
 import { ScrollContent } from '@components/scroll-content';
 import { useRouteBackDefault } from '@common/hooks';
 import { getServerSession } from '@server/auth-options';
-import { NextSeo } from 'next-seo';
-import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
-import NotSoSocialMedImg from '@components/layout/left-rail/NotSo.Social-med.png';
-import NotSoSocialMedJpegImg from '@components/layout/left-rail/NotSo.Social-med.jpg';
+import { Seo } from '@components/seo';
+import { useState } from 'react';
 import {
 	AppName,
-	BaseUrl,
 	Paths,
 	SpecialCharacterCodes,
 } from '@common/constants';
@@ -26,7 +23,6 @@ import {
 	Tabs,
 	Typography,
 } from '@mui/material';
-import { useState } from 'react';
 
 enum Section {
 	Reposts,
@@ -59,38 +55,10 @@ const PostPage: NextPage<Props> = (props) => {
 
 	return (
 		<>
-			<NextSeo
+			<Seo
 				title={title}
 				description={description}
-				twitter={{
-					site: '@NotSoSocialApp',
-					cardType: 'summary_large_image',
-				}}
-				openGraph={{
-					url: `${BaseUrl}${Paths.Post}/${post?._id}`,
-					title,
-					description,
-					site_name: AppName,
-					images: [{
-						url: NotSoSocialImg.src,
-						width: NotSoSocialImg.width,
-						height: NotSoSocialImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
-					}, {
-						url: NotSoSocialMedImg.src,
-						width: NotSoSocialMedImg.width,
-						height: NotSoSocialMedImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
-					}, {
-						url: NotSoSocialMedJpegImg.src,
-						width: NotSoSocialMedJpegImg.width,
-						height: NotSoSocialMedJpegImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/jpeg',
-					}],
-				}}
+				path={`${Paths.Post}/${post?._id}`}
 			/>
 			<Head>
 				<title>{AppName}</title>
