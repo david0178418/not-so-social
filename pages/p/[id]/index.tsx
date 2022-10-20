@@ -11,6 +11,7 @@ import { useRouteBackDefault } from '@common/hooks';
 import { getServerSession } from '@server/auth-options';
 import { NextSeo } from 'next-seo';
 import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
+import NotSoSocialMedImg from '@components/layout/left-rail/NotSo.Social-med.png';
 import {
 	AppName,
 	BaseUrl,
@@ -73,6 +74,12 @@ const PostPage: NextPage<Props> = (props) => {
 						url: NotSoSocialImg.src,
 						width: NotSoSocialImg.width,
 						height: NotSoSocialImg.height,
+						alt: 'NoSo.Social',
+						type: 'image/png',
+					}, {
+						url: NotSoSocialMedImg.src,
+						width: NotSoSocialMedImg.width,
+						height: NotSoSocialMedImg.height,
 						alt: 'NoSo.Social',
 						type: 'image/png',
 					}],

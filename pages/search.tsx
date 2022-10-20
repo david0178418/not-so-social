@@ -11,6 +11,7 @@ import { fetchSearchFeed } from '@server/queries';
 import { LoadMoreButton } from '@components/load-more-button';
 import { useFeed } from '@common/hooks';
 import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
+import NotSoSocialMedImg from '@components/layout/left-rail/NotSo.Social-med.png';
 import {
 	AppName,
 	BaseUrl,
@@ -95,6 +96,12 @@ const SearchPage: NextPage<Props> = (props) => {
 						url: NotSoSocialImg.src,
 						width: NotSoSocialImg.width,
 						height: NotSoSocialImg.height,
+						alt: 'NoSo.Social',
+						type: 'image/png',
+					}, {
+						url: NotSoSocialMedImg.src,
+						width: NotSoSocialMedImg.width,
+						height: NotSoSocialMedImg.height,
 						alt: 'NoSo.Social',
 						type: 'image/png',
 					}],
