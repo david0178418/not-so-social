@@ -6,7 +6,6 @@ import { FeedPost } from '@components/feed-post';
 import { getServerSession } from '@server/auth-options';
 import { HomeSortTabs } from '@components/home-sort-tabs';
 import { SearchForm } from '@components/search-form';
-import { NextSeo } from 'next-seo';
 import { Box } from '@mui/material';
 import { LoadMoreButton } from '@components/load-more-button';
 import { FeedTypeQueryMap } from '@server/queries';
@@ -17,6 +16,7 @@ import {
 	FeedTypes,
 	Paths,
 } from '@common/constants';
+import { Seo } from '@components/seo';
 
 // TODO Clean all this up
 type HomeFeedTypes = FeedTypes.Hot | FeedTypes.New | FeedTypes.Top;
@@ -48,7 +48,7 @@ const HomePage: NextPage<Props> = (props) => {
 
 	return (
 		<>
-			<NextSeo />
+			<Seo />
 			<ScrollContent
 				header={
 					<Box sx={{
