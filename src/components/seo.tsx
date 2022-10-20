@@ -1,12 +1,10 @@
 import { NextSeo } from 'next-seo';
-import NotSoSocialImg from '@components/layout/left-rail/NotSo.Social.png';
-import NotSoSocialMedImg from '@components/layout/left-rail/NotSo.Social-med.png';
 import NotSoSocialMedJpegImg from '@components/layout/left-rail/NotSo.Social-med.jpg';
+import { urlJoin } from '@common/utils';
 import {
 	AppName,
 	BaseUrl,
 } from '@common/constants';
-import { urlJoin } from '@common/utils';
 
 interface Props {
 	title?: string;
@@ -14,8 +12,6 @@ interface Props {
 	path?: string;
 }
 
-const NotSoSocialImgSrc = urlJoin(BaseUrl, NotSoSocialImg.src);
-const NotSoSocialMedImgSrc = urlJoin(BaseUrl, NotSoSocialMedImg.src);
 const NotSoSocialMedJpegImgSrc = urlJoin(BaseUrl, NotSoSocialMedJpegImg.src);
 
 export
@@ -45,18 +41,6 @@ function Seo(props: Props) {
 						height: NotSoSocialMedJpegImg.height,
 						alt: 'NoSo.Social',
 						type: 'image/jpeg',
-					}, {
-						url: NotSoSocialImgSrc,
-						width: NotSoSocialImg.width,
-						height: NotSoSocialImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
-					}, {
-						url: NotSoSocialMedImgSrc,
-						width: NotSoSocialMedImg.width,
-						height: NotSoSocialMedImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
 					}],
 				}}
 			/>
