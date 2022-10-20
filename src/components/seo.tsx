@@ -42,15 +42,15 @@ function Seo(props: Props) {
 					title,
 					site_name: AppName,
 					images: [ {
-						url: NotSoSocialImgSrc,
-						width: NotSoSocialImg.width,
-						height: NotSoSocialImg.height,
-						alt: 'NoSo.Social',
-						type: 'image/png',
-					}, {
 						url: NotSoSocialStackedImgSrc,
 						width: NotSoSocialStackedImg.width,
 						height: NotSoSocialStackedImg.height,
+						alt: 'NoSo.Social',
+						type: 'image/png',
+					}, {
+						url: NotSoSocialImgSrc,
+						width: NotSoSocialImg.width,
+						height: NotSoSocialImg.height,
 						alt: 'NoSo.Social',
 						type: 'image/png',
 					}, {
